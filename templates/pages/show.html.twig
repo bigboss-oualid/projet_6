@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tricks - {{ parent() }} {% endblock %}
+
+{% block body %}
+    <div class="container text-center">
+        <h3 class="m-5">{{ trick.title }}</h3>
+        <p >{{ trick.description }}</p>
+        <div class="blockquote-footer float-right">
+            Créer le {{ trick.createdAt | format_datetime(locale='fr') }}
+        </div>
+    </div>
+{% endblock %}
+

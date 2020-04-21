@@ -15,19 +15,19 @@
     <div class="container">
         <div class="navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link {% if current_menu is defined and current_menu == 'Home' %} active {% endif %}" href="{{ path('blog.home') }}">Accueil <span class="sr-only">(current)</span></a>
+                <li class="nav-item">
+                    <a class="nav-link {% if current_menu is defined and current_menu == 'home' %} active {% endif %}" href="{{ path('pages.home') }}">Accueil <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Tricks <span class="sr-only">(current)</span></a>
+                    <a class="nav-link {% if current_menu is defined and current_menu == 'show' %} active {% endif %}"  href="#">Tricks <span class="sr-only">(current)</span></a>
                 </li>
             </ul>
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link {% if current_menu is defined and current_menu == 'login' %}active {% endif %}" href="">Login</a>
+                    <a class="nav-link {% if current_menu is defined and current_menu == 'login' %}active {% endif %}" href=""><span class="sr-only">(current)</span>Login</a>
                 </li>
                 <li class="nav-item {% if current_menu is defined and current_menu == 'register' %}active {% endif %}">
-                    <a class="nav-link" href="">Register</a>
+                    <a class="nav-link" href=""><span class="sr-only">(current)</span>Register</a>
                 </li>
             </ul>
         </div>
