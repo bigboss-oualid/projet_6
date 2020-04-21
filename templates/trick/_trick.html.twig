@@ -9,5 +9,8 @@
         <div class="blockquote-footer float-right">
             Créer le {{ trick.createdAt | format_datetime(locale='fr') }}
         </div>
+        {% if trick.published%}
+            <div class="blockquote-footer float-right"> Publier</div>
+        {% endif %}
     </div>
 </div>

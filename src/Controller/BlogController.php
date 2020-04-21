@@ -19,7 +19,9 @@ class BlogController extends AbstractController
 	 */
 	public function home(TrickRepository $repository): Response
 	{
-		$tricks = $repository->findAll();
+		$tricks = $repository->findBy([
+			"published" => true
+		]);
 
 		return $this->render('pages/home.html.twig', [
 			'current_menu'    => 'home',
@@ -31,11 +33,9 @@ class BlogController extends AbstractController
 	 * @Route("/tricks/{slug}/{id}", name="pages.show", requirements={"slug": "[a-z0-9\-]*", "id": "\d+"})
 	 * @param Trick   $trick
 	 * @param String  $slug
-	 * @param Request $request
-	 *
 	 * @return Response
 	 */
-	public function show(Trick $trick, String $slug,  Request $request)
+	public function show(Trick $trick, String $slug)
 	{
 		if ($trick->getSlug() != $slug) {
 			return $this->redirectToRoute('pages.show', [
