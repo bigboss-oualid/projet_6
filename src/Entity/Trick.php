@@ -19,7 +19,7 @@ class Trick
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $title;
 
@@ -34,7 +34,7 @@ class Trick
     private $createdAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="tricks")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="tricks", cascade={"persist"})
      */
     private $category;
 
@@ -60,6 +60,7 @@ class Trick
 
     public function __construct()
     {
+	    $this->createdAt = new \DateTime();
         $this->illustrations = new ArrayCollection();
         $this->videos = new ArrayCollection();
     }
@@ -191,7 +192,13 @@ class Trick
         return $this;
     }
 
-    public function getPublished(): ?bool
+    public function createSlug(): self
+	{
+		$this->setSlug(str_replace(' ', '-', $this->getTitle()));
+		return $this;
+	}
+
+    public function isPublished(): ?bool
     {
         return $this->published;
     }
