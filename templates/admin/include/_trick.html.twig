@@ -1,0 +1,27 @@
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="h1 card-title text-center">
+            <a href="{{ path('blog.show', {slug: trick.slug, id: trick.id}) }}">
+                {{ trick.title }}
+            </a>
+        </h5>
+        <p class="card-text display-5">{{ trick.description}}</p>
+        <div class="blockquote-footer float-right">
+            Créer le {{ trick.createdAt | format_datetime(locale='fr') }}
+        </div>
+        {% if trick.published%}
+            <div class="text-success  float-right"> Publier</div>
+        {% else %}
+            <div class="text-danger blockquote-footer float-right"> brouillon</div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="mt-0 mb-5 text-center">
+    <a href="{{ path('admin.trick.edit', {id: trick.id}) }}" class="btn btn-secondary"><i class="fa fa-pencil"></i></a>
+    <form method="post" action="{{ path('admin.trick.delete', {id: trick.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes vous vraiment sûr ?')">
+        <input type="hidden" name="_method" value="DELETE">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ trick.id) }}">
+        <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
+    </form>
+</div>

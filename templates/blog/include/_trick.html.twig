@@ -1,7 +1,7 @@
 <div class="card mb-4">
     <div class="card-body">
         <h5 class="h1 card-title text-center">
-            <a href="{{ path('pages.show', {slug: trick.slug, id: trick.id}) }}">
+            <a href="{{ path('blog.show', {slug: trick.slug, id: trick.id}) }}">
                 {{ trick.title }}
             </a>
         </h5>
@@ -10,7 +10,9 @@
             Créer le {{ trick.createdAt | format_datetime(locale='fr') }}
         </div>
         {% if trick.published%}
-            <div class="blockquote-footer float-right"> Publier</div>
+            <div class="text-success  float-right"> Publier</div>
+        {% else %}
+            <div class="text-danger blockquote-footer float-right"> brouillon</div>
         {% endif %}
     </div>
 </div>
