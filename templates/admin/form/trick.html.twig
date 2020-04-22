@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="container mt-4">
+        <h1>
+            {% if editMode %}
+                Créer
+            {% else %}
+                Modifier
+            {% endif %}
+             une figure
+        </h1>
+        {{ form_start(formTrick) }}
+            {{ form_row(formTrick.category, {'attr': {'label': "Catégorie"}}) }}
+            {{ form_row(formTrick.title, {'attr': {'placeholder': "Titre de la figure"}}) }}
+            {{ form_row(formTrick.description, {'attr': {'placeholder': "Description de la figure"}}) }}
+            {{ form_row(formTrick.published) }}
+
+            <button type="submit" class="btn btn-success">
+                {% if editMode %}
+                    Enregistrer
+                {% else %}
+                    Ajouter
+                {% endif %}
+            </button>
+        {{ form_end(formTrick) }}
+    </div>
+
+{% endblock %}
+

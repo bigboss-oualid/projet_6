@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>{% block title %}JSST!{% endblock %}</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <!-- Add icon library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     {% block stylesheets %}{% endblock %}
 </head>
 <body>
@@ -16,7 +18,7 @@
         <div class="navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link {% if current_menu is defined and current_menu == 'home' %} active {% endif %}" href="{{ path('pages.home') }}">Accueil <span class="sr-only">(current)</span></a>
+                    <a class="nav-link {% if current_menu is defined and current_menu == 'home' %} active {% endif %}" href="{{ path('blog.home') }}">Accueil <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {% if current_menu is defined and current_menu == 'show' %} active {% endif %}"  href="#">Tricks <span class="sr-only">(current)</span></a>

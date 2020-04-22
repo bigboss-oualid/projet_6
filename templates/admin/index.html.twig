@@ -9,11 +9,17 @@
     </div>
 
     <div class="container">
-        <h2>Tous les Tricks</h2>
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+        <h2 class="mb-4">Tous les Tricks</h2>
+        <a href="{{ path('admin.trick.create') }}" class="mb-5 btn btn-success"><i class="fa fa-plus"> Ajouter nouvelle figure</i></a>
         <div class="row flex">
             {% for trick in tricks%}
                 <div class="col-3">
-                    {% include 'trick/_trick.html.twig' %}
+                    {% include 'admin/include/_trick.html.twig' %}
                 </div>
             {% endfor %}
         </div>
