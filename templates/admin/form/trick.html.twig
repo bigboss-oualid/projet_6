@@ -12,10 +12,8 @@
              une figure
         </h1>
         {{ form_start(formTrick) }}
-            {{ form_row(formTrick.category, {'attr': {'label': "Catégorie"}}) }}
-            {{ form_row(formTrick.title, {'attr': {'placeholder': "Titre de la figure"}}) }}
-            {{ form_row(formTrick.description, {'attr': {'placeholder': "Description de la figure"}}) }}
-            {{ form_row(formTrick.published) }}
+
+        {{  form_widget(formTrick) }}
 
             <button type="submit" class="btn btn-success">
                 {% if editMode %}

@@ -31,7 +31,7 @@ class AdminController extends AbstractController
 	}
 
 	/**
-	 * @Route("/admin", name="admin.index")
+	 * @Route("/tricks", name="admin.index")
 	 *
 	 * @param TrickRepository $repository
 	 * @return  Response
@@ -58,9 +58,9 @@ class AdminController extends AbstractController
     {
     	if(!$trick){
 		    $trick = new Trick();
-		    $flash = 'la figure est créé avec succès';
+		    $flash = " enregistrée";
 	    }else{
-		    $flash = 'la figure est modifiée avec succès';
+		    $flash = " modifiée";
 	    }
 
 		$form = $this->createForm(TrickType::class, $trick);
@@ -69,7 +69,7 @@ class AdminController extends AbstractController
 	    if ($form->isSubmitted() && $form->isValid()) {
 		    $this->em->persist($trick);
 		    $this->em->flush();
-		    $this->addFlash('success', $flash );
+		    $this->addFlash('success', "la figure <strong>{$trick->getTitle()}</strong> a bien été " . $flash);
 		    return $this->redirectToRoute('admin.index');
 	    }
 

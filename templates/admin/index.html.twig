@@ -9,11 +9,6 @@
     </div>
 
     <div class="container">
-        {% for message in app.flashes('success') %}
-            <div class="alert alert-success">
-                {{ message }}
-            </div>
-        {% endfor %}
         <h2 class="mb-4">Tous les Tricks</h2>
         <a href="{{ path('admin.trick.create') }}" class="mb-5 btn btn-success"><i class="fa fa-plus"> Ajouter nouvelle figure</i></a>
         <div class="row flex">
