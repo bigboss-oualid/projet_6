@@ -67,14 +67,6 @@ class AdminController extends AbstractController
 
 		$form->handleRequest($request);
 	    if ($form->isSubmitted() && $form->isValid()) {
-
-	    	$uow = $this->em->getUnitOfWork();
-		    $uow->computeChangeSets();
-		    $changeSet = $uow->getEntityChangeSet($trick);
-
-	    	if(isset($changeSet['title']) || !$trick->getId())
-			    $trick->createSlug();
-
 		    $this->em->persist($trick);
 		    $this->em->flush();
 		    $this->addFlash('success', $flash );

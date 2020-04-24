@@ -4,10 +4,12 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\EventArgs;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TrickRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Trick
 {
@@ -192,10 +194,19 @@ class Trick
         return $this;
     }
 
-    public function createSlug(): self
+	/**
+	 * @ORM\PrePersist
+	 * @ORM\PreUpdate()
+	 *
+	 * @param EventArgs $event
+	 *
+	 * @return void
+	 */
+    public function createSlug(EventArgs $event): void
 	{
-		$this->setSlug(str_replace(' ', '-', $this->getTitle()));
-		return $this;
+		//create slug if trick is new or his title is modified
+		if($this->id == null || (isset($event->getEntityChangeSet()['title'])))
+			$this->slug = $this->slugify($this->title);
 	}
 
     public function isPublished(): ?bool
@@ -209,4 +220,24 @@ class Trick
 
         return $this;
     }
+
+	/**
+	 * Initialize le slug
+	 *
+	 * @param        $string
+	 * @param string $delimiter
+	 *
+	 * @return string
+	 */
+	private function slugify($string, $delimiter = '-'): string {
+		$oldLocale = setlocale(LC_ALL, '0');
+		setlocale(LC_ALL, 'en_US.UTF-8');
+		$clean = iconv('UTF-8', 'ASCII//TRANSLIT', $string);
+		$clean = preg_replace("/[^a-zA-Z0-9\/_|+ -]/", '', $clean);
+		$clean = strtolower($clean);
+		$clean = preg_replace("/[\/_|+ -]+/", $delimiter, $clean);
+		$clean = trim($clean, $delimiter);
+		setlocale(LC_ALL, $oldLocale);
+		return $clean;
+	}
 }
