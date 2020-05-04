@@ -6,10 +6,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\EventArgs;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TrickRepository")
  * @ORM\HasLifecycleCallbacks()
+ * @UniqueEntity("title")
  */
 class Trick
 {
@@ -21,7 +24,10 @@ class Trick
     private $id;
 
     /**
+     * @Assert\Length(min=5, max=255)
      * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\NotBlank
+     * @Assert\Length(min=3, minMessage="Titre trop court !")
      */
     private $title;
 
@@ -41,12 +47,14 @@ class Trick
     private $category;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Illustration", mappedBy="trick", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Illustration", mappedBy="trick", cascade={"persist"}, orphanRemoval=true)
+     * @Assert\Valid()
      */
     private $illustrations;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Video", mappedBy="trick")
+     * @ORM\OneToMany(targetEntity="App\Entity\Video", mappedBy="trick", cascade={"persist"}, orphanRemoval=true)
+     * @Assert\Valid()
      */
     private $videos;
 
@@ -59,6 +67,13 @@ class Trick
      * @ORM\Column(type="boolean")
      */
     private $published;
+
+    private $illustrationFiles;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $updatedAt;
 
     public function __construct()
     {
@@ -143,11 +158,35 @@ class Trick
         if ($this->illustrations->contains($illustration)) {
             $this->illustrations->removeElement($illustration);
             // set the owning side to null (unless already changed)
-            if ($illustration->getTrick() === $this) {
+            /*if ($illustration->getTrick() === $this) {
                 $illustration->setTrick(null);
-            }
+            }*/
         }
 
+        return $this;
+    }
+
+	/**
+	 * @return array
+	 */
+	public function getIllustrationFiles():? array
+    {
+        return $this->illustrationFiles;
+    }
+
+	/**
+	 * @param $illustrationFiles
+	 *
+	 * @return Trick
+	 */
+	public function setIllustrationFiles($illustrationFiles): self
+    {
+        foreach($illustrationFiles as $illustrationFile) {
+            $illustration = new Illustration();
+            $illustration->setImageFile($illustrationFile);
+            $this->addIllustration($illustration);
+        }
+        $this->illustrationFiles = $illustrationFiles;
         return $this;
     }
 
@@ -159,7 +198,12 @@ class Trick
         return $this->videos;
     }
 
-    public function addVideo(Video $video): self
+	/**
+	 * @param Video $video
+	 *
+	 * @return Trick
+	 */
+	public function addVideo(Video $video): self
     {
         if (!$this->videos->contains($video)) {
             $this->videos[] = $video;
@@ -174,9 +218,9 @@ class Trick
         if ($this->videos->contains($video)) {
             $this->videos->removeElement($video);
             // set the owning side to null (unless already changed)
-            if ($video->getTrick() === $this) {
+            /*if ($video->getTrick() === $this) {
                 $video->setTrick(null);
-            }
+            }*/
         }
 
         return $this;
@@ -185,13 +229,6 @@ class Trick
     public function getSlug(): ?string
     {
         return $this->slug;
-    }
-
-    public function setSlug(string $slug): self
-    {
-        $this->slug = $slug;
-
-        return $this;
     }
 
 	/**
@@ -221,23 +258,44 @@ class Trick
         return $this;
     }
 
+	public function getUpdatedAt(): ?\DateTimeInterface
+	{
+		return $this->updatedAt;
+	}
+
+	public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
+	{
+		$this->updatedAt = $updatedAt;
+
+		return $this;
+	}
+
+	/**
+	 * @ORM\PreUpdate
+	 */
+	public function updateDate()
+	{
+		$this->setUpdatedAt(new \Datetime());
+	}
+
 	/**
 	 * Initialize le slug
 	 *
-	 * @param        $string
+	 * @param string $string
 	 * @param string $delimiter
 	 *
 	 * @return string
 	 */
-	private function slugify($string, $delimiter = '-'): string {
-		$oldLocale = setlocale(LC_ALL, '0');
-		setlocale(LC_ALL, 'en_US.UTF-8');
-		$clean = iconv('UTF-8', 'ASCII//TRANSLIT', $string);
-		$clean = preg_replace("/[^a-zA-Z0-9\/_|+ -]/", '', $clean);
-		$clean = strtolower($clean);
-		$clean = preg_replace("/[\/_|+ -]+/", $delimiter, $clean);
-		$clean = trim($clean, $delimiter);
-		setlocale(LC_ALL, $oldLocale);
-		return $clean;
-	}
+	private function slugify(String $string, String $delimiter = '-'): string {
+        $oldLocale = setlocale(LC_ALL, '0');
+        setlocale(LC_ALL, 'en_US.UTF-8');
+        $clean = iconv('UTF-8', 'ASCII//TRANSLIT', $string);
+        $clean = preg_replace("/[^a-zA-Z0-9\/_|+ -]/", '', $clean);
+        $clean = preg_replace("/[\/_|+ -]+/", $delimiter, $clean);
+        $clean = strtolower($clean);
+        $clean = trim($clean, $delimiter);
+        setlocale(LC_ALL, $oldLocale);
+        return $clean;
+    }
+
 }

@@ -3,12 +3,15 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\VideoRepository")
  */
 class Video
 {
+	const WIDTH = 130;
+	const HEIGHT = 120;
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -18,11 +21,10 @@ class Video
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     */
-    private $url;
-
-    /**
-     * @ORM\Column(type="text", nullable=true)
+     * @Assert\Regex(
+     *     pattern="/^<iframe.*?s*src=""http[s]?:(.*?)"".*?<\/iframe>$/",
+     *     message="your code is not a video"
+     * )
      */
     private $embedCode;
 
@@ -37,18 +39,6 @@ class Video
         return $this->id;
     }
 
-    public function getUrl(): ?string
-    {
-        return $this->url;
-    }
-
-    public function setUrl(?string $url): self
-    {
-        $this->url = $url;
-
-        return $this;
-    }
-
     public function getEmbedCode(): ?string
     {
         return $this->embedCode;
@@ -56,9 +46,9 @@ class Video
 
     public function setEmbedCode(?string $embedCode): self
     {
-        $this->embedCode = $embedCode;
+        $this->embedCode = $this->adjustVideo($embedCode);
 
-        return $this;
+	    return $this;
     }
 
     public function getTrick(): Trick
@@ -72,4 +62,19 @@ class Video
 
         return $this;
     }
+
+	/**
+	 *  Adjust Height & Width
+	 *
+	 * @param String $embedCode
+	 *
+	 * @return String
+	 */
+	private function adjustVideo(String $embedCode): String {
+
+		return preg_replace(
+			array('/width="\d+"/i', '/height="\d+"/i'),
+			array(sprintf('width="%d"', self::WIDTH), sprintf('height="%d"', self::HEIGHT)),
+			$embedCode);
+	}
 }

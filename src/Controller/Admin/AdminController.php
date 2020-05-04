@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Trick;
 use App\Form\TrickType;
 use App\Repository\TrickRepository;
+use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -34,6 +35,7 @@ class AdminController extends AbstractController
 	 * @Route("/tricks", name="admin.index")
 	 *
 	 * @param TrickRepository $repository
+	 *
 	 * @return  Response
 	 */
     public function index(TrickRepository $repository): Response
@@ -49,8 +51,10 @@ class AdminController extends AbstractController
 	/**
 	 * @Route("/tricks/new", name="admin.trick.create")
 	 * @Route("/tricks/{id}/edit", name="admin.trick.edit", requirements={"slug": "[a-z0-9\-]*", "id": "\d+"})
-	 * @param Trick|null $trick
-	 * @param Request    $request
+	 *
+	 * @param Trick|null   $trick
+	 * @param Request      $request
+	 * @param FileUploader $fileUploader
 	 *
 	 * @return Response
 	 */
@@ -67,9 +71,12 @@ class AdminController extends AbstractController
 
 		$form->handleRequest($request);
 	    if ($form->isSubmitted() && $form->isValid()) {
+
 		    $this->em->persist($trick);
 		    $this->em->flush();
+
 		    $this->addFlash('success', "la figure <strong>{$trick->getTitle()}</strong> a bien été " . $flash);
+
 		    return $this->redirectToRoute('admin.index');
 	    }
 
@@ -80,6 +87,7 @@ class AdminController extends AbstractController
     }
 	/**
 	 * @Route("/tricks/delete/{id}", name="admin.trick.delete", methods="DELETE", requirements={"id": "\d+"})
+	 *
 	 * @param Trick   $trick
 	 * @param Request $request
 	 *
@@ -87,7 +95,6 @@ class AdminController extends AbstractController
 	 */
 	public function delete(Trick $trick, Request $request):RedirectResponse
 	{
-
 		if ($this->isCsrfTokenValid('delete' . $trick->getId(), $request->get('_token'))) {
 			$this->em->remove($trick);
 			$this->em->flush();

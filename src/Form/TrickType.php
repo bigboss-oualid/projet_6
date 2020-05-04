@@ -6,7 +6,8 @@ use App\Entity\Category;
 use App\Entity\Trick;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -24,7 +25,30 @@ class TrickType extends AbstractType
 		        'choice_label' => 'name'
 	        ])
             ->add('description', TextareaType::class, $this->getConfiguration("Description", "Tapez la description de la figure"))
-            ->add('published')
+            ->add('published', CheckboxType::class, [
+	            'label'    => 'Publier la figure',
+	            'required'			=> false,
+            	])
+
+	        ->add('illustrations', CollectionType::class, array(
+		        'entry_type'   		=> IllustrationType::class,
+		        'prototype'			=> true,
+		        'allow_add'			=> true,
+		        'allow_delete'		=> true,
+		        'by_reference' 		=> false,
+		        'required'			=> false,
+		        'label'			=> false,
+	        ))
+
+	        ->add('videos', CollectionType::class, array(
+		        'entry_type'   		=> VideoType::class,
+		        'prototype'			=> true,
+		        'allow_add'			=> true,
+		        'allow_delete'		=> true,
+		        'by_reference' 		=> false,
+		        'required'			=> false,
+		        'label'			=> false,
+	        ))
 
         ;
     }
@@ -45,6 +69,8 @@ class TrickType extends AbstractType
     private function getConfiguration($label, $placeholder = null): array {
     	return [
     		'label' => $label,
+
+		    'required'			=> false,
 		    'attr'  => [
 		    	'placeholder' => $placeholder
 		    ]

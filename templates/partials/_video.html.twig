@@ -1,0 +1,18 @@
+<div class="col-md-4 mb-2" id="video-{{ form.vars.name}}">
+    <div class="border p-2 w-100">
+        <div class="text-center p-2">
+        {% if form.vars.value.embedCode is defined  %}
+            {{ form.vars.value.embedCode | raw}}
+        {% else %}
+
+        {%  endif %}
+            <span id="video-value-{{ form.vars.name }}"></span>
+        </div>
+        {{ form_row(form.embed_code, {
+            attr: {
+                'placeholder': 'Entrer code integré'
+            }
+        }) }}
+        <button type="button" class="btn-btn-sm btn-danger btn-remove" data-rel="#video-{{ form.vars.name }}"><i class="fa fa-trash"></i> Supprimer</button>
+    </div>
+</div>
