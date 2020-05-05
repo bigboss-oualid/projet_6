@@ -1,7 +1,7 @@
 {% include 'blog/include/_trick.html.twig' %}
 
 <div class="mb-5 text-center">
-    <a href="{{ path('admin.trick.edit', {id: trick.id}) }}" class="btn btn-secondary"><i class="fa fa-pencil"></i></a>
+    <a href="{{ path('admin.trick.edit', {slug: trick.slug, id: trick.id}) }}" class="btn btn-secondary"><i class="fa fa-pencil"></i></a>
     <form method="post" action="{{ path('admin.trick.delete', {id: trick.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes vous vraiment sûr ?')">
         <input type="hidden" name="_method" value="DELETE">
         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ trick.id) }}">

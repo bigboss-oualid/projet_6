@@ -54,7 +54,7 @@
                     </div>
                     {% if editMode %}
                         <div class="col col-md-auto">
-                            <form method="post" action="{{ path('admin.trick.delete', {id: app.request.get('id')}) }}" style="display: inline-block" onsubmit="return confirm('Êtes vous vraiment sûr ?')">
+                            <form method="post" action="{{ path('admin.trick.delete', {id: formTrick.vars.value.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes vous vraiment sûr ?')">
                                 <input type="hidden" name="_method" value="DELETE">
                                 <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ app.request.get('id')) }}">
                                 <button class="btn btn-danger"><i class="fa fa-trash"></i> Supprimer</button>
@@ -96,9 +96,14 @@
 
         // Add illustration
         $(".btn-add-image").on("click", function() {
+            //get the number of future fields
             var $collectionHolder = $($(this).data("rel"));
             var index = $collectionHolder.data("index");
+
+            //get the prototype of the inputs
             var prototype = $collectionHolder.data("prototype");
+
+            // inject code into the div
             $collectionHolder.append(prototype.replace(/__name__/g, index));
 
             // show name of file in input placeholder

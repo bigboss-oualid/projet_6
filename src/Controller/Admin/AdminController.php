@@ -50,20 +50,26 @@ class AdminController extends AbstractController
 
 	/**
 	 * @Route("/tricks/new", name="admin.trick.create")
-	 * @Route("/tricks/{id}/edit", name="admin.trick.edit", requirements={"slug": "[a-z0-9\-]*", "id": "\d+"})
+	 * @Route("/tricks/{slug}/{id}/edit", name="admin.trick.edit", requirements={"slug": "[a-z0-9\-]*", "id": "\d+"})
 	 *
-	 * @param Trick|null   $trick
-	 * @param Request      $request
-	 * @param FileUploader $fileUploader
+	 * @param Trick|null $trick
+	 * @param String     $slug
+	 * @param Request    $request
 	 *
 	 * @return Response
 	 */
-    public function formTrick(Trick $trick = null, Request $request):Response
+    public function formTrick(Trick $trick = null, String $slug=null, Request $request):Response
     {
     	if(!$trick){
 		    $trick = new Trick();
 		    $flash = " enregistrée";
 	    }else{
+		    if ($trick->getSlug() != $slug) {
+			    return $this->redirectToRoute('admin.trick.edit', [
+				    'slug' => $trick->getSlug(),
+				    'id'   => $trick->getId()
+			    ], 301);
+		    }
 		    $flash = " modifiée";
 	    }
 

@@ -23,7 +23,7 @@ class Video
      * @ORM\Column(type="text", nullable=true)
      * @Assert\Regex(
      *     pattern="/^<iframe.*?s*src=""http[s]?:(.*?)"".*?<\/iframe>$/",
-     *     message="your code is not a video"
+     *     message="Code de la video n'est pas correct"
      * )
      */
     private $embedCode;

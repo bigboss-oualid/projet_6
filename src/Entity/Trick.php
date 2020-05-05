@@ -12,7 +12,10 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TrickRepository")
  * @ORM\HasLifecycleCallbacks()
- * @UniqueEntity("title")
+ * @UniqueEntity(
+ *     fields={"title"},
+ *     message="Une autre figure possède déjà ce titre, merci de le modifier"
+ * )
  */
 class Trick
 {
@@ -24,10 +27,9 @@ class Trick
     private $id;
 
     /**
-     * @Assert\Length(min=5, max=255)
      * @ORM\Column(type="string", length=255, unique=true)
      * @Assert\NotBlank
-     * @Assert\Length(min=3, minMessage="Titre trop court !")
+     * @Assert\Length(min=3, max=255, minMessage="Titre trop court, Il doit avoir 3 caractères ou plus !", maxMessage="Titre trop long, Il doit avoir 255 caractères pas plus !")
      */
     private $title;
 

@@ -18,37 +18,54 @@ class TrickType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title', TextType::class, $this->getConfiguration("Titre", "Tapez le titre de la figure"))
-	        ->add('category', EntityType::class, [
-		        'label' => 'Catégorie',
-		        'class' => Category::class,
-		        'choice_label' => 'name'
+            ->add(
+            	'title',
+	            TextType::class,
+	            $this->getConfiguration("Titre", ['placeholder' => "Tapez le titre de la figure"])
+            )
+	        ->add(
+	        	'category',
+		        EntityType::class,
+		        $this->getConfiguration("Catégorie", [],
+			        [
+			        	'class' => Category::class,
+				        'choice_label' => 'name'
+			        ])
+		        )
+            ->add(
+            	'description',
+	            TextareaType::class,
+	            $this->getConfiguration("Description",
+		            ['placeholder' => "Tapez la description de la figure"],
+	                ['required' => false]
+	            )
+            )
+            ->add(
+            	'published',
+	            CheckboxType::class,
+	            $this->getConfiguration("Publier la figure", [], ['required' => false])
+
+             )
+
+	        ->add('illustrations', CollectionType::class, [
+		        'entry_type'   	=> IllustrationType::class,
+		        'prototype'		=> true,
+		        'allow_add'		=> true,
+		        'allow_delete'	=> true,
+		        'by_reference' 	=> false,
+		        'required'		=> false,
+		        'label'			=> false,
 	        ])
-            ->add('description', TextareaType::class, $this->getConfiguration("Description", "Tapez la description de la figure"))
-            ->add('published', CheckboxType::class, [
-	            'label'    => 'Publier la figure',
-	            'required'			=> false,
-            	])
 
-	        ->add('illustrations', CollectionType::class, array(
-		        'entry_type'   		=> IllustrationType::class,
-		        'prototype'			=> true,
-		        'allow_add'			=> true,
-		        'allow_delete'		=> true,
-		        'by_reference' 		=> false,
-		        'required'			=> false,
+	        ->add('videos', CollectionType::class, [
+		        'entry_type'   	=> VideoType::class,
+		        'prototype'		=> true,
+		        'allow_add'		=> true,
+		        'allow_delete'	=> true,
+		        'by_reference' 	=> false,
+		        'required'		=> false,
 		        'label'			=> false,
-	        ))
-
-	        ->add('videos', CollectionType::class, array(
-		        'entry_type'   		=> VideoType::class,
-		        'prototype'			=> true,
-		        'allow_add'			=> true,
-		        'allow_delete'		=> true,
-		        'by_reference' 		=> false,
-		        'required'			=> false,
-		        'label'			=> false,
-	        ))
+	        ])
 
         ;
     }
@@ -62,18 +79,15 @@ class TrickType extends AbstractType
 
 	/**
 	 * @param string $label
-	 * @param null|string $placeholder
+	 * @param array  $attr
+	 * @param array  $options
 	 *
 	 * @return array
 	 */
-    private function getConfiguration($label, $placeholder = null): array {
-    	return [
+    private function getConfiguration($label, $attr, $options = []): array {
+    	return array_merge([
     		'label' => $label,
-
-		    'required'			=> false,
-		    'attr'  => [
-		    	'placeholder' => $placeholder
-		    ]
-	    ];
+		    'attr'  => $attr
+	    ], $options);
     }
 }
