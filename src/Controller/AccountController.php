@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Account;
+namespace App\Controller;
 
 use App\Entity\PasswordUpdate;
 use App\Entity\User;
@@ -29,9 +29,6 @@ class AccountController extends AbstractController
     {
     	$error = $utils->getLastAuthenticationError();
     	$username = $utils->getLastUsername();
-
-    	if($error)
-    		dump($error);
 
         return $this->render('account/login.html.twig',[
 	        'current_menu'    => 'login',
