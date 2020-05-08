@@ -44,7 +44,7 @@ class FileUploaderSubscriber implements EventSubscriber
 
 		$entity = $args->getEntity();
 
-		if (!$entity instanceof Picture) {
+		if (!$entity instanceof Picture || $entity->getImageFile() == null) {
 			return;
 		}
 
@@ -59,7 +59,7 @@ class FileUploaderSubscriber implements EventSubscriber
 
 		$entity = $args->getEntity();
 
-		if (!$entity instanceof Picture) {
+		if (!$entity instanceof Picture || $entity->getImageFile() == null) {
 			return;
 		}
 		unlink($this->targetDirectory .'/' .$entity->getFilename());
