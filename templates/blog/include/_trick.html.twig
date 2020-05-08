@@ -6,13 +6,16 @@
             </a>
         </h5>
         <p class="card-text display-5">{{ trick.description}}</p>
-        <div class="blockquote-footer float-right">
-            Créer le {{ trick.createdAt | format_datetime(locale='fr') }}
+        <div class="row float-right">
+            <div class="col-12 blockquote-footer">
+                Créer le {{ trick.createdAt | format_datetime(locale='fr') }}
+            </div>
+            <div class="col-12">
+                Créer par
+                <a href="{{ path('user.show', {'username': trick.author.username}) }}">
+                    <span class="badge badge-warning">{{ trick.author.username }}</span>
+                </a>
+            </div>
         </div>
-        {% if trick.published%}
-            <div class="text-success  float-right"> Publier</div>
-        {% else %}
-            <div class="text-danger blockquote-footer float-right"> brouillon</div>
-        {% endif %}
     </div>
 </div>

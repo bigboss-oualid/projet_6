@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion au site!{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Inscrivez vous sur notre site !</h1>
+
+        {{  form_start(form) }}
+        <div class="col-md-6 offset-md-3">
+            <div class="row">
+                <div class="col-md-4  text-center p-2">
+                    {% if form.vars.value.filename is defined  %}
+                        <img  id="avatar-holder-{{ form.vars.name }}" src="{{ asset('images/' ~ form.vars.value.filename) }}" width="120" height="120" alt="{{ form.vars.value.altName }}">
+                    {% else %}
+                        <img id="avatar-holder-{{ form.vars.name }}" src="{{ asset('images/placeholder.png') }}" style='max-width:120px;'/>
+                    {%  endif %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">{{ form_row(form.avatar) }}</div>
+            </div>
+            <div class="form-row align-items-end">
+                <div class="col-md-6">{{ form_row(form.firstName) }}</div>
+                <div class="col-md-6">{{ form_row(form.lastName) }}</div>
+                <div class="col-md-6">{{ form_row(form.username) }}</div>
+                <div class="col-md-6">{{ form_row(form.email) }}</div>
+                <div class="col-md-6">{{ form_row(form.hash) }}</div>
+                <div class="col-md-6">{{ form_row(form.passwordConfirm) }}</div>
+            </div>
+            <div class="row pt-4">
+                <div class="col-md-12 ">
+                    <button type="submit" class="w-100 btn btn-success">
+                        <i class="fa fa-floppy-o"></i>
+                         Confirmez l'inscription
+                    </button>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

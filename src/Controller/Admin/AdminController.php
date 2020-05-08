@@ -5,7 +5,6 @@ namespace App\Controller\Admin;
 use App\Entity\Trick;
 use App\Form\TrickType;
 use App\Repository\TrickRepository;
-use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -77,6 +76,8 @@ class AdminController extends AbstractController
 
 		$form->handleRequest($request);
 	    if ($form->isSubmitted() && $form->isValid()) {
+
+	    	$trick->setAuthor($this->getUser());
 
 		    $this->em->persist($trick);
 		    $this->em->flush();

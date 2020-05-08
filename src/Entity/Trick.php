@@ -19,161 +19,167 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class Trick
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+	/**
+	 * @ORM\Id()
+	 * @ORM\GeneratedValue()
+	 * @ORM\Column(type="integer")
+	 */
+	private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255, unique=true)
-     * @Assert\NotBlank(message="Vous devez renseigner un titre!")
-     * @Assert\Length(min=3, max=255, minMessage="Titre trop court, Il doit faire au moins 3 caractères !", maxMessage="Titre trop long, Il doit faire au max 255 caractères ! !")
-     */
-    private $title;
+	/**
+	 * @ORM\Column(type="string", length=255, unique=true)
+	 * @Assert\NotBlank(message="Vous devez renseigner un titre!")
+	 * @Assert\Length(min=3, max=255, minMessage="Titre trop court, Il doit faire au moins 3 caractères !", maxMessage="Titre trop long, Il doit faire au max 255 caractères ! !")
+	 */
+	private $title;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     * @Assert\Length(min=100, minMessage="La description est trop court, Il doit faire au moins 100 caractères !", )
-     */
-    private $description;
+	/**
+	 * @ORM\Column(type="text", nullable=true)
+	 * @Assert\Length(min=100, minMessage="La description est trop court, Il doit faire au moins 100 caractères !", )
+	 */
+	private $description;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $createdAt;
+	/**
+	 * @ORM\Column(type="datetime")
+	 */
+	private $createdAt;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="tricks", cascade={"persist"})
-     */
-    private $category;
+	/**
+	 * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="tricks", cascade={"persist"})
+	 */
+	private $category;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Illustration", mappedBy="trick", cascade={"persist"}, orphanRemoval=true)
-     * @Assert\Valid()
-     */
-    private $illustrations;
+	/**
+	 * @ORM\OneToMany(targetEntity="App\Entity\Illustration", mappedBy="trick", cascade={"persist"}, orphanRemoval=true)
+	 * @Assert\Valid()
+	 */
+	private $illustrations;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Video", mappedBy="trick", cascade={"persist"}, orphanRemoval=true)
-     * @Assert\Valid()
-     */
-    private $videos;
+	/**
+	 * @ORM\OneToMany(targetEntity="App\Entity\Video", mappedBy="trick", cascade={"persist"}, orphanRemoval=true)
+	 * @Assert\Valid()
+	 */
+	private $videos;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $slug;
+	/**
+	 * @ORM\Column(type="string", length=255)
+	 */
+	private $slug;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $published;
+	/**
+	 * @ORM\Column(type="boolean")
+	 */
+	private $published;
 
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private $updatedAt;
+	/**
+	 * @ORM\Column(type="datetime", nullable=true)
+	 */
+	private $updatedAt;
 
-    public function __construct()
-    {
-	    $this->createdAt = new \DateTime();
-        $this->illustrations = new ArrayCollection();
-        $this->videos = new ArrayCollection();
-    }
+	/**
+	 * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="tricks")
+	 * @ORM\JoinColumn(nullable=false)
+	 */
+	private $author;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+	public function __construct()
+	{
+		$this->createdAt = new \DateTime();
+		$this->illustrations = new ArrayCollection();
+		$this->videos = new ArrayCollection();
+	}
 
-    public function getTitle(): ?string
-    {
-        return $this->title;
-    }
+	public function getId(): ?int
+	{
+		return $this->id;
+	}
 
-    public function setTitle(string $title): self
-    {
-        $this->title = $title;
+	public function getTitle(): ?string
+	{
+		return $this->title;
+	}
 
-        return $this;
-    }
+	public function setTitle(string $title): self
+	{
+		$this->title = $title;
 
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
+		return $this;
+	}
 
-    public function setDescription(?string $description): self
-    {
-        $this->description = $description;
+	public function getDescription(): ?string
+	{
+		return $this->description;
+	}
 
-        return $this;
-    }
+	public function setDescription(?string $description): self
+	{
+		$this->description = $description;
 
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
-    }
+		return $this;
+	}
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
-    {
-        $this->createdAt = $createdAt;
+	public function getCreatedAt(): ?\DateTimeInterface
+	{
+		return $this->createdAt;
+	}
 
-        return $this;
-    }
+	public function setCreatedAt(\DateTimeInterface $createdAt): self
+	{
+		$this->createdAt = $createdAt;
 
-    public function getCategory(): ?Category
-    {
-        return $this->category;
-    }
+		return $this;
+	}
 
-    public function setCategory(?Category $category): self
-    {
-        $this->category = $category;
+	public function getCategory(): ?Category
+	{
+		return $this->category;
+	}
 
-        return $this;
-    }
+	public function setCategory(?Category $category): self
+	{
+		$this->category = $category;
 
-    /**
-     * @return Collection|Illustration[]
-     */
-    public function getIllustrations(): Collection
-    {
-        return $this->illustrations;
-    }
+		return $this;
+	}
 
-    public function addIllustration(Illustration $illustration): self
-    {
-        if (!$this->illustrations->contains($illustration)) {
-            $this->illustrations[] = $illustration;
-            $illustration->setTrick($this);
-        }
+	/**
+	 * @return Collection|Illustration[]
+	 */
+	public function getIllustrations(): Collection
+	{
+		return $this->illustrations;
+	}
 
-        return $this;
-    }
+	public function addIllustration(Illustration $illustration): self
+	{
+		if (!$this->illustrations->contains($illustration)) {
+			$this->illustrations[] = $illustration;
+			$illustration->setTrick($this);
+		}
 
-    public function removeIllustration(Illustration $illustration): self
-    {
-        if ($this->illustrations->contains($illustration)) {
-            $this->illustrations->removeElement($illustration);
-            // set the owning side to null (unless already changed)
-            /*if ($illustration->getTrick() === $this) {
-                $illustration->setTrick(null);
-            }*/
-        }
+		return $this;
+	}
 
-        return $this;
-    }
+	public function removeIllustration(Illustration $illustration): self
+	{
+		if ($this->illustrations->contains($illustration)) {
+			$this->illustrations->removeElement($illustration);
+			// set the owning side to null (unless already changed)
+			/*if ($illustration->getTrick() === $this) {
+				$illustration->setTrick(null);
+			}*/
+		}
 
-    /**
-     * @return Collection|Video[]
-     */
-    public function getVideos(): Collection
-    {
-        return $this->videos;
-    }
+		return $this;
+	}
+
+	/**
+	 * @return Collection|Video[]
+	 */
+	public function getVideos(): Collection
+	{
+		return $this->videos;
+	}
 
 	/**
 	 * @param Video $video
@@ -183,30 +189,30 @@ class Trick
 	public function addVideo(Video $video): self
 	{
 		if (!$this->videos->contains($video)) {
-		    $this->videos[] = $video;
-		    $video->setTrick($this);
+			$this->videos[] = $video;
+			$video->setTrick($this);
 		}
 
 		return $this;
 	}
 
-    public function removeVideo(Video $video): self
-    {
-        if ($this->videos->contains($video)) {
-            $this->videos->removeElement($video);
-            // set the owning side to null (unless already changed)
-            /*if ($video->getTrick() === $this) {
-                $video->setTrick(null);
-            }*/
-        }
+	public function removeVideo(Video $video): self
+	{
+		if ($this->videos->contains($video)) {
+			$this->videos->removeElement($video);
+			// set the owning side to null (unless already changed)
+			/*if ($video->getTrick() === $this) {
+				$video->setTrick(null);
+			}*/
+		}
 
-        return $this;
-    }
+		return $this;
+	}
 
-    public function getSlug(): ?string
-    {
-        return $this->slug;
-    }
+	public function getSlug(): ?string
+	{
+		return $this->slug;
+	}
 
 	/**
 	 * @ORM\PrePersist
@@ -216,44 +222,44 @@ class Trick
 	 *
 	 * @return void
 	 */
-    public function createSlug(EventArgs $event): void
+	public function createSlug(EventArgs $event): void
 	{
 		//create slug if trick is new or his title is modified
 		if($this->id == null || (isset($event->getEntityChangeSet()['title'])))
 			$this->slug = $this->slugify($this->title);
 	}
 
-    public function isPublished(): ?bool
-    {
-        return $this->published;
-    }
+	public function isPublished(): ?bool
+	{
+		return $this->published;
+	}
 
-    public function setPublished(bool $published): self
-    {
-        $this->published = $published;
+	public function setPublished(bool $published): self
+	{
+		$this->published = $published;
 
-        return $this;
-    }
+		return $this;
+	}
 
 	public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
+	{
+		return $this->updatedAt;
+	}
 
 	public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
-    {
-        $this->updatedAt = $updatedAt;
+	{
+		$this->updatedAt = $updatedAt;
 
-        return $this;
-    }
+		return $this;
+	}
 
 	/**
 	 * @ORM\PreUpdate
 	 */
 	public function updateDate()
-    {
-        $this->setUpdatedAt(new \Datetime());
-    }
+	{
+		$this->setUpdatedAt(new \Datetime());
+	}
 
 	/**
 	 * Initialize le slug
@@ -264,15 +270,27 @@ class Trick
 	 * @return string
 	 */
 	private function slugify(String $string, String $delimiter = '-'): string {
-		 $oldLocale = setlocale(LC_ALL, '0');
-		 setlocale(LC_ALL, 'en_US.UTF-8');
-		 $clean = iconv('UTF-8', 'ASCII//TRANSLIT', $string);
-		 $clean = preg_replace("/[^a-zA-Z0-9\/_|+ -]/", '', $clean);
-		 $clean = preg_replace("/[\/_|+ -]+/", $delimiter, $clean);
-		 $clean = strtolower($clean);
-		 $clean = trim($clean, $delimiter);
-		 setlocale(LC_ALL, $oldLocale);
-		 return $clean;
+		$oldLocale = setlocale(LC_ALL, '0');
+		setlocale(LC_ALL, 'en_US.UTF-8');
+		$clean = iconv('UTF-8', 'ASCII//TRANSLIT', $string);
+		$clean = preg_replace("/[^a-zA-Z0-9\/_|+ -]/", '', $clean);
+		$clean = preg_replace("/[\/_|+ -]+/", $delimiter, $clean);
+		$clean = strtolower($clean);
+		$clean = trim($clean, $delimiter);
+		setlocale(LC_ALL, $oldLocale);
+		return $clean;
+	}
+
+	public function getAuthor(): ?User
+	{
+		return $this->author;
+	}
+
+	public function setAuthor(?User $author): self
+	{
+		$this->author = $author;
+
+		return $this;
 	}
 
 }

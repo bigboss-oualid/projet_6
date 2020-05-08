@@ -9,19 +9,36 @@
     <div class="ml-5 mr-5 collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link {% if current_menu is defined and current_menu == 'home' %} active {% endif %}" href="{{ path('blog.home') }}">Accueil <span class="sr-only">(current)</span></a>
+                <a class="nav-link {% if current_menu is defined and current_menu == 'home' %}font-weight-bold active {% endif %}" href="{{ path('blog.home') }}">Accueil <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {% if current_menu is defined and current_menu == 'show' %} active {% endif %}"  href="#">Tricks <span class="sr-only">(current)</span></a>
+                <a class="nav-link {% if current_menu is defined and current_menu == 'show' %}font-weight-bold active {% endif %}"  href="#">Tricks <span class="sr-only">(current)</span></a>
             </li>
         </ul>
         <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link {% if current_menu is defined and current_menu == 'login' %}active {% endif %}" href=""><span class="sr-only">(current)</span>Login</a>
-            </li>
-            <li class="nav-item {% if current_menu is defined and current_menu == 'register' %}active {% endif %}">
-                <a class="nav-link" href=""><span class="sr-only">(current)</span>Register</a>
-            </li>
+            {% if app.user %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="accountDropdownLink" data-toggle="dropdown">
+                        <img class="avatar avatar-small" src="{{ asset('images/' ~ app.user.avatar.filename) }}" alt="avatar de {{ app.user.fullName }}"> {{ app.user.fullName }}
+                    </a>
+                    <div class="navbar-light bg-warning dropdown-menu dropdown-menu-right" aria-labelledby="accountDropdownLink">
+                        <a href="{{ path('admin.trick.create') }}" class="dropdown-item">Créer une Figure</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item {% if current_menu is defined and current_menu == 'index' %}font-weight-bold {% endif %}" href="{{ path('account.index') }}"><span class="sr-only">(current)</span>Mon Compte</a>
+                        <a class="dropdown-item {% if current_menu is defined and current_menu == 'profile' %}font-weight-bold {% endif %}" href="{{ path('account.profile') }}"><span class="sr-only">(current)</span>Mdifier mon profil</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{ path('account.logout') }}"><span class="sr-only">(current)</span>Déconnexion</a>
+                    </div>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link {% if current_menu is defined and current_menu == 'register' %}font-weight-bold active{% endif %}" href="{{ path('account.register') }}"><span class="sr-only">(current)</span>Inscription</a>
+                </li>
+                <li class="nav-item {% if current_menu is defined and current_menu == 'login' %}font-weight-bold active {% endif %}">
+                    <a class="nav-link" href="{{ path('account.login') }}"><span class="sr-only">(current)</span>Connexion</a>
+                </li>
+            {% endif %}
+
         </ul>
     </div>
 </nav>
