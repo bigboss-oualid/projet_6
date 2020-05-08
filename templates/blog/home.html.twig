@@ -10,6 +10,9 @@
 
     <div class="container">
         <h2>Tous les Tricks</h2>
+        {% if app.user %}
+            <a href="{{ path('trick.create') }}" class="mb-5 btn btn-success"><i class="fa fa-plus"> Ajouter nouvelle figure</i></a>
+        {% endif %}
         <div class="row flex">
             {% for trick in tricks%}
                 <div class="col-md-3">

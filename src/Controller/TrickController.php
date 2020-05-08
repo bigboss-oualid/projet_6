@@ -4,8 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Trick;
 use App\Form\TrickType;
-use App\Repository\TrickRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,42 +16,20 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class TrickController extends AbstractController
 {
-
-	/**
-	 * @var TrickRepository
-	 */
-	private $repository;
 	/**
 	 * @var EntityManagerInterface
 	 */
 	private $em;
 
-	public function __construct(TrickRepository $repository, EntityManagerInterface $em)
+	public function __construct(EntityManagerInterface $em)
 	{
-		$this->repository = $repository;
 		$this->em = $em;
 	}
 
 	/**
-	 * @Route("/tricks", name="admin.index")
-	 *
-	 * @param TrickRepository $repository
-	 *
-	 * @return  Response
-	 */
-    public function index(TrickRepository $repository): Response
-    {
-	    $tricks = $repository->findAll();
-
-	    return $this->render('admin/index.html.twig', [
-		    'current_menu'    => 'home',
-		    'tricks' => $tricks
-	    ]);
-    }
-
-	/**
-	 * @Route("/tricks/new", name="admin.trick.create")
-	 * @Route("/tricks/{slug}/{id}/edit", name="admin.trick.edit", requirements={"slug": "[a-z0-9\-]*", "id": "\d+"})
+	 * @Route("/tricks/new", name="trick.create")
+	 * @Route("/tricks/{slug}/{id}/edit", name="trick.edit", requirements={"slug": "[a-z0-9\-]*", "id": "\d+"})
+	 * @IsGranted("ROLE_USER")
 	 *
 	 * @param Trick|null $trick
 	 * @param String     $slug
@@ -65,7 +44,7 @@ class TrickController extends AbstractController
 		    $flash = " enregistrée";
 	    }else{
 		    if ($trick->getSlug() != $slug) {
-			    return $this->redirectToRoute('admin.trick.edit', [
+			    return $this->redirectToRoute('trick.edit', [
 				    'slug' => $trick->getSlug(),
 				    'id'   => $trick->getId()
 			    ], 301);
@@ -85,16 +64,18 @@ class TrickController extends AbstractController
 
 		    $this->addFlash('success', "la figure <strong>{$trick->getTitle()}</strong> a bien été " . $flash);
 
-		    return $this->redirectToRoute('admin.index');
+		    return $this->redirectToRoute('blog.home');
 	    }
 
-		return $this->render('admin/form/trick.html.twig', [
+		return $this->render('form/trick.html.twig', [
 			'formTrick' => $form->createView(),
 			'editMode'  => $trick->getId() !== null
 		]);
     }
+
 	/**
-	 * @Route("/tricks/delete/{id}", name="admin.trick.delete", methods="DELETE", requirements={"id": "\d+"})
+	 * @Route("/tricks/{id}/delete", name="trick.delete", methods="DELETE", requirements={"id": "\d+"})
+	 * @Security("is_granted('ROLE_USER') and user === trick.getAuthor()", message="Cette figure ne vous appartient pas, vous ne pouvez pas la supprimer")
 	 *
 	 * @param Trick   $trick
 	 * @param Request $request
@@ -106,8 +87,11 @@ class TrickController extends AbstractController
 		if ($this->isCsrfTokenValid('delete' . $trick->getId(), $request->get('_token'))) {
 			$this->em->remove($trick);
 			$this->em->flush();
-			$this->addFlash('success', 'Figure supprimé avec succès');
+			$this->addFlash(
+				'success',
+				"La figure <strong>{$trick->getTitle()}</strong> a bien été supprimée !"
+			);
 		}
-		return $this->redirectToRoute('admin.index');
+		return $this->redirectToRoute('blog.home');
 	}
 }

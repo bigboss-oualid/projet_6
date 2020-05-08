@@ -54,7 +54,7 @@
                     </div>
                     {% if editMode %}
                         <div class="col col-md-auto">
-                            <form method="post" action="{{ path('admin.trick.delete', {id: formTrick.vars.value.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes vous vraiment sûr ?')">
+                            <form method="post" action="{{ path('trick.delete', {id: formTrick.vars.value.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes vous vraiment sûr ?')">
                                 <input type="hidden" name="_method" value="DELETE">
                                 <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ app.request.get('id')) }}">
                                 <button class="btn btn-danger"><i class="fa fa-trash"></i> Supprimer</button>
