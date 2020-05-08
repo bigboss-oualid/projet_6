@@ -11,7 +11,6 @@ class Illustration extends Picture
 {
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Trick", inversedBy="illustrations")
-     * @ORM\JoinColumn(nullable=false)
      */
     private $trick;
 
@@ -23,9 +22,7 @@ class Illustration extends Picture
     public function setTrick(Trick $trick): self
     {
         $this->trick = $trick;
-	    parent::setTitle($trick->getTitle());
 
         return $this;
     }
-
 }

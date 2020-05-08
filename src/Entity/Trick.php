@@ -28,13 +28,14 @@ class Trick
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
-     * @Assert\NotBlank
-     * @Assert\Length(min=3, max=255, minMessage="Titre trop court, Il doit avoir 3 caractères ou plus !", maxMessage="Titre trop long, Il doit avoir 255 caractères pas plus !")
+     * @Assert\NotBlank(message="Vous devez renseigner un titre!")
+     * @Assert\Length(min=3, max=255, minMessage="Titre trop court, Il doit faire au moins 3 caractères !", maxMessage="Titre trop long, Il doit faire au max 255 caractères ! !")
      */
     private $title;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Assert\Length(min=100, minMessage="La description est trop court, Il doit faire au moins 100 caractères !", )
      */
     private $description;
 
@@ -69,8 +70,6 @@ class Trick
      * @ORM\Column(type="boolean")
      */
     private $published;
-
-    private $illustrationFiles;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -168,30 +167,6 @@ class Trick
         return $this;
     }
 
-	/**
-	 * @return array
-	 */
-	public function getIllustrationFiles():? array
-    {
-        return $this->illustrationFiles;
-    }
-
-	/**
-	 * @param $illustrationFiles
-	 *
-	 * @return Trick
-	 */
-	public function setIllustrationFiles($illustrationFiles): self
-    {
-        foreach($illustrationFiles as $illustrationFile) {
-            $illustration = new Illustration();
-            $illustration->setImageFile($illustrationFile);
-            $this->addIllustration($illustration);
-        }
-        $this->illustrationFiles = $illustrationFiles;
-        return $this;
-    }
-
     /**
      * @return Collection|Video[]
      */
@@ -206,14 +181,14 @@ class Trick
 	 * @return Trick
 	 */
 	public function addVideo(Video $video): self
-    {
-        if (!$this->videos->contains($video)) {
-            $this->videos[] = $video;
-            $video->setTrick($this);
-        }
+	{
+		if (!$this->videos->contains($video)) {
+		    $this->videos[] = $video;
+		    $video->setTrick($this);
+		}
 
-        return $this;
-    }
+		return $this;
+	}
 
     public function removeVideo(Video $video): self
     {
@@ -261,24 +236,24 @@ class Trick
     }
 
 	public function getUpdatedAt(): ?\DateTimeInterface
-	{
-		return $this->updatedAt;
-	}
+    {
+        return $this->updatedAt;
+    }
 
 	public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
-	{
-		$this->updatedAt = $updatedAt;
+    {
+        $this->updatedAt = $updatedAt;
 
-		return $this;
-	}
+        return $this;
+    }
 
 	/**
 	 * @ORM\PreUpdate
 	 */
 	public function updateDate()
-	{
-		$this->setUpdatedAt(new \Datetime());
-	}
+    {
+        $this->setUpdatedAt(new \Datetime());
+    }
 
 	/**
 	 * Initialize le slug
@@ -289,15 +264,15 @@ class Trick
 	 * @return string
 	 */
 	private function slugify(String $string, String $delimiter = '-'): string {
-        $oldLocale = setlocale(LC_ALL, '0');
-        setlocale(LC_ALL, 'en_US.UTF-8');
-        $clean = iconv('UTF-8', 'ASCII//TRANSLIT', $string);
-        $clean = preg_replace("/[^a-zA-Z0-9\/_|+ -]/", '', $clean);
-        $clean = preg_replace("/[\/_|+ -]+/", $delimiter, $clean);
-        $clean = strtolower($clean);
-        $clean = trim($clean, $delimiter);
-        setlocale(LC_ALL, $oldLocale);
-        return $clean;
-    }
+		 $oldLocale = setlocale(LC_ALL, '0');
+		 setlocale(LC_ALL, 'en_US.UTF-8');
+		 $clean = iconv('UTF-8', 'ASCII//TRANSLIT', $string);
+		 $clean = preg_replace("/[^a-zA-Z0-9\/_|+ -]/", '', $clean);
+		 $clean = preg_replace("/[\/_|+ -]+/", $delimiter, $clean);
+		 $clean = strtolower($clean);
+		 $clean = trim($clean, $delimiter);
+		 setlocale(LC_ALL, $oldLocale);
+		 return $clean;
+	}
 
 }
