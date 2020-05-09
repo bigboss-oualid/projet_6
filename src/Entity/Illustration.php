@@ -19,9 +19,10 @@ class Illustration extends Picture
         return $this->trick;
     }
 
-    public function setTrick(Trick $trick): self
+    public function setTrick(?Trick $trick): self
     {
-        $this->trick = $trick;
+    	if($trick)
+            $this->trick = $trick;
 
         return $this;
     }
