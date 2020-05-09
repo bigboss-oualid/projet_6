@@ -106,11 +106,17 @@ class User implements UserInterface
      */
     private $userRoles;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\UserUpdateTrick", mappedBy="author", cascade={"persist"}, orphanRemoval=true)
+     */
+    private $updatedTricks;
+
     public function __construct()
     {
         $this->tricks = new ArrayCollection();
 	    $this->createdAt = new \DateTime();
-     $this->userRoles = new ArrayCollection();
+        $this->userRoles = new ArrayCollection();
+        $this->updatedTricks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -142,9 +148,10 @@ class User implements UserInterface
         return $this;
     }
 
-	public function getFullName(): String {
-               		return ucwords("{$this->getFirstName()} {$this->getLastName()}");
-               	}
+	public function getFullName(): String
+	{
+        return ucwords("{$this->getFirstName()} {$this->getLastName()}");
+    }
 
     public function getUsername(): ?string
     {
@@ -239,21 +246,21 @@ class User implements UserInterface
 
 
 	public function getRoles(): array
-    {
-    	$roles = $this->userRoles->map(function (Role $role){
-			return $role->getTitle();
-	    })->toArray();
+   {
+		$roles = $this->userRoles->map(function (Role $role){
+		    return $role->getTitle();
+		})->toArray();
 
-    	$roles[] = 'ROLE_USER';
-    	//dd($roles);
+		$roles[] = 'ROLE_USER';
+	    //dd($roles);
 
         return $roles;
-    }
+   }
 
 	public function getPassword():? String
-    {
+	{
 		return $this->hash;
-    }
+	}
 
 	public function getSalt() {}
 
@@ -282,6 +289,37 @@ class User implements UserInterface
         if ($this->userRoles->contains($userRole)) {
             $this->userRoles->removeElement($userRole);
             $userRole->removeUser($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|UserUpdateTrick[]
+     */
+    public function getUpdatedTricks(): Collection
+    {
+        return $this->updatedTricks;
+    }
+
+    public function addUpdatedTrick(UserUpdateTrick $updatedTricks): self
+    {
+        if (!$this->updatedTricks->contains($updatedTricks)) {
+            $this->updatedTricks[] = $updatedTricks;
+            $updatedTricks->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUpdatedTrick(UserUpdateTrick $updatedTricks): self
+    {
+        if ($this->updatedTricks->contains($updatedTricks)) {
+            $this->updatedTricks->removeElement($updatedTricks);
+            // set the owning side to null (unless already changed)
+            if ($updatedTricks->getAuthor() === $this) {
+                $updatedTricks->setAuthor(null);
+            }
         }
 
         return $this;

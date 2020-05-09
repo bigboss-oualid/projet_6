@@ -11,11 +11,19 @@
                 Créer le {{ trick.createdAt | format_datetime(locale='fr') }}
             </div>
             <div class="col-12">
-                Créer par
                 <a href="{{ path('user.show', {'username': trick.author.username}) }}">
-                    <span class="badge badge-warning">{{ trick.author.username }}</span>
+                    <span class="badge badge-warning">par {{ trick.author.username|title  }}</span>
                 </a>
             </div>
+            {% if trick.updatedBy is not empty%}
+                {% set updated=trick.updatedBy|last %}
+            <div class="col-12">
+                <a href="{{ path('user.show', {'username': updated.author.username}) }}">
+                    <span class="badge badge-dark"> Récemment modifié par {{ updated.author.username|title  }}</span>
+                </a>
+                <span> à {{ updated.updatedAt | format_datetime(locale='fr') }}</span>
+            </div>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

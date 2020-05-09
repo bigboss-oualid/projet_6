@@ -3,7 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Trick;
+use App\Entity\User;
+use App\Entity\UserUpdateTrick;
 use App\Form\TrickType;
+use App\Repository\UserUpdateTrickRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -31,16 +34,22 @@ class TrickController extends AbstractController
 	 * @Route("/tricks/{slug}/{id}/edit", name="trick.edit", requirements={"slug": "[a-z0-9\-]*", "id": "\d+"})
 	 * @IsGranted("ROLE_USER")
 	 *
-	 * @param Trick|null $trick
-	 * @param String     $slug
-	 * @param Request    $request
+	 * @param Trick|null                $trick
+	 * @param String                    $slug
+	 * @param Request                   $request
+	 *
+	 * @param UserUpdateTrickRepository $repository
 	 *
 	 * @return Response
 	 */
-    public function formTrick(Trick $trick = null, String $slug=null, Request $request):Response
+    public function formTrick(Trick $trick = null, String $slug=null, Request $request, UserUpdateTrickRepository $repository):Response
     {
+	    /** @var User $user */
+	    $user = $this->getUser();
+
     	if(!$trick){
 		    $trick = new Trick();
+		    $trick->setAuthor($user);
 		    $flash = " enregistrée";
 	    }else{
 		    if ($trick->getSlug() != $slug) {
@@ -57,7 +66,28 @@ class TrickController extends AbstractController
 		$form->handleRequest($request);
 	    if ($form->isSubmitted() && $form->isValid()) {
 
-	    	$trick->setAuthor($this->getUser());
+	    	if($trick->getId() != 0){
+
+			    $update = $repository->findOneBy([
+			    	'author' => $user->getId(),
+				    'trick' => $trick->getId()
+			    ]);
+
+			    if(!$update){
+				    $update = new UserUpdateTrick($user, $trick);
+				    $user->addUpdatedTrick($update);
+				    $trick->addUpdatedBy($update);
+			    }else{
+				    $user->removeUpdatedTrick($update);
+				    $trick->removeUpdatedBy($update);
+				    $update = new UserUpdateTrick($user, $trick);
+				    $user->addUpdatedTrick($update);
+				    $trick->addUpdatedBy($update);
+			    }
+
+			    $update->setUpdatedAt(new \DateTime());
+
+		    }
 
 		    $this->em->persist($trick);
 		    $this->em->flush();

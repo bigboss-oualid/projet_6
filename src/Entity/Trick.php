@@ -72,26 +72,27 @@ class Trick
 	private $published;
 
 	/**
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	private $updatedAt;
-
-	/**
 	 * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="tricks")
 	 * @ORM\JoinColumn(nullable=false)
 	 */
 	private $author;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\UserUpdateTrick", mappedBy="trick", cascade={"persist"}, orphanRemoval=true)
+     */
+    private $updatedBy;
 
 	public function __construct()
 	{
 		$this->createdAt = new \DateTime();
 		$this->illustrations = new ArrayCollection();
 		$this->videos = new ArrayCollection();
+		$this->updatedBy = new ArrayCollection();
 	}
 
 	public function getId(): ?int
 	{
-		return $this->id;
+	    return $this->id;
 	}
 
 	public function getTitle(): ?string
@@ -100,35 +101,35 @@ class Trick
 	}
 
 	public function setTitle(string $title): self
-	{
-		$this->title = $title;
+    {
+        $this->title = $title;
 
-		return $this;
-	}
+        return $this;
+    }
 
 	public function getDescription(): ?string
-	{
-		return $this->description;
-	}
+    {
+        return $this->description;
+    }
 
 	public function setDescription(?string $description): self
-	{
-		$this->description = $description;
+    {
+        $this->description = $description;
 
-		return $this;
-	}
+        return $this;
+    }
 
 	public function getCreatedAt(): ?\DateTimeInterface
-	{
-		return $this->createdAt;
-	}
+    {
+        return $this->createdAt;
+    }
 
 	public function setCreatedAt(\DateTimeInterface $createdAt): self
-	{
-		$this->createdAt = $createdAt;
+    {
+        $this->createdAt = $createdAt;
 
-		return $this;
-	}
+        return $this;
+    }
 
 	public function getCategory(): ?Category
 	{
@@ -136,50 +137,50 @@ class Trick
 	}
 
 	public function setCategory(?Category $category): self
-	{
-		$this->category = $category;
+    {
+        $this->category = $category;
 
-		return $this;
-	}
+        return $this;
+    }
 
 	/**
 	 * @return Collection|Illustration[]
 	 */
 	public function getIllustrations(): Collection
-	{
-		return $this->illustrations;
-	}
+    {
+        return $this->illustrations;
+    }
 
 	public function addIllustration(Illustration $illustration): self
-	{
-		if (!$this->illustrations->contains($illustration)) {
-			$this->illustrations[] = $illustration;
-			$illustration->setTrick($this);
-		}
+    {
+        if (!$this->illustrations->contains($illustration)) {
+            $this->illustrations[] = $illustration;
+            $illustration->setTrick($this);
+        }
 
-		return $this;
-	}
+        return $this;
+    }
 
 	public function removeIllustration(Illustration $illustration): self
-	{
-		if ($this->illustrations->contains($illustration)) {
-			$this->illustrations->removeElement($illustration);
-			// set the owning side to null (unless already changed)
-			/*if ($illustration->getTrick() === $this) {
-				$illustration->setTrick(null);
-			}*/
-		}
+    {
+        if ($this->illustrations->contains($illustration)) {
+            $this->illustrations->removeElement($illustration);
+            // set the owning side to null (unless already changed)
+            if ($illustration->getTrick() === $this) {
+                $illustration->setTrick(null);
+            }
+        }
 
-		return $this;
-	}
+        return $this;
+    }
 
 	/**
 	 * @return Collection|Video[]
 	 */
 	public function getVideos(): Collection
-	{
-		return $this->videos;
-	}
+    {
+        return $this->videos;
+    }
 
 	/**
 	 * @param Video $video
@@ -187,32 +188,32 @@ class Trick
 	 * @return Trick
 	 */
 	public function addVideo(Video $video): self
-	{
-		if (!$this->videos->contains($video)) {
-			$this->videos[] = $video;
-			$video->setTrick($this);
-		}
+    {
+        if (!$this->videos->contains($video)) {
+            $this->videos[] = $video;
+            $video->setTrick($this);
+        }
 
-		return $this;
-	}
+        return $this;
+    }
 
 	public function removeVideo(Video $video): self
-	{
-		if ($this->videos->contains($video)) {
-			$this->videos->removeElement($video);
-			// set the owning side to null (unless already changed)
-			/*if ($video->getTrick() === $this) {
-				$video->setTrick(null);
-			}*/
-		}
+    {
+        if ($this->videos->contains($video)) {
+            $this->videos->removeElement($video);
+            // set the owning side to null (unless already changed)
+            /*if ($video->getTrick() === $this) {
+                $video->setTrick(null);
+            }*/
+        }
 
-		return $this;
-	}
+        return $this;
+    }
 
 	public function getSlug(): ?string
-	{
-		return $this->slug;
-	}
+    {
+        return $this->slug;
+    }
 
 	/**
 	 * @ORM\PrePersist
@@ -223,43 +224,79 @@ class Trick
 	 * @return void
 	 */
 	public function createSlug(EventArgs $event): void
-	{
-		//create slug if trick is new or his title is modified
-		if($this->id == null || (isset($event->getEntityChangeSet()['title'])))
-			$this->slug = $this->slugify($this->title);
-	}
+    {
+        //create slug if trick is new or his title is modified
+        if($this->id == null || (isset($event->getEntityChangeSet()['title'])))
+            $this->slug = $this->slugify($this->title);
+    }
 
 	public function isPublished(): ?bool
-	{
-		return $this->published;
-	}
+    {
+        return $this->published;
+    }
 
 	public function setPublished(bool $published): self
-	{
-		$this->published = $published;
+    {
+        $this->published = $published;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function getUpdatedAt(): ?\DateTimeInterface
-	{
-		return $this->updatedAt;
-	}
+	public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
 
-	public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
-	{
-		$this->updatedAt = $updatedAt;
+	public function setAuthor(?User $author): self
+    {
+        $this->author = $author;
 
-		return $this;
-	}
+        return $this;
+    }
+
+    /**
+     * @return Collection|UserUpdateTrick[]
+     */
+    public function getUpdatedBy(): Collection
+    {
+        return $this->updatedBy;
+    }
 
 	/**
-	 * @ORM\PreUpdate
+	 * @return string
 	 */
-	public function updateDate()
+	public function getLastUpdatedBy(): ?String
 	{
-		$this->setUpdatedAt(new \Datetime());
+		if(!$this->updatedBy)
+			return null;
+		//$current = current(($this->updatedBy)->toArray());
+		$last = end(($this->updatedBy)->toArray());
+
+		return $last;
 	}
+
+    public function addUpdatedBy(UserUpdateTrick $updatedBy): self
+    {
+        if (!$this->updatedBy->contains($updatedBy)) {
+            $this->updatedBy[] = $updatedBy;
+	        $updatedBy->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUpdatedBy(UserUpdateTrick $updatedBy): self
+    {
+        if ($this->updatedBy->contains($updatedBy)) {
+            $this->updatedBy->removeElement($updatedBy);
+            // set the owning side to null (unless already changed)
+            if ($updatedBy->getTrick() === $this) {
+	            $updatedBy->setTrick(null);
+            }
+        }
+
+        return $this;
+    }
 
 	/**
 	 * Initialize le slug
@@ -279,18 +316,6 @@ class Trick
 		$clean = trim($clean, $delimiter);
 		setlocale(LC_ALL, $oldLocale);
 		return $clean;
-	}
-
-	public function getAuthor(): ?User
-	{
-		return $this->author;
-	}
-
-	public function setAuthor(?User $author): self
-	{
-		$this->author = $author;
-
-		return $this;
 	}
 
 }
