@@ -203,6 +203,10 @@ class User implements UserInterface
 
     public function getAvatar(): ?Avatar
     {
+    	if($this->avatar == null){
+    		$this->avatar = new Avatar();
+    		$this->avatar->setFilename('defaultAvatar.png');
+	    }
         return $this->avatar;
     }
 
