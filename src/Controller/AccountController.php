@@ -15,34 +15,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class AccountController extends AbstractController
 {
-	/**
-	 * @Route("/login", name="account.login")
-	 *
-	 * @param AuthenticationUtils $utils
-	 *
-	 * @return Response
-	 */
-    public function login(AuthenticationUtils $utils):Response
-    {
-    	$error = $utils->getLastAuthenticationError();
-    	$username = $utils->getLastUsername();
-
-        return $this->render('account/login.html.twig',[
-	        'current_menu'    => 'login',
-        	'hasError' => $error !== null,
-	        'username' => $username
-        ]);
-    }
-
-	/**
-	 * @Route("/logout", name="account.logout")
-	 */
-	public function logout() {}
-
 	/**
 	 * @Route("/account/register", name="account.register")
 	 *
@@ -74,7 +49,7 @@ class AccountController extends AbstractController
 
 			$this->addFlash('success', "Votre compte a bien été créé ! Vous pouvez maintenant vous connecter !");
 
-			return $this->redirectToRoute('account.login');
+			return $this->redirectToRoute('security.login');
 		}
 
 		return $this->render('account/register.html.twig', [
@@ -112,7 +87,7 @@ class AccountController extends AbstractController
 
 			$this->addFlash('success', "Vos données personnelles ont été enregistré avec succès !");
 
-			return $this->redirectToRoute('blog.home');
+			return $this->redirectToRoute('account.index');
 		}
 
 		return $this->render('account/profile.html.twig', [

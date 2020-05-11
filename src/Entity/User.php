@@ -111,6 +111,11 @@ class User implements UserInterface
      */
     private $updatedTricks;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Token", mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $token;
+
     public function __construct()
     {
         $this->tricks = new ArrayCollection();
@@ -149,8 +154,8 @@ class User implements UserInterface
     }
 
 	public function getFullName(): String
-	{
-        return ucwords("{$this->getFirstName()} {$this->getLastName()}");
+    {
+    	return ucwords("{$this->getFirstName()} {$this->getLastName()}");
     }
 
     public function getUsername(): ?string
@@ -188,6 +193,23 @@ class User implements UserInterface
 
         return $this;
     }
+
+	public function getToken(): ?Token
+	{
+		return $this->token;
+	}
+
+	public function setToken(Token $token): self
+	{
+		$this->token = $token;
+
+		// set the owning side of the relation if necessary
+		if ($token->getUser() !== $this) {
+			$token->setUser($this);
+		}
+
+		return $this;
+	}
 
     public function getCreatedAt(): ?\DateTimeInterface
     {
@@ -250,21 +272,21 @@ class User implements UserInterface
 
 
 	public function getRoles(): array
-   {
-		$roles = $this->userRoles->map(function (Role $role){
-		    return $role->getTitle();
-		})->toArray();
+    {
+        $roles = $this->userRoles->map(function (Role $role){
+            return $role->getTitle();
+        })->toArray();
 
-		$roles[] = 'ROLE_USER';
-	    //dd($roles);
+        $roles[] = 'ROLE_USER';
+        //dd($roles);
 
-        return $roles;
-   }
+         return $roles;
+    }
 
 	public function getPassword():? String
-	{
-		return $this->hash;
-	}
+    {
+        return $this->hash;
+    }
 
 	public function getSalt() {}
 
