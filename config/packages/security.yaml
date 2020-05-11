@@ -20,11 +20,22 @@ security:
 
           form_login:
               #login_path: account.login
-              check_path: account.login
+              check_path: security.login
 
           logout:
-              path: account.logout
-              target: account.login
+              path: security.logout
+              target: security.login
+          guard:
+              authenticators:
+                  - App\Security\LoginFormAuthenticator
+          remember_me:
+              secret:   '%kernel.secret%'
+              lifetime: 604800 # 1 week in seconds
+              #https://symfony.com/doc/current/security/remember_me.html
+              # by default, the feature is enabled by checking a
+              # checkbox in the login form (see below), uncomment the
+              # following line to always enable it.
+              #always_remember_me: true
 
 
             # activate different ways to authenticate
