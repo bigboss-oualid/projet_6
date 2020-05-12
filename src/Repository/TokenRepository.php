@@ -20,7 +20,7 @@ class TokenRepository extends ServiceEntityRepository
     }
 
     // /**
-    //  * @return Token[] Returns an array of Token objects
+    //  * @return TokenManager[] Returns an array of TokenManager objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class TokenRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Token
+    public function findOneBySomeField($value): ?TokenManager
     {
         return $this->createQueryBuilder('t')
             ->andWhere('t.exampleField = :val')
