@@ -3,17 +3,17 @@
 namespace App\Controller;
 
 use App\Entity\PasswordUpdate;
-use App\Entity\Token;
 use App\Entity\User;
 use App\Form\PasswordUpdateType;
+use App\Service\TokenManager;
+use App\Service\UserNotification;
 use Doctrine\ORM\EntityManagerInterface;
-use Swift_Mailer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
@@ -54,19 +54,20 @@ class SecurityController extends AbstractController
 
 	/**
 	 * @Route("/forgotten-password", name="security.forgotten_password")
-	 * @param Request                      $request
-	 * @param Swift_Mailer                 $mailer
-	 * @param TokenGeneratorInterface      $tokenGenerator
+	 * @param Request          $request
+	 * @param UserNotification $mailer
+	 * @param TokenManager     $tokenManager
 	 *
 	 * @return Response
+	 * @throws \Twig\Error\LoaderError
+	 * @throws \Twig\Error\RuntimeError
+	 * @throws \Twig\Error\SyntaxError
 	 */
-	public function forgottenPassword(Request $request, Swift_Mailer $mailer, TokenGeneratorInterface $tokenGenerator): Response
+	public function forgottenPassword(Request $request, UserNotification $mailer, TokenManager $tokenManager): Response
 	{
-
 		if ($request->isMethod('POST')) {
 
 			$email = $request->request->get('_email');
-
 			/* @var $user User */
 			$user = $this->em->getRepository(User::class)->findOneByEmail($email);
 
@@ -74,31 +75,16 @@ class SecurityController extends AbstractController
 				$this->addFlash('danger', "Aucun compte n'est associé à cette adresse e-mail: <strong> {$email}</strong>");
 				return $this->redirectToRoute('blog.home');
 			}
-			$token = $tokenGenerator->generateToken();
 
-			try{
-				$userToken = new Token();
-				$userToken->setCreatedAt(new \DateTime());
-				$userToken->setTokenCode($token);
-				$userToken->setUser($user);
-				$this->em->persist($userToken);
-				$this->em->flush();
-			} catch (\Exception $e) {
-				$this->addFlash('warning', $e->getMessage());
-				return $this->redirectToRoute('security.login');
-			}
+			$token = $tokenManager->createToken($user);
+			$this->em->flush();
 
-			$url = $this->generateUrl('security.reset_password', array('token' => $token));
+			$url = $this->generateUrl('security.reset_password', [
+				'tokenCode' => $token->getTokenCode()],
+				UrlGeneratorInterface::ABSOLUTE_URL
+			);
 
-			$message = (new \Swift_Message('Forgot Password'))
-				->setFrom('g.ponty@dev-web.io')
-				->setTo($user->getEmail())
-				->setBody(
-					"voici le token pour reseter votre mot de passe : " . $url,
-					'text/html'
-				);
-
-			$mailer->send($message);
+			$mailer->notify($user, 'SnowTricks: Réinitialisation du mot de passe', $url);
 
 			$this->addFlash('success', "Nous avons envoyé un lien à <strong>{$email}</strong>, pour rénitialiser votre mot de passe.<br/> Le lien expirera dans les deux heures suivantes !");
 
@@ -109,15 +95,15 @@ class SecurityController extends AbstractController
 	}
 
 	/**
-	 * @Route("/reset-password/{token}", name="security.reset_password")
+	 * @Route("/reset-password/{tokenCode}", name="security.reset_password")
 	 * @param Request                      $request
-	 * @param String                       $token
+	 * @param String                       $tokenCode
 	 * @param UserPasswordEncoderInterface $passwordEncoder
+	 * @param TokenManager                 $tokenManager
 	 *
 	 * @return Response
-	 * @throws \Exception
 	 */
-	public function resetPassword(Request $request, String $token, UserPasswordEncoderInterface $passwordEncoder)
+	public function resetPassword(Request $request, String $tokenCode, UserPasswordEncoderInterface $passwordEncoder, TokenManager $tokenManager): Response
 	{
 		$passwordUpdate = new PasswordUpdate();
 
@@ -125,38 +111,24 @@ class SecurityController extends AbstractController
 		$form->handleRequest($request);
 
 		if ($form->isSubmitted() && $form->isValid()) {
-			$tokenRepository = $this->em->getRepository(Token::class);
-			$userToken = $tokenRepository->findOneByTokenCode($token);
-
 			/* @var $user User */
-			$user = null;
-			if($userToken)
-				$user = $userToken->getUser();
+			$user =	$tokenManager->getUserFromToken($tokenCode);
 
 			if ($user === null) {
-				$this->addFlash('danger', 'Le lien est Inconnu ou expiré, veuillez demander un nouveau lien !');
+				$this->addFlash('danger', "Le lien est Inconnu ou expiré, veuillez demander un nouveau lien !");
 				return $this->redirectToRoute('security.login');
 			}
 
-			$time= $userToken->getCreatedAt();
-			$timeplus = new \DateInterval('PT2H');
-			$time->add($timeplus);
-
-			if(new \DateTime()>$time){
-
-				$userToken->setUser(null);
-				$this->em->remove($userToken);
-				$this->em->flush();
+			if($tokenManager->isTokenExpired()){
 
 				$this->addFlash('danger', 'Le lien est expiré, veuillez demander un nouveau lien !');
 				return $this->redirectToRoute('security.login');
 			}
-			
-			$userToken->setUser(null);
-			$this->em->remove($userToken);
 
 			$user->setHash($passwordEncoder->encodePassword($user, $request->request->get('password_update')['newPassword']));
 
+			$this->em->persist($user);
+			$tokenManager->deleteToken();
 			$this->em->flush();
 
 			$this->addFlash('success', 'Votre mot de passe est mis à jour, Veuillez vous connecter avec votre nouveau mot de passe');
@@ -166,7 +138,7 @@ class SecurityController extends AbstractController
 
 		return $this->render('security/reset_password.html.twig', [
 			'form' => $form->createView(),
-			'token' => $token]
+			'token' => $tokenCode]
 		);
 	}
 }
