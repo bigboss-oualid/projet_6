@@ -5,7 +5,7 @@ namespace App\Service;
 use App\Entity\User;
 use Twig\Environment;
 
-class UserNotification
+class Mailer
 {
 	/**
 	 * @var \Swift_Mailer
@@ -18,7 +18,7 @@ class UserNotification
 	private $renderer;
 
 	/**
-	 * UserNotification constructor.
+	 * Mailer constructor.
 	 *
 	 * @param \Swift_Mailer $mailer
 	 * @param Environment   $renderer
@@ -39,7 +39,7 @@ class UserNotification
 	 * @throws \Twig\Error\RuntimeError
 	 * @throws \Twig\Error\SyntaxError
 	 */
-	public function notify(User $user, String $subject, String $url)
+	public function send(User $user, String $subject, String $url)
 	{
 		$message = (new \Swift_Message($subject))
 			->setFrom('noreply@snowtricks.com')

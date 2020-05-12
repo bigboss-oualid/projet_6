@@ -6,7 +6,7 @@ use App\Entity\PasswordUpdate;
 use App\Entity\User;
 use App\Form\PasswordUpdateType;
 use App\Service\TokenManager;
-use App\Service\UserNotification;
+use App\Service\Mailer;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -54,16 +54,16 @@ class SecurityController extends AbstractController
 
 	/**
 	 * @Route("/forgotten-password", name="security.forgotten_password")
-	 * @param Request          $request
-	 * @param UserNotification $mailer
-	 * @param TokenManager     $tokenManager
+	 * @param Request      $request
+	 * @param Mailer       $mailer
+	 * @param TokenManager $tokenManager
 	 *
 	 * @return Response
 	 * @throws \Twig\Error\LoaderError
 	 * @throws \Twig\Error\RuntimeError
 	 * @throws \Twig\Error\SyntaxError
 	 */
-	public function forgottenPassword(Request $request, UserNotification $mailer, TokenManager $tokenManager): Response
+	public function forgottenPassword(Request $request, Mailer $mailer, TokenManager $tokenManager): Response
 	{
 		if ($request->isMethod('POST')) {
 
@@ -84,7 +84,7 @@ class SecurityController extends AbstractController
 				UrlGeneratorInterface::ABSOLUTE_URL
 			);
 
-			$mailer->notify($user, 'SnowTricks: Réinitialisation du mot de passe', $url);
+			$mailer->send($user, 'SnowTricks: Réinitialisation du mot de passe', $url);
 
 			$this->addFlash('success', "Nous avons envoyé un lien à <strong>{$email}</strong>, pour rénitialiser votre mot de passe.<br/> Le lien expirera dans les deux heures suivantes !");
 
