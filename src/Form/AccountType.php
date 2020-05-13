@@ -37,22 +37,6 @@ class AccountType extends AbstractType
 		        'email',
 		        EmailType::class
 	        )
-	        /*->add(
-		        'hash',
-		        PasswordType::class,
-		        [
-			        'label' => "Mot de passe",
-			        'required' => false
-		        ]
-	        )
-	        ->add(
-		        'passwordConfirm',
-		        PasswordType::class,
-		        [
-			        'label' => "Confirmation du mot de passe",
-			        'required' => false
-		        ]
-	        )*/
         ;
     }
 

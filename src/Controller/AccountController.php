@@ -40,7 +40,6 @@ class AccountController extends AbstractController
 				$user->setAvatar(null);
 			}
 
-			//$em->persist($user);
 			$em->flush();
 
 			$this->addFlash('success', "Vos données personnelles ont été enregistré avec succès !");
