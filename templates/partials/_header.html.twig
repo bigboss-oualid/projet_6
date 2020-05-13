@@ -33,7 +33,7 @@
                 </li>
             {% else %}
                 <li class="nav-item">
-                    <a class="nav-link {% if current_menu is defined and current_menu == 'register' %}font-weight-bold active{% endif %}" href="{{ path('account.register') }}"><span class="sr-only">(current)</span>Inscription</a>
+                    <a class="nav-link {% if current_menu is defined and current_menu == 'register' %}font-weight-bold active{% endif %}" href="{{ path('security.register') }}"><span class="sr-only">(current)</span>Inscription</a>
                 </li>
                 <li class="nav-item {% if current_menu is defined and current_menu == 'login' %}font-weight-bold active {% endif %}">
                     <a class="nav-link" href="{{ path('security.login') }}"><span class="sr-only">(current)</span>Connexion</a>
@@ -48,7 +48,7 @@
     <div class="container mt-5">
         <div class="alert alert-{{ label }}">
             {% for message in messages %}
-                <p>{{ message | raw}}</p>
+                <p class="text-center">{{ message | raw}}</p>
             {% endfor %}
         </div>
     </div>

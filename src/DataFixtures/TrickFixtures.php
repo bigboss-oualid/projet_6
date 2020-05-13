@@ -47,8 +47,9 @@ class TrickFixtures extends Fixture
 		    ->setLastName('bigboss')
 		    ->setUsername('bigboss')
 		    ->setEmail('admin@snowtricks.com')
-		    ->setHash($this->encoder->encodePassword($adminUser, '123'))
-		    ->addUserRole($adminRole);
+		    ->setHash($this->encoder->encodePassword($adminUser, 'admin'))
+		    ->addUserRole($adminRole)
+		    ->setEnabled(True);
 
 
 	    $avatar->setFilename('admin.png')
@@ -72,7 +73,8 @@ class TrickFixtures extends Fixture
 			    ->setFirstName("f.name-$i")
 			    ->setUsername("username-$i")
 			    ->setEmail("username-$i@mail.de")
-			    ->setHash($hash);
+			    ->setHash($hash)
+		        ->setEnabled(True);
 
 		    $bloggerAvatar->setFilename('defaultAvatar.png')
 			    ->setOldName('defaultAvatar.png')

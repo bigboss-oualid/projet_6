@@ -52,7 +52,7 @@
                         </button>
                         {{ form_end(formTrick, { "render_rest": false }) }}
                     </div>
-                    {% if editMode %}
+                    {% if app.user == formTrick.vars.value.author and editMode  %}
                         <div class="col col-md-auto">
                             <form method="post" action="{{ path('trick.delete', {id: formTrick.vars.value.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes vous vraiment sûr ?')">
                                 <input type="hidden" name="_method" value="DELETE">

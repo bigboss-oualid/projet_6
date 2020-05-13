@@ -8,9 +8,13 @@
             <div class="col-md-6 mt-5">
                 <div class="bg-light py-3 px-3">
                     <h1 class="text-center mb-5 mt-4">Connectez vous !</h1>
-
-                    {% if hasError %}
+                    {% if error and error.user is not defined %}
                         <div class="alert alert-danger">Une erreur est servenue, le nom d'utilisateur ou alors le mot de passse est invalide</div>
+                    {% elseif error.user is defined %}
+                        <div class="alert alert-warning">
+                            <div>{{ error.message }}</div>
+                            <a href="{{ path('security.send_confirm', {username: last_username}) }}">Envoyer un email de confirmation</a>
+                        </div>
                     {% endif %}
                     <form action="{{ path('security.login') }}" method="post">
                         <div class="form-group">

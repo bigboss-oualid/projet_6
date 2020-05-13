@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Confirmation du compte !{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="col-md-6 mt-5">
+                <div class="bg-light py-3 px-3">
+                    <h1 class="text-center mb-5 mt-4">Confirmez votre compte !</h1>
+                    <form action="{{ path('security.confirm_account', {username: app.request.get('username'), tokenCode: app.request.get('tokenCode')}) }}" method="post">
+                        <div class="form-group">
+                            <label for="_confirmationCode">Code</label>
+                            <input type="text" name="_confirmationCode" id="code-confirmation" class="form-control" placeholder="code de confirmation..." required>
+                        </div>
+                        <div class="form-group my-4">
+                            <button type="submit" class="btn btn-success btn-block">Confirmation !</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

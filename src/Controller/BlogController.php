@@ -37,6 +37,7 @@ class BlogController extends AbstractController
 	 * @Route("/tricks/{slug}/{id}", name="blog.show", requirements={"slug": "[a-z0-9\-]*", "id": "\d+"})
 	 * @param Trick   $trick
 	 * @param String  $slug
+	 *
 	 * @return Response
 	 */
 	public function show(Trick $trick, String $slug)

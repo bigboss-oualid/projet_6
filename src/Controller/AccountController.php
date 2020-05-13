@@ -3,10 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\PasswordUpdate;
-use App\Entity\User;
 use App\Form\AccountType;
 use App\Form\PasswordUpdateType;
-use App\Form\UserType;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,46 +16,6 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AccountController extends AbstractController
 {
-	/**
-	 * @Route("/account/register", name="account.register")
-	 *
-	 * @param Request                      $request
-	 * @param EntityManagerInterface       $em
-	 * @param UserPasswordEncoderInterface $encoder
-	 *
-	 * @return Response
-	 */
-	public function register(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder): Response
-	{
-		$user = new User();
-
-		$form = $this->createForm(UserType::class, $user);
-
-		$form->handleRequest($request);
-
-		if ($form->isSubmitted() && $form->isValid()) {
-
-			$user->getAvatar()->setUser($user);
-			if($user->getAvatar()->getImageFile() == null){
-				$user->setAvatar(null);
-			}
-			$hash = $encoder->encodePassword($user, $user->getHash());
-			$user->setHash($hash);
-
-			$em->persist($user);
-			$em->flush();
-
-			$this->addFlash('success', "Votre compte a bien été créé ! Vous pouvez maintenant vous connecter !");
-
-			return $this->redirectToRoute('security.login');
-		}
-
-		return $this->render('account/register.html.twig', [
-			'current_menu'    => 'register',
-			'form' => $form->createView()
-		]);
-	}
-
 	/**
 	 * @Route("/account/profile", name="account.profile")
 	 * @IsGranted("ROLE_USER")
@@ -134,12 +92,13 @@ class AccountController extends AbstractController
 		}
 
 		return $this->render('account/password.html.twig', [
+			'current_menu'    => 'profile',
 			'form' => $form->createView()
 		]);
 	}
 
 	/**
-	 * @Route("/account", name="account.index")
+	 * @Route("/account", name="account.index", requirements={"username": "[a-z0-9\-]*"})
 	 * @IsGranted("ROLE_USER")
 	 *
 	 * @return Response
@@ -147,7 +106,7 @@ class AccountController extends AbstractController
 	public function myAccount(): Response
 	{
 		return $this->render('user/index.html.twig', [
-			'current_menu'    => 'index',
+			'current_menu'    => 'profile',
 			'user' => $this->getUser()
 		]);
 	}

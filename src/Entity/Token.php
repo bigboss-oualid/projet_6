@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use phpDocumentor\Reflection\Types\Integer;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TokenRepository")
@@ -31,6 +32,16 @@ class Token
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
+
+    /**
+     * @ORM\Column(type="smallint", nullable=true)
+     */
+    private $confirmationCode;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $urlActivation;
 
     public function getId(): ?int
     {
@@ -69,6 +80,30 @@ class Token
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getConfirmationCode(): ?int
+    {
+        return $this->confirmationCode;
+    }
+
+    public function generateConfirmationCode(Int $min, Int $max): self
+    {
+		$this->confirmationCode = rand($min, $max);
+
+        return $this;
+    }
+
+    public function getUrlActivation(): ?string
+    {
+        return $this->urlActivation;
+    }
+
+    public function setUrlActivation(?string $urlActivation): self
+    {
+        $this->urlActivation = $urlActivation;
 
         return $this;
     }

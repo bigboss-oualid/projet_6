@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\PasswordUpdate;
 use App\Entity\User;
 use App\Form\PasswordUpdateType;
+use App\Form\UserType;
 use App\Service\TokenManager;
 use App\Service\Mailer;
 use Doctrine\ORM\EntityManagerInterface;
@@ -42,7 +43,7 @@ class SecurityController extends AbstractController
 
 		return $this->render('security/login.html.twig',[
 			'current_menu'    => 'login',
-			'hasError' => $error !== null,
+			'error' => $error,
 			'last_username' => $lastUsername
 		]);
 	}
@@ -53,15 +54,155 @@ class SecurityController extends AbstractController
 	public function logout() { }
 
 	/**
+	 * @Route("/send-confirmation/{username}", name="security.send_confirm", requirements={"username": "[a-z0-9\-]*"})
+	 * @param User   $user
+	 * @param Mailer $mailer
+	 *
+	 * @return Response
+	 * @throws \Twig\Error\LoaderError
+	 * @throws \Twig\Error\RuntimeError
+	 * @throws \Twig\Error\SyntaxError
+	 */
+	public function sendConfirmation(User $user, Mailer $mailer): Response
+	{
+		$token = $user->getToken();
+		$mailer->send(
+			'emails/partials/confirmation_account.html.twig',
+			'Confirmation de votre compte',
+			[
+				'user' => $user,
+				'url'  => $token->getUrlActivation(),
+				'confirmationCode' => $token->getConfirmationCode()
+			]);
+		$this->addFlash('success', "Un email de confirmation à été envoyé à <strong>{$user->getEmail()}</strong>.");
+
+		return $this->redirectToRoute('security.confirm_account', [
+			'username' => $user->getUsername(),
+			'tokenCode' => $token->getTokenCode()
+		]);
+	}
+
+
+	/**
+	 * @Route("/register", name="security.register")
+	 *
+	 * @param Request                      $request
+	 * @param UserPasswordEncoderInterface $encoder
+	 * @param TokenManager                 $tokenManager
+	 * @param Mailer                       $mailer
+	 *
+	 * @return Response
+	 */
+	public function register(Request $request, UserPasswordEncoderInterface $encoder, TokenManager $tokenManager, Mailer $mailer): Response
+	{
+		$user = new User();
+
+		$form = $this->createForm(UserType::class, $user);
+
+		$form->handleRequest($request);
+
+		if ($form->isSubmitted() && $form->isValid()) {
+
+			$user->getAvatar()->setUser($user);
+			if($user->getAvatar()->getImageFile() == null){
+				$user->setAvatar(null);
+			}
+			$hash = $encoder->encodePassword($user, $user->getHash());
+			$user->setHash($hash);
+
+			$token = $tokenManager->createToken($user, WITH_CONFIRMATION);
+
+			$url = $this->generateUrl('security.confirm_account',
+				[
+					'tokenCode' => $token->getTokenCode(),
+					'username' => $user->getUsername()
+				],
+				UrlGeneratorInterface::ABSOLUTE_URL
+			);
+			$token->setUrlActivation($url);
+
+			$this->em->persist($user);
+			$this->em->flush();
+
+			$mailer->send(
+				'emails/partials/confirmation_account.html.twig',
+				'Confirmation de votre compte',
+				[
+					'user' => $user,
+					'url'  => $url,
+					'confirmationCode' => $token->getConfirmationCode()
+				]);
+
+			$this->addFlash('success', "!!!  Félicitations  !!!<br/> Votre compte a bien été créé ! <br/>Un email de confirmation à été envoyé à <strong>{$user->getEmail()}</strong> pour activer votre compte et pouvoir vous connecté!");
+
+			return $this->redirectToLogin();
+		}
+
+		return $this->render('security/register.html.twig', [
+			'current_menu'    => 'register',
+			'form' => $form->createView()
+		]);
+	}
+
+	/**
+	 * @Route("/confirm-account/{username}/{tokenCode}", name="security.confirm_account", requirements={"username": "[a-z0-9\-]*"})
+	 *
+	 * @param User                   $user
+	 * @param String                 $tokenCode
+	 * @param Request                $request
+	 *
+	 * @return Response
+	 */
+	public function confirmAccount(User $user, String $tokenCode, Request $request): Response
+	{
+		if ($request->isMethod('POST')) {
+			if(!$user->isEnabled()) {
+				$userToken = $user->getToken();
+				$confirmationCode = $request->request->get('_confirmationCode');
+				if($userToken->getTokenCode() === $tokenCode) {
+
+					if($confirmationCode != $userToken->getConfirmationCode()){
+						$this->addFlash('danger', "le code que vous avez entré <strong>[ $confirmationCode]</strong> est invalide<br/>!!! Vérifier votre code svp !!!");
+
+						return $this->redirectToRoute('security.confirm_account', [
+							'current_menu'    => 'login',
+							'username'        => $user->getUsername(),
+							'tokenCode'       => $tokenCode
+						]);
+					}
+
+					$user->setToken(null);
+					$userToken->setUser(null);
+					$this->em->remove($userToken);
+					$user->setEnabled(true);
+					$this->em->persist($user);
+					$this->em->flush();
+
+					return $this->redirectToLogin();
+				}
+				$this->addFlash('danger', "Une erreur est servenue, le lien <srong>[ token ]</strong> est invalide");
+
+				return $this->redirectToLogin();
+			} else {
+				$this->addFlash('warning', "!!!  Cher utilisateur <strong>{$user->getFullName()}</strong> !!!<br/> Votre compte est déjà activé, désormais vous pouvez vous connecter !");
+
+				return $this->redirectToLogin();
+			}
+		}
+
+		return $this->render('security/confirm_account.html.twig',[
+			'current_menu'    => 'login'
+		]);
+
+	}
+
+	/**
 	 * @Route("/forgotten-password", name="security.forgotten_password")
 	 * @param Request      $request
 	 * @param Mailer       $mailer
 	 * @param TokenManager $tokenManager
 	 *
 	 * @return Response
-	 * @throws \Twig\Error\LoaderError
-	 * @throws \Twig\Error\RuntimeError
-	 * @throws \Twig\Error\SyntaxError
 	 */
 	public function forgottenPassword(Request $request, Mailer $mailer, TokenManager $tokenManager): Response
 	{
@@ -73,7 +214,7 @@ class SecurityController extends AbstractController
 
 			if ($user === null) {
 				$this->addFlash('danger', "Aucun compte n'est associé à cette adresse e-mail: <strong> {$email}</strong>");
-				return $this->redirectToRoute('blog.home');
+				return $this->redirectToLogin();
 			}
 
 			$token = $tokenManager->createToken($user);
@@ -84,14 +225,22 @@ class SecurityController extends AbstractController
 				UrlGeneratorInterface::ABSOLUTE_URL
 			);
 
-			$mailer->send($user, 'SnowTricks: Réinitialisation du mot de passe', $url);
+			$mailer->send(
+				'emails/partials/reset_password.html.twig',
+				'Réinitialisation du mot de passe',
+				[
+					'user' => $user,
+					'url'  => $url
+				]);
 
 			$this->addFlash('success', "Nous avons envoyé un lien à <strong>{$email}</strong>, pour rénitialiser votre mot de passe.<br/> Le lien expirera dans les deux heures suivantes !");
 
-			return $this->redirectToRoute('security.login');
+			return $this->redirectToLogin();
 		}
 
-		return $this->render('security/forgotten_password.html.twig');
+		return $this->render('security/forgotten_password.html.twig',[
+			'current_menu'    => 'login'
+		]);
 	}
 
 	/**
@@ -115,14 +264,14 @@ class SecurityController extends AbstractController
 			$user =	$tokenManager->getUserFromToken($tokenCode);
 
 			if ($user === null) {
-				$this->addFlash('danger', "Le lien est Inconnu ou expiré, veuillez demander un nouveau lien !");
-				return $this->redirectToRoute('security.login');
+				$this->addFlash('danger', "Le lien est incorrect ou expiré, veuillez demander un nouveau lien, afin de  réinitialiser votre mot de passe !");
+				return $this->redirectToLogin();
 			}
 
 			if($tokenManager->isTokenExpired()){
 
-				$this->addFlash('danger', 'Le lien est expiré, veuillez demander un nouveau lien !');
-				return $this->redirectToRoute('security.login');
+				$this->addFlash('danger', 'Le lien est expiré, veuillez demander un nouveau lien, afin de réinitialiser votre mot de passe !');
+				return $this->redirectToLogin();
 			}
 
 			$user->setHash($passwordEncoder->encodePassword($user, $request->request->get('password_update')['newPassword']));
@@ -133,12 +282,20 @@ class SecurityController extends AbstractController
 
 			$this->addFlash('success', 'Votre mot de passe est mis à jour, Veuillez vous connecter avec votre nouveau mot de passe');
 
-			return $this->redirectToRoute('security.login');
+			return $this->redirectToLogin();
 		}
 
 		return $this->render('security/reset_password.html.twig', [
-			'form' => $form->createView(),
-			'token' => $tokenCode]
+				'current_menu'    => 'login',
+				'form' => $form->createView(),
+				'token' => $tokenCode]
 		);
 	}
+
+	private function redirectToLogin(){
+
+		return $this->redirectToRoute('security.login',['current_menu'=>'login']);
+	}
 }
+
+

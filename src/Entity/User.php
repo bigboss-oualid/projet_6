@@ -44,7 +44,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=25, unique=true, unique=true)
      * @Assert\NotBlank(message="Vous devez renseigner un username !")
-     * @Assert\Length(min=5, max=25, minMessage="Username trop court, Il doit faire au moins 5 caractères !", maxMessage="Username trop long, Il doit faire au max 25 caractères !")
+     * @Assert\Length(min=4, max=25, minMessage="Username trop court, Il doit faire au moins 5 caractères !", maxMessage="Username trop long, Il doit faire au max 25 caractères !")
      * @Assert\Regex(
      *     pattern="/^[a-z]/",
      *     message="Le username devrait commencer par une lettre !"
@@ -116,6 +116,11 @@ class User implements UserInterface
      */
     private $token;
 
+    /**
+     * @ORM\Column(type="boolean", options={"default": false}, nullable=true)
+     */
+    private $enabled;
+
     public function __construct()
     {
         $this->tricks = new ArrayCollection();
@@ -154,9 +159,9 @@ class User implements UserInterface
     }
 
 	public function getFullName(): String
-    {
-    	return ucwords("{$this->getFirstName()} {$this->getLastName()}");
-    }
+	{
+		return ucwords("{$this->getFirstName()} {$this->getLastName()}");
+	}
 
     public function getUsername(): ?string
     {
@@ -195,21 +200,21 @@ class User implements UserInterface
     }
 
 	public function getToken(): ?Token
-	{
-		return $this->token;
-	}
+    {
+        return $this->token;
+    }
 
-	public function setToken(Token $token): self
-	{
-		$this->token = $token;
+	public function setToken(?Token $token): self
+    {
+        $this->token = $token;
 
-		// set the owning side of the relation if necessary
-		if ($token->getUser() !== $this) {
-			$token->setUser($this);
-		}
+        // set the owning side of the relation if necessary
+        if ($token != null && $token->getUser() !== $this) {
+            $token->setUser($this);
+        }
 
-		return $this;
-	}
+        return $this;
+    }
 
     public function getCreatedAt(): ?\DateTimeInterface
     {
@@ -272,21 +277,21 @@ class User implements UserInterface
 
 
 	public function getRoles(): array
-    {
-        $roles = $this->userRoles->map(function (Role $role){
-            return $role->getTitle();
-        })->toArray();
+	{
+		 $roles = $this->userRoles->map(function (Role $role){
+		     return $role->getTitle();
+		 })->toArray();
 
-        $roles[] = 'ROLE_USER';
-        //dd($roles);
+		 $roles[] = 'ROLE_USER';
+		 //dd($roles);
 
-         return $roles;
-    }
+		  return $roles;
+	}
 
 	public function getPassword():? String
-    {
-        return $this->hash;
-    }
+	{
+		return $this->hash;
+	}
 
 	public function getSalt() {}
 
@@ -347,6 +352,18 @@ class User implements UserInterface
                 $updatedTricks->setAuthor(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isEnabled(): ?bool
+    {
+        return $this->enabled;
+    }
+
+    public function setEnabled(bool $enabled): self
+    {
+        $this->enabled = $enabled;
 
         return $this;
     }

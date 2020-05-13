@@ -30,24 +30,20 @@ class Mailer
 	}
 
 	/**
-	 * @param User   $user
+	 * @param string $template
 	 * @param String $subject
-	 *
-	 * @param String $url
-	 *
-	 * @throws \Twig\Error\LoaderError
-	 * @throws \Twig\Error\RuntimeError
-	 * @throws \Twig\Error\SyntaxError
+	 * @param array  $data
 	 */
-	public function send(User $user, String $subject, String $url)
+	public function send(String $template, String $subject, Array $data)
 	{
-		$message = (new \Swift_Message($subject))
+		$message = (new \Swift_Message('SnowTricks: ' . $subject))
 			->setFrom('noreply@snowtricks.com')
-			->setTo($user->getEmail())
+			->setTo($data['user']->getEmail())
 			->setReplyTo('admin@snowtricks.com')
-			->setBody($this->renderer->render('emails/partials/reset_password.html.twig', [
-				'user' => $user,
-				'url'  => $url
+			->setBody($this->renderer->render($template, [
+				'fullName' => $data['user']->getFullName(),
+				'url'  => $data['url'],
+				'confirmationCode' => isset($data['confirmationCode'])? $data['confirmationCode']: ''
 			]), 'text/html');
 
 		$this->mailer->send($message);

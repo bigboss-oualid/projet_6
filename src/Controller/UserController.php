@@ -10,15 +10,15 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserController extends AbstractController
 {
 	/**
-	 * @Route("/user/{username}", name="user.show")
+	 * @Route("/user/{username}", name="user.show", requirements={"username": "[a-z0-9\-]*"})
 	 * @param User $user
 	 *
 	 * @return Response
 	 */
-    public function index(User $user): Response
-    {
-        return $this->render('user/index.html.twig', [
-        	'user' => $user,
-        ]);
-    }
+	public function index(User $user): Response
+	{
+		return $this->render('user/index.html.twig', [
+			'user' => $user,
+		]);
+	}
 }

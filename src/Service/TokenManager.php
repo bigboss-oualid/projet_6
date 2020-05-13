@@ -9,6 +9,8 @@ use App\Repository\TokenRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 
+define('WITH_CONFIRMATION', true);
+
 class TokenManager
 {
 	/**
@@ -40,9 +42,11 @@ class TokenManager
 	/**
 	 * @param User $user
 	 *
+	 * @param bool $confirmation
+	 *
 	 * @return Token
 	 */
-	public function createToken(User $user): Token
+	public function createToken(User $user, bool $confirmation = false): Token
 	{
 		if($token = $user->getToken()){
 			$this->deleteToken($token);
@@ -53,6 +57,8 @@ class TokenManager
 		$this->token->setCreatedAt(new \DateTime())
 			->setTokenCode($this->tokenGenerator->generateToken())
 			->setUser($user);
+		if($confirmation)
+			$this->token->generateConfirmationCode(1111,9999);
 		$user->setToken($this->token);
 
 		return $this->token;
@@ -78,6 +84,7 @@ class TokenManager
 
 	public function isTokenExpired()
 	{
+		if(!$this->token)   return true;
 		$createdAt = $this->token->getCreatedAt();
 		$createdAt->add(new \DateInterval('PT2H'));
 

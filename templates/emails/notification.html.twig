@@ -92,7 +92,19 @@
               <td class="" style="vertical-align:top;width:600px;"><![endif]-->
           <div class="mj-column-per-100 outlook-group-fix"
                style="font-size:13px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;">
-              {% block body %}{% endblock %}
+            <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:top;" width="100%">
+              <tr>
+                <td style="margin-top: 30%; font-size:0px;padding:10px 25px;word-break:break-word;">
+                  <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:20px;line-height:1.5;color:#000000;">
+                    <h2 style="text-align:center"> SnowTricks By Jimmy Sweat </h2>
+                    <div style="text-align:center;margin-left:auto;margin-right:auto;margin-top: 5%;margin-bottom:3%">
+                      <img src="https://it-bigboss.de/wp-admin/images/photo/logo.png" alt=""/>
+                    </div>
+                    {% block body %}{% endblock %}
+                  </div>
+                </td>
+              </tr>
+            </table>
           </div>
           <!--[if mso | IE]></td></tr></table><![endif]--></td>
       </tr>
