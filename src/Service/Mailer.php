@@ -29,11 +29,6 @@ class Mailer
 		$this->renderer = $renderer;
 	}
 
-	/**
-	 * @param string $template
-	 * @param String $subject
-	 * @param array  $data
-	 */
 	public function send(String $template, String $subject, Array $data)
 	{
 		$message = (new \Swift_Message('SnowTricks: ' . $subject))
