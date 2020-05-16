@@ -25,7 +25,6 @@ class BlogController extends AbstractController
 	 */
 	public function home(TrickRepository $repository): Response
 	{
-
 		if($this->getUser()){
 			$tricks = $repository->findAll();
 		}else{
@@ -49,7 +48,7 @@ class BlogController extends AbstractController
 	 *
 	 * @return Response
 	 */
-	public function show(Trick $trick, String $slug, Request $request, EntityManagerInterface $em)
+	public function show(Trick $trick, String $slug, Request $request, EntityManagerInterface $em): Response
 	{
 		if ($trick->getSlug() != $slug) {
 			return $this->redirectToRoute('blog.show', [
@@ -60,47 +59,49 @@ class BlogController extends AbstractController
 
 		/** @var User $user */
 		$user = $this->getUser();
-		$comment = new Comment();
-		$commentForm = $this->createForm(CommentType::class, $comment);
-		$rating = $em->getRepository(Rating::class)->findOneBy(['trick' =>$trick, 'author'=>$user]);
 
+		$comment = new Comment();
+
+		$rating = $em->getRepository(Rating::class)->findOneBy(['trick' =>$trick, 'author'=>$user]);
 		if(!$rating){
 			$rating = new Rating();
 		}
 
-		$ratingForm = $this->createForm(RatingType::class, $rating);
+		$commentForm = $this->submitForm(CommentType::class, $trick, $user, $comment, "Votre commentaire a bien été pris en compte !", $em, $request);
 
-		$commentForm->handleRequest($request);
-		$ratingForm->handleRequest($request);
+		$ratingForm = $this->submitForm(RatingType::class, $trick, $user, $rating, "Votre èvaluation de diffuculté a bien é´te pris en compte!", $em, $request);
 
-		if ($ratingForm->isSubmitted() && $ratingForm->isValid()) {
-			$rating->setTrick($trick)
-				->setAuthor($user);
-			$em->persist($rating);
-			$em->flush();
-			$this->addFlash(
-				'success',
-				"Votre èvaluation de diffuculté a bien é´te pris en compte!"
-			);
-		}
-
-		if ($commentForm->isSubmitted() && $commentForm->isValid()) {
-			$comment->setTrick($trick)
-				->setAuthor($user);
-			$em->persist($comment);
-			$em->flush();
-			$this->addFlash(
-				'success',
-				"Votre commentaire a bien été pris en compte !"
-			);
+		if($commentForm->getData()->getId()){
+			return $this->redirectToRoute('blog.show', [
+				'slug' => $trick->getSlug(),
+				'id'   => $trick->getId(),
+				'_fragment' => 'comment'
+			], 301);
 		}
 
 		return $this->render('blog/show.html.twig', [
-			'controller_name' => 'BlogController',
 			'current_menu'    => 'show',
 			'trick'           => $trick,
-			'comment_form'    => $commentForm->createView(),
-			'rating_form'     => $ratingForm->createView()
+			'rating_form'     => $ratingForm->createView(),
+			'comment_form'    => $commentForm->createView()
 		]);
+	}
+
+	private function submitForm(String $formType, Trick $trick,User $user, $persist, String $successMessage, EntityManagerInterface $em, Request $request){
+
+		$form = $this->createForm($formType, $persist);
+
+		if($request->isMethod('POST')){
+			$form->handleRequest($request);
+			if ($form->isSubmitted() && $form->isValid()) {
+				$persist->setTrick($trick)
+					->setAuthor($user);
+				$em->persist($persist);
+				$em->flush();
+				$this->addFlash('success', $successMessage );
+			}
+		}
+
+		return $form;
 	}
 }
