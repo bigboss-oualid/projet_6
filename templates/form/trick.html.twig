@@ -125,7 +125,7 @@
             var prototype = $collectionHolder.data("prototype");
             $collectionHolder.append(prototype.replace(/__name__/g, index));
 
-            $('#trick_videos_'+ index+'_embed_code').on('change', function(event) {
+            $('#trick_videos_'+ index+'_embedCode').on('change', function(event) {
                 var embedCode = event.currentTarget;
 
                 //adjust width & height in iframe

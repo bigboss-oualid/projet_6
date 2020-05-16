@@ -85,7 +85,7 @@ class TrickController extends AbstractController
 				    $trick->addUpdatedBy($update);
 			    }
 
-			    $update->setUpdatedAt(new \DateTime());
+			    //$update->setUpdatedAt(new \DateTime());
 
 		    }
 

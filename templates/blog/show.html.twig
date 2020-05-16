@@ -3,9 +3,82 @@
 {% block title %}Tricks - {{ parent() }} {% endblock %}
 
 {% block body %}
-    <div class="container text-center">
-        <h3 class="m-5">{{ trick.title }}</h3>
-        <p >{{ trick.description }}</p>
+    <div class="container">
+        <h2 class="m-5 text-center">{{ trick.title }}</h2>
+        <p class="mb-3">{{ trick.description }}</p>
+        <hr/>
+        {% if app.user %}
+        <div class="alert alert-info">
+            <h4 class="alert-heading text-center">Votre commentaire</h4>
+            <div>
+                {{ form_start(comment_form) }}
+                {{ form_widget(comment_form) }}
+                <button type="submit" class="btn btn-info">Commenter !</button>
+                {{ form_end(comment_form) }}
+            </div>
+            {#<div>
+                <h4 class="alert-heading text-center">Votre evaluation</h4>
+                {{ form_start(rating_form) }}
+                {{ form_widget(rating_form) }}
+                <button type="submit" class="btn btn-success">Envoyez !</button>
+                {{ form_end(rating_form) }}
+            </div>#}
+
+        </div>
+        <hr/>
+        {% endif %}
+
+        <div class="alert alert-warning">
+            <h4 class="alert-heading text-center">
+                <div class="row align-items-center">
+                    <div class="col-md-2">
+                        <h4 class="alert-heading text-center"></h4>
+                        {{ form_start(rating_form) }}
+                        {{ form_widget(rating_form) }}
+                        <button type="submit" class="btn btn-warning">Evalué !</button>
+                        {{ form_end(rating_form) }}
+                    </div>
+                    <div class="col-md-5">
+                        Note globale donnée par nos utilisateurs
+                    </div>
+                    <div class="col-md-5">
+                        {%  include 'partials/_rating.html.twig' with{ 'rating': trick.avgRatings} %}
+                        <br/>
+                        <small>(Calculée sur {{ trick.ratings|length }} avis !)</small>
+                    </div>
+                </div>
+            </h4>
+        </div>
+        {%  if trick.comments|length > 0 %}
+            <h2 class="mb-3">Commentaires de nos voyageurs :</h2>
+            {% for comment in trick.comments %}
+                <div class="bg-light rounded mb-3 p-3">
+                    <div class="row">
+                        <div class="col-1">
+                            <img src="{{ asset('images/' ~ comment.author.avatar.filename) }}" alt="Avatar de {{ comment.author.fullName }}" class="mb-1 avatar-medium">
+                        </div>
+                        <div class="col-10 col-offset-1">
+                            <div class="row ">
+                                <p class="col-12 float-left">
+                                    <strong>{{ comment.author.fullName }}</strong> a dit :
+                                </p>
+                                <blockquote class="col-12">
+                                    {{ comment.content }}
+                                </blockquote>
+                                {#<div class="col-12">
+                                    <p class=" float-right">
+                                        <strong>Note Donnée par {{ comment.author.fullName }} :</strong>
+                                        {% include 'partials/_rating.html.twig' with{'rating': rating} %}
+                                    </p>
+                                </div>#}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <h2 class="mb-3">Cette annonce n'a pas encore recu de commentaires ...</h2>
+        {% endif %}
         <div class="row float-right">
             <div class="col-12 blockquote-footer">
                 Créer le {{ trick.createdAt | format_datetime(locale='fr') }}
@@ -19,7 +92,7 @@
                 {% set updated=trick.updatedBy|last %}
             <div class="col-12">
                 <a href="{{ path('user.show', {'username': updated.author.username}) }}">
-                    <span class="badge badge-dark"> Récemment modifié par {{ updated.author.username|title  }}</span>
+                    <span class="badge badge-dark">Récemment modifié par {{ updated.author.username|title  }}</span>
                 </a>
                 <span> à {{ updated.updatedAt | format_datetime(locale='fr') }}</span>
             </div>

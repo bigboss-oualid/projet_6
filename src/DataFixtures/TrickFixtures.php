@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Avatar;
 use App\Entity\Category;
+use App\Entity\Comment;
 use App\Entity\Role;
 use App\Entity\Trick;
 use App\Entity\User;
@@ -105,6 +106,15 @@ class TrickFixtures extends Fixture
 				$trick->setAuthor($adminUser);
 			} else {
 				$trick->setAuthor($user);
+			}
+			//Create Comments
+			if(mt_rand(0,1)) {
+				$comment = new Comment();
+				$comment->setContent("un commentaire de test")
+					->setTrick($trick)
+					->setAuthor($user);
+
+				$manager->persist($comment);
 			}
 
 			$manager->persist($trick);
