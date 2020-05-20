@@ -1,0 +1,19 @@
+{% for comment in comments %}
+<div class="bg-light rounded mb-3 p-3">
+    <div class="row">
+        <div class="col-1">
+            <img src="{{ asset('images/' ~ comment.author.avatar.filename) }}" alt="Avatar de {{ comment.author.fullName }}" class="mb-1 avatar-medium">
+        </div>
+        <div class="col-10 col-offset-1">
+            <div class="row ">
+                <p class="col-12 float-left">
+                    <strong>{{ comment.author.fullName }}</strong> a dit :
+                </p>
+                <blockquote class="col-12">
+                    {{ comment.content }}
+                </blockquote>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}

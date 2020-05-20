@@ -13,13 +13,54 @@
         {% if app.user %}
             <a href="{{ path('trick.create') }}" class="mb-5 btn btn-success"><i class="fa fa-plus"> Ajouter nouvelle figure</i></a>
         {% endif %}
-        <div class="row flex">
-            {% for trick in tricks%}
-                <div class="col-md-3">
-                    {% include 'blog/include/_trick.html.twig' %}
-                </div>
-            {% endfor %}
-        </div>
+    <div class="row flex" id="tricks"></div>
+    {% if pagination.pages > 0 %}
+        {{ pagination.display() }}
+    {#{% else %}#}
+
+    {% endif %}
     </div>
 
+{% endblock %}
+{% block javascripts%}
+    <script>
+        //pagination Comments
+        function laodmore(divElt){
+            var page = 1
+            var incrementPages = $('span.js-label')
+            $('a.js-load').on('click', function (e) {
+                e.preventDefault();
+                var url = this.href;
+                console.log(url)
+                $.ajax(
+                    {
+                        url: url,
+                        data: {
+                            page: page
+                        },
+                        dataType: "html",
+                        beforeSend: function() {
+                            incrementPages.text('...')
+                        },
+                        success: function(data) {
+                            divElt.append(data);
+                            page++;
+                            if (page > {{ pagination.pages }}){
+                                e.currentTarget.remove()
+                            } else{
+                                incrementPages.text(page)
+                            }
+                        },
+                        error: function(e)
+                        {
+                            alert('Error: ' + e);
+                        }
+                    }
+                );
+            })
+        }
+
+        $( document ).ready(laodmore($("#tricks")));
+
+    </script>
 {% endblock %}
