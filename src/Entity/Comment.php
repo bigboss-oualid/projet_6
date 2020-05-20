@@ -26,7 +26,7 @@ class Comment
 
     /**
      * @ORM\Column(type="text")
-     * @Assert\NotBlank(message="Vous pouvez pas laissser un commentaire vide !")
+     * @Assert\NotBlank(message="Vous ne pouvez pas entrer un commentaire vide !")
      */
     private $content;
 

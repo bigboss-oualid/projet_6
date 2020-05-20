@@ -84,6 +84,7 @@ class Trick
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="trick", orphanRemoval=true)
+     * @ORM\OrderBy({"createdAt" = "DESC"})
      */
     private $comments;
 
@@ -277,7 +278,7 @@ class Trick
 	/**
 	 * @return string
 	 */
-	public function getLastUpdatedBy(): ?String
+	public function lastUpdatedBy(): ?String
 	{
 		if(!$this->updatedBy)
 		    return null;
