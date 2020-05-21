@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\PasswordUpdate;
+use App\Entity\Trick;
 use App\Form\AccountType;
 use App\Form\PasswordUpdateType;
+use App\Service\Pagination;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -97,16 +99,28 @@ class AccountController extends AbstractController
 	}
 
 	/**
-	 * @Route("/account", name="account.index", requirements={"username": "[a-z0-9\-]*"})
+	 * @Route("/account/{page<\d+>?1}", name="account.index")
 	 * @IsGranted("ROLE_USER")
 	 *
+	 * @param            $page
+	 * @param Pagination $pagination
+	 *
 	 * @return Response
+	 * @throws \Exception
 	 */
-	public function myAccount(): Response
+	public function myAccount($page, Pagination $pagination): Response
 	{
-		return $this->render('user/index.html.twig', [
-			'current_menu'    => 'profile',
-			'user' => $this->getUser()
+		$user = $this->getUser();
+		$pagination->setEntityClass(Trick::class)
+			->setCriteria(['author' => $user])
+			->setCurrentPage($page)
+			->setEntityTemplatePath('blog/include/_pagination_tricks.html.twig')
+			->setButtonTemplatePath('partials/_pagination.html.twig');
+
+		return $this->render('account/index.html.twig', [
+			'current_menu'    => 'index',
+			'user' => $user,
+			'pagination' => $pagination,
 		]);
 	}
 

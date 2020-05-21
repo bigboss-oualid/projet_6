@@ -32,48 +32,48 @@
 
         <hr/>
         {% if app.user %}
-        <div class="mt-5 alert alert-info">
-            <div class="section-row">
-                <div class="section-title">
-                    <h4 class="alert-heading text-center">Votre commentaire</h4>
-                </div>
-                {{ form_start(comment_form, {'action': path('add_comment', {id: trick.id}),'attr': {'id': 'formsComment'}}) }}
-                <div class="row">
-                   <div class="col-md-12">
-                       <div class="form-group">
-                           {{ form_widget(comment_form) }}
+            <div class="mt-5 alert alert-info">
+                <div class="section-row">
+                    <div class="section-title">
+                        <h4 class="alert-heading text-center">Votre commentaire</h4>
+                    </div>
+                    {{ form_start(comment_form, {'action': path('add_comment', {id: trick.id}),'attr': {'id': 'formsComment'}}) }}
+                    <div class="row">
+                       <div class="col-md-12">
+                           <div class="form-group">
+                               {{ form_widget(comment_form) }}
+                           </div>
                        </div>
-                   </div>
-                   <div class="col-md-12">
-                       <button type="submit" id="add-comment" name="btn-1" class="btn btn-info">Ajouter</button>
-                   </div>
+                       <div class="col-md-12">
+                           <button type="submit" id="add-comment" name="btn-1" class="btn btn-info">Ajouter</button>
+                       </div>
+                    </div>
+                    {{ form_end(comment_form) }}
                 </div>
-                {{ form_end(comment_form) }}
             </div>
-        </div>
-        <hr/>
+            <hr/>
 
-        <div class="alert alert-warning">
-            <h4 class="alert-heading text-center">
-                <div class="row align-items-center">
-                    <div  id="comment" class="col-md-2">
-                        <h4 class="alert-heading text-center"></h4>
-                        {{ form_start(rating_form) }}
-                        {{ form_widget(rating_form) }}
-                        <button type="submit" class="btn btn-warning">Evalué !</button>
-                        {{ form_end(rating_form) }}
+            <div class="alert alert-warning">
+                <h4 class="alert-heading text-center">
+                    <div class="row align-items-center">
+                        <div  id="comment" class="col-md-2">
+                            <h4 class="alert-heading text-center"></h4>
+                            {{ form_start(rating_form) }}
+                            {{ form_widget(rating_form) }}
+                            <button type="submit" class="btn btn-warning">Evalué !</button>
+                            {{ form_end(rating_form) }}
+                        </div>
+                        <div class="col-md-5">
+                            Note globale donnée par nos utilisateurs
+                        </div>
+                        <div class="col-md-5">
+                            {%  include 'partials/_rating.html.twig' with{ 'rating': trick.avgRatings} %}
+                            <br/>
+                            <small>(Calculée sur {{ trick.ratings|length }} avis !)</small>
+                        </div>
                     </div>
-                    <div class="col-md-5">
-                        Note globale donnée par nos utilisateurs
-                    </div>
-                    <div class="col-md-5">
-                        {%  include 'partials/_rating.html.twig' with{ 'rating': trick.avgRatings} %}
-                        <br/>
-                        <small>(Calculée sur {{ trick.ratings|length }} avis !)</small>
-                    </div>
-                </div>
-            </h4>
-        </div>
+                </h4>
+            </div>
         {% else %}
             <h2 class="text-center">Veuillez vous
                 <a href="{{ path('security.login') }}" class="primary-button"> connectez-vous </a>
@@ -82,46 +82,24 @@
                 pour ajouter des commentaires
             </h2>
         {% endif %}
-        {%  if trick.comments|length > 0 %}
             <hr/>
-            <h2 class="my-3 text-center">Espace de discussion :</h2>
+            <h2 id="titre-discussions" class="my-3 text-center">
+                {%  if trick.comments|length > 0 %}<span>Espace de discussion :</span>{% else %}<span class="js-no-comment">Cette figure n'a pas encore recu de commentaires ...</span>{% endif %}</h2>
             <div id="comments"></div>
-            {#{% for comment in trick.comments %}
-                <div class="bg-light rounded mb-3 p-3">
-                    <div class="row">
-                        <div class="col-1">
-                            <img src="{{ asset('images/' ~ comment.author.avatar.filename) }}" alt="Avatar de {{ comment.author.fullName }}" class="mb-1 avatar-medium">
-                        </div>
-                        <div class="col-10 col-offset-1">
-                            <div class="row ">
-                                <p class="col-12 float-left">
-                                    <strong>{{ comment.author.fullName }}</strong> a dit :
-                                </p>
-                                <blockquote class="col-12">
-                                    {{ comment.content }}
-                                </blockquote>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}#}
             {% if pagination.pages > 1 %}
                 {{ pagination.display() }}
-                {#{% else %}#}
             {% endif %}
-        {% else %}
-            <h2 class="mb-3">Cette figure n'a pas encore recu de commentaires ...</h2>
-        {% endif %}
     </div>
 {% endblock %}
 
 {% block javascripts%}
     <script>
-
-        console.log();
+        var titreDiscussion = $('#titre-discussions > .js-no-comment')
+        console.log(titreDiscussion);
+        //add comment
         $('#add-comment').on('click', function (e) {
             e.preventDefault();
-            if ($('#error-comment')!= "undefined"){
+            if ($('#error-comment')!== "undefined"){
                 $('#error-comment').remove()
             }
             var url = $('#formsComment').attr('action');
@@ -131,6 +109,12 @@
                 data: $('#formsComment').serialize(),
                 dataType : 'json',
                 success: function (data) {
+                    if (titreDiscussion.text() !== ""){
+                        parentElt = titreDiscussion.parent().hide('slow')
+                        spanElt = '<span class="js-comment">Espace de discussion :</span>';
+                        $( ".js-no-comment" ).detach()
+                        parentElt.prepend(spanElt).show('slow')
+                    }
                     $('#comment_content').val('');
                     $('#comment_content').css({"border":"1px solid #ced4da", "box-shadow": "1px 1px #ced4da"})
                     $(data.comment).prependTo('#comments').hide().show('slow');

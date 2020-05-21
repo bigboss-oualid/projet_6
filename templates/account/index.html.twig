@@ -20,16 +20,15 @@
             </div>
         </div>
         <hr>
+        
         <h2>Les figures de {{ user.fullName }}</h2>
-
         {% if user.tricks | length > 0 %}
             <div class="row flex">
-                {% for trick in user.tricks %}
-                    <div class="col-md-3">
-                        {%  include 'blog/include/_trick.html.twig' %}
-                    </div>
-                {% endfor %}
+                {%  include 'blog/include/_pagination_tricks.html.twig' with {'tricks': pagination.data}%}
             </div>
+            {% if pagination.pages > 1 %}
+                {{ pagination.display() }}
+            {% endif %}
         {% else %}
             <div class="alert alert-warning">
                 <p><strong>{{ user.fullName }}</strong></p> n'a pas encore de figure sur le site !

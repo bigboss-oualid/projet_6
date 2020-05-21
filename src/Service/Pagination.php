@@ -23,11 +23,11 @@ class Pagination
 	 * @var Environment
 	 */
 	private $twig;
-
 	private $criteria = [];
 	private $em;
 	private $entityTemplatePath;
 	private $buttonTemplatePath;
+	private $routeParameters = [];
 
 	public function __construct(EntityManagerInterface $em, Environment $twig, RequestStack $requestStack, String $buttonTemplatePath, int $limit)
 	{
@@ -51,9 +51,6 @@ class Pagination
 
 		return $this->twig->render($this->entityTemplatePath,[
 				$this->getDataName() => $this->getData(),
-				'page'               => $this->currentPage,
-				'pages'              => $this->getPages(),
-				'route'              => $this->route
 			]
 		);
 	}
@@ -67,10 +64,12 @@ class Pagination
 	 * @throws \Exception
 	 */
 	public function display(){
+
 		$this->twig->display($this->buttonTemplatePath, [
 			'pages' => $this->getPages(),
 			'route' => $this->route,
-			'page'  => $this->currentPage
+			'page'  => $this->currentPage,
+			'parameters' => $this->routeParameters
 		]);
 	}
 
@@ -80,12 +79,8 @@ class Pagination
 	 */
 	public function getData(){
 		$this->error();
-
 		$offset = $this->currentPage * $this->limit - $this->limit;
 		$repository = $this->em->getRepository($this->entityClass);
-
-		if($this->criteria == null)
-			return $repository->findBy([], [], $this->limit, $offset);
 
 		return $repository->findBy($this->criteria, [], $this->limit, $offset);
 	}
@@ -97,7 +92,7 @@ class Pagination
 	public function getPages(){
 		$this->error();
 
-		$total = count($this->em->getRepository($this->entityClass)->findAll());
+		$total = count($this->em->getRepository($this->entityClass)->findBy($this->criteria));
 
 		return ceil($total / $this->limit);
 	}
@@ -203,6 +198,18 @@ class Pagination
 	}
 
 	/**
+	 * @param String $buttonTemplatePath
+	 *
+	 * @return Pagination
+	 */
+	public function setButtonTemplatePath(String $buttonTemplatePath): self
+	{
+		$this->buttonTemplatePath = $buttonTemplatePath;
+
+		return $this;
+	}
+
+	/**
 	 * @return array
 	 */
 	public function getCriteria(): array
@@ -218,6 +225,17 @@ class Pagination
 	public function setCriteria(array $criteria): Pagination
 	{
 		$this->criteria = $criteria;
+		return $this;
+	}
+
+	/**
+	 * @param mixed $routeParameters
+	 *
+	 * @return Pagination
+	 */
+	public function setRouteParameters(array $routeParameters)
+	{
+		$this->routeParameters = $routeParameters;
 		return $this;
 	}
 
@@ -241,5 +259,4 @@ class Pagination
 			throw  new \Exception("The entity used by pagination service is not specified ! Resolve the problem by using the method [ setEntityClass() ] from object 'Pagination'");
 		}
 	}
-
 }
