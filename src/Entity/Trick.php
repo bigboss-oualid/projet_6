@@ -113,7 +113,7 @@ class Trick
         return $this->title;
     }
 
-	public function setTitle(string $title): self
+	public function setTitle(?string $title): self
 	{
 	    $this->title = $title;
 
@@ -275,19 +275,6 @@ class Trick
         return $this->updatedBy;
     }
 
-	/**
-	 * @return string
-	 */
-	public function lastUpdatedBy(): ?String
-	{
-		if(!$this->updatedBy)
-		    return null;
-		//$current = current(($this->updatedBy)->toArray());
-		$last = end(($this->updatedBy)->toArray());
-
-		return $last;
-	}
-
     public function addUpdatedBy(UserUpdateTrick $updatedBy): self
     {
         if (!$this->updatedBy->contains($updatedBy)) {
@@ -360,6 +347,17 @@ class Trick
         return $this;
     }
 
+	/**
+	 * get Average of Ratings
+	 *
+	 * @return Int
+	 */
+	public function countComment(): Int{
+		if($this->comments) return count($this->comments);
+
+		return 0;
+	}
+
     public function removeRating(Rating $rating): self
     {
         if ($this->ratings->contains($rating)) {
@@ -388,7 +386,6 @@ class Trick
 		}
 
 		return 0;
-
 	}
 
 	/**

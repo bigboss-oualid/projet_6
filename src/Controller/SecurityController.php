@@ -59,9 +59,6 @@ class SecurityController extends AbstractController
 	 * @param Mailer $mailer
 	 *
 	 * @return Response
-	 * @throws \Twig\Error\LoaderError
-	 * @throws \Twig\Error\RuntimeError
-	 * @throws \Twig\Error\SyntaxError
 	 */
 	public function sendConfirmation(User $user, Mailer $mailer): Response
 	{

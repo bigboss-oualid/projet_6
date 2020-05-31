@@ -20,7 +20,7 @@ class TrickType extends ApplicationType
             ->add(
             	'title',
 	            TextType::class,
-	            $this->getConfiguration("Titre", ['placeholder' => "Tapez le titre de la figure"])
+	            $this->getConfiguration("Titre", ['placeholder' => "Tapez le titre de la figure"],['required' => false])
             )
 	        ->add(
 	        	'category',
@@ -28,7 +28,10 @@ class TrickType extends ApplicationType
 		        $this->getConfiguration("Catégorie", [],
 			        [
 			        	'class' => Category::class,
-				        'choice_label' => 'name'
+				        'choice_label' => function(?Category $category) {
+					        return $category ? strtoupper($category->getName()) : '';
+				        },
+				        'placeholder' => 'Choisir un groupe',
 			        ])
 		        )
             ->add(
@@ -73,6 +76,7 @@ class TrickType extends ApplicationType
     {
         $resolver->setDefaults([
             'data_class' => Trick::class,
+	        'error_bubbling' => true
         ]);
     }
 

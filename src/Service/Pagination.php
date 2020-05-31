@@ -82,7 +82,7 @@ class Pagination
 		$offset = $this->currentPage * $this->limit - $this->limit;
 		$repository = $this->em->getRepository($this->entityClass);
 
-		return $repository->findBy($this->criteria, [], $this->limit, $offset);
+		return $repository->findBy($this->criteria, ['createdAt' => 'DESC'], $this->limit, $offset);
 	}
 
 	/**
