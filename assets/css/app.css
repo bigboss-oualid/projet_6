@@ -1,9 +1,12 @@
 @import "~bootstrap";
 
 body {
-    background-color: lightgray;
-}
 
+    background-color: #f1f4fa;
+}
+.custom-file, .custom-video-upload{
+    display: none;
+}
 /*keep footer at the bottom of the page*/
 *{
     box-sizing: border-box;
@@ -43,7 +46,148 @@ footer{
     max-width: 30px;
     max-height: 30px;
 }
-
 span.rating i {
-    color: darkgoldenrod;
+    color: gold;
+}
+
+/*change color pen trick add*/
+.fa-pencil, .fa-plus-circle{
+    color: #FFFFFF;
+}
+
+/*video trick*/
+#video-btns{
+    padding-bottom: 4px;
+}
+iframe{
+    margin-bottom: -5px;
+}
+
+.invalid-feedback{
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+/*page trick show show title over default img*/
+#default-illustration{
+    position: relative;
+}
+#trick-title-edit{
+    position: absolute;
+    bottom: 50%;
+}
+#trick-title-edit > span >span{
+    text-align: center;
+    font-weight: bold;
+    color: #FFFFFF;
+    text-shadow: 3px 3px 3px rgba(255,0,0,1);
+    outline:none;
+    height:30px;
+    transition:height 1s;
+    -webkit-transition:height 1s;
+}
+
+#trick-title-edit>input {
+    background-color:rgba(0, 0, 0, 0.1);
+    text-align: center;
+    font-size:24px;
+    font-weight: bolder;
+    color:white;
+    text-shadow: 3px 3px 3px rgba(0,0,0,0.8);
+    border: none;
+    outline:none;
+    height:40px;
+    transition:height 1s;
+    -webkit-transition:height 1s;
+}
+
+#trick-title-edit>input:focus {
+    height:60px;
+    font-size:30px;
+}
+#trick-title-edit>input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: whitesmoke; /* Firefox */
+    font-weight: lighter;
+}
+
+#trick-title-edit>input:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: whitesmoke;
+}
+
+#trick-title-edit>input::-ms-input-placeholder { /* Microsoft Edge */
+    color: whitesmoke;
+}
+
+#btns-img-0{
+    position: absolute;
+    top: 10px;
+    right: 30px;
+}
+option[value=""] {
+    font-weight: bolder;
+}
+/*end page trick show*/
+
+
+#sum_box h4 {
+    text-align: left;
+    margin-top: 0;
+    font-size: 30px;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+
+#sum_box .db:hover {
+    background: #40516f;
+    color: #fff;
+}
+
+
+
+
+#sum_box .db:hover .icon {
+    opacity: 1;
+    color: #999999;
+}
+
+#sum_box .icon {
+    color: #fff;
+    font-size: 55px;
+    margin-top: 7px;
+    margin-bottom: 0;
+    float: right;
+}
+
+
+.panel.income.db.mbm{
+    background-color: #5cb85c;
+}
+
+.panel.profit.db.mbm{
+    background-color: #5bc0de;
+}
+
+
+/*section info trick*/
+.info-trick {
+    color: #FFCA0B;
+    background: linear-gradient(135deg,#6394ff 0%,#0a193b 100%);
+    border-radius: 0.5rem;
+    box-shadow: 7px 7px 30px -5px rgba(0,0,0,0.8);
+    text-shadow: 1px 1px 2px rgba(0,0,0,1);
+    margin-bottom: 20px;
+}
+
+.info-trick:hover {
+    background: linear-gradient(135deg,#FFCA0B 0%,#B8860B 100%);
+    color: #0a193b;
+    text-shadow: 2px 2px 2px rgba(255,255,255,1);
+}
+/*end section info trick*/
+
+@media only screen and (min-width:320px) {
+    .mobile-inline {
+        display:inline-block;
+    }
 }

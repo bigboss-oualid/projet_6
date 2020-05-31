@@ -18,3 +18,14 @@ global.$ = global.jQuery = $;
 import 'bootstrap'
 
 console.log('Hello Webpack Encore! Edit me in assets/js/app.js');
+
+/*Confirm delete*/
+$(document).ready(function(){
+    $("#confirm-del-trick").click(function(){
+        if (!confirm("Desirez vraiment supprimer la figure")){
+            return false;
+        }
+    });
+});
+
+
