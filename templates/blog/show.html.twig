@@ -16,16 +16,14 @@
                     <a href="{{ path('user.show', {'username': trick.author.username}) }}">
                         <span class="badge badge-warning">Postée par {{ trick.author.username|title  }}</span>
                     </a>
-                    le {{ trick.createdAt | format_datetime(locale='fr') }}
+                    le {{ trick.createdAt | format_datetime('full', 'full',locale='fr') }}
                 </div>
                 {% if trick.updatedBy is not empty%}
                     {% set updated=trick.updatedBy|last %}
-                    <div class="col-12 blockquote-footer">
                         <a href="{{ path('user.show', {'username': updated.author.username}) }}">
-                            <span class="badge badge-dark">Récemment modifié par {{ updated.author.username|title  }}</span>
+                            <h1><span class="badge badge-dark">Récemment modifié par {{ updated.author.username|title  }}</span></h1>
                         </a>
-                        <span> le {{ updated.updatedAt | format_datetime(locale='fr') }}</span>
-                    </div>
+                        <span> le {{ updated.updatedAt | format_datetime('full', 'full',locale='fr') }}</span>
                 {% endif %}
             </div>
         </div>
@@ -54,7 +52,7 @@
             <hr/>
 
             <div class="alert alert-warning">
-                <h4 class="alert-heading text-center">
+                <h4 id="titre-evaluation" class="alert-heading text-center">
                     <div class="row align-items-center">
                         <div  id="comment" class="col-md-2">
                             <h4 class="alert-heading text-center"></h4>
@@ -64,7 +62,7 @@
                             {{ form_end(rating_form) }}
                         </div>
                         <div class="col-md-5">
-                            Note globale donnée par nos utilisateurs
+                            Évaluation globale donnée par nos utilisateurs
                         </div>
                         <div class="col-md-5">
                             {%  include 'partials/_rating.html.twig' with{ 'rating': trick.avgRatings} %}
@@ -75,17 +73,17 @@
                 </h4>
             </div>
         {% else %}
-            <h2 class="text-center">Veuillez vous
-                <a href="{{ path('security.login') }}" class="primary-button"> connectez-vous </a>
+            <h4 class="text-center">
+                <a href="{{ path('security.login') }}" class="primary-button"> Connectez-vous </a>
                 ou
-                <a href="{{ path('security.register') }}" class="primary-button"> inscrivez-vous</a>
+                <a href="{{ path('security.register') }}" class="primary-button"> Inscrivez-vous</a>
                 pour ajouter des commentaires
-            </h2>
+            </h4>
         {% endif %}
             <hr/>
-            <h2 id="titre-discussions" class="my-3 text-center">
-                {%  if trick.comments|length > 0 %}<span>Espace de discussion :</span>{% else %}<span class="js-no-comment">Cette figure n'a pas encore recu de commentaires ...</span>{% endif %}</h2>
-            <div id="comments"></div>
+            <h4 id="titre-discussions" class="my-3 text-center">
+                {%  if trick.comments|length > 0 %}<span>Espace de discussion :</span>{% else %}<span class="js-no-comment">Cette figure n'a pas encore recu de commentaires ...</span>{% endif %}</h4>
+            <div id="comments" class="load-content" data-pages = {{ pagination.pages }}></div>
             {% if pagination.pages > 1 %}
                 {{ pagination.display() }}
             {% endif %}
@@ -93,90 +91,6 @@
 {% endblock %}
 
 {% block javascripts%}
-    <script>
-        var titreDiscussion = $('#titre-discussions > .js-no-comment')
-        console.log(titreDiscussion);
-        //add comment
-        $('#add-comment').on('click', function (e) {
-            e.preventDefault();
-            if ($('#error-comment')!== "undefined"){
-                $('#error-comment').remove()
-            }
-            var url = $('#formsComment').attr('action');
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: $('#formsComment').serialize(),
-                dataType : 'json',
-                success: function (data) {
-                    if (titreDiscussion.text() !== ""){
-                        parentElt = titreDiscussion.parent().hide('slow')
-                        spanElt = '<span class="js-comment">Espace de discussion :</span>';
-                        $( ".js-no-comment" ).detach()
-                        parentElt.prepend(spanElt).show('slow')
-                    }
-                    $('#comment_content').val('');
-                    $('#comment_content').css({"border":"1px solid #ced4da", "box-shadow": "1px 1px #ced4da"})
-                    $(data.comment).prependTo('#comments').hide().show('slow');
-
-                },
-                error: function (data) {
-                    console.log(data.responseJSON.errors.content[0]);
-                    if(data.status === 400) {
-                        $('#comment_content').css({"border":"1px solid red"})
-                        commentError = '<span id="error-comment" class="invalid-feedback d-block"><span class="d-block"><span class="mb-2 form-error-icon badge badge-danger">ERREUR </span><span class="form-error-message"> ' + data.responseJSON.errors.content[0]+'</span></span></span>'
-                        $(commentError).insertBefore($('textarea')).hide().show('slow')
-                    }
-                }
-            });
-        });
-
-
-        //pagination Comments
-        function laodmore(divElt){
-            var page = 1
-            var incrementPages = $('span.js-label')
-            $('a.js-load').on('click', function (e) {
-                e.preventDefault();
-                var url = this.href;
-                console.log(url)
-                $.ajax(
-                    {
-                        url: url,
-                        data: {
-                            page: page
-                        },
-                        dataType: "html",
-                        beforeSend: function() {
-                            incrementPages.text('...')
-                        },
-                        success: function(data) {
-                            divElt.append(data);
-                            page++;
-                            if (page > {{ pagination.pages }}){
-                                e.currentTarget.remove()
-                            } else{
-                                incrementPages.text(page)
-                            }
-                        },
-                        error: function(e)
-                        {
-                            alert('Error: ' + e);
-                        }
-                    }
-                );
-            })
-        }
-
-        $( document ).ready(laodmore($("#comments")));
-
-        //show first page automaticly afetr page load
-        $("document").ready(function() {
-            setTimeout(function() {
-                $("a.js-load").trigger('click');
-            },10);
-
-        });
-
-    </script>
+    {{ encore_entry_script_tags('loadMore') }}
+    {{ encore_entry_script_tags('comments') }}
 {% endblock %}

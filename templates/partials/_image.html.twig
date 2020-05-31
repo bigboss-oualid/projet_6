@@ -1,29 +1,28 @@
-
 <div class="col-md-4 mb-2" id="illustration-{{ form.vars.name}}">
     <div class="border p-2 w-100">
         <div class="text-center p-2">
-            {% if form.vars.value.filename is defined  %}
-                <img  id="illustration-holder-{{ form.vars.name }}" src="{{ asset('images/' ~ form.vars.value.filename) }}" width="120" height="120" alt="{{ form.vars.value.oldName }}">
+            {% set file = form.vars.value %}
+            {% if file.filename is defined %}
+                <img id="illustration-holder-{{ form.vars.name }}" class="rounded" src="{{ asset('images/' ~ file.filename) }}" width="120" height="120" alt="{{ file.oldName }}"/>
             {% else %}
-                <img id="illustration-holder-{{ form.vars.name }}" src="{{ asset('images/placeholder.png') }}" style='max-width:120px;'/>
-            {%  endif %}
+                <img id="illustration-holder-{{ form.vars.name }}" class="rounded" src="{{ asset('images/placeholder.png') }}"/>
+            {% endif %}
+            <div class="row mt-2 d-flex justify-content-center">
+                <label class="custom-file-upload">
+                    {{ form_widget(form.imageFile)}}
+                    <a class="btn btn-success btn-edit">
+                        {% if file.filename is defined  %}
+                            <i class="fa fa-pencil"></i>
+                        {% else %}
+                            <i class="fa fa-plus-circle text-white"></i>
+                        {% endif %}
+                    </a>
+                </label>
+                <div class="ml-1">
+                    <button type="button" class="btn btn-danger btn-remove float-right" data-rel="#illustration-{{ form.vars.name }}"><i class="fa fa-trash"></i>
+                    </button>
+                </div>
+            </div>
         </div>
-
-        {% if form.vars.value.oldName is defined and form.vars.value.oldName != null%}
-            {{ form_row(form.imageFile, {
-                attr: {
-                    'placeholder': form.vars.value.oldName
-                }
-                })
-            }}
-        {% else %}
-            {{ form_row(form.imageFile, {
-                attr: {
-                    'placeholder': 'Choisir une illustration'
-                }
-            })
-            }}
-        {% endif %}
-        <button type="button" class="btn-btn-sm btn-danger btn-remove" data-rel="#illustration-{{ form.vars.name }}"><i class="fa fa-trash"></i> Supprimer</button>
     </div>
 </div>

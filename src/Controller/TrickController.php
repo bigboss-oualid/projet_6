@@ -31,6 +31,41 @@ class TrickController extends AbstractController
 
 	/**
 	 * @Route("/tricks/new", name="trick.create")
+	 * @IsGranted("ROLE_USER")
+	 *
+	 * @param Request $request
+	 *
+	 * @return Response
+	 */
+    public function createTrick(Request $request):Response
+    {
+	    /** @var User $user */
+	    $user = $this->getUser();
+	    $trick = new Trick();
+
+		$form = $this->createForm(TrickType::class, $trick);
+
+		$form->handleRequest($request);
+	    if ($form->isSubmitted() && $form->isValid()) {
+
+	    	$trick->setAuthor($user);
+		    $this->em->persist($trick);
+		    $this->em->flush();
+
+		    $this->addFlash('success', "la figure <strong>{$trick->getTitle()}</strong> a bien été crée !" );
+
+		    return $this->redirectToRoute('blog.home');
+	    }
+
+		return $this->render('form/trick.html.twig', [
+			'current_menu' => 'create_trick',
+			'formTrick' => $form->createView(),
+			'editMode'  => false,
+			'errorsForm' => $form->getErrors(true)
+		]);
+    }
+
+	/**
 	 * @Route("/tricks/{slug}/{id}/edit", name="trick.edit", requirements={"slug": "[a-z0-9\-]*", "id": "\d+"})
 	 * @IsGranted("ROLE_USER")
 	 *
@@ -42,64 +77,54 @@ class TrickController extends AbstractController
 	 *
 	 * @return Response
 	 */
-    public function formTrick(Trick $trick = null, String $slug=null, Request $request, UserUpdateTrickRepository $repository):Response
-    {
-	    /** @var User $user */
-	    $user = $this->getUser();
+	public function editTrick(Trick $trick, String $slug, Request $request, UserUpdateTrickRepository $repository):Response
+	{
+		/** @var User $user */
+		$user = $this->getUser();
 
-    	if(!$trick){
-		    $trick = new Trick();
-		    $trick->setAuthor($user);
-		    $flash = " enregistrée";
-	    }else{
-		    if ($trick->getSlug() != $slug) {
-			    return $this->redirectToRoute('trick.edit', [
-				    'slug' => $trick->getSlug(),
-				    'id'   => $trick->getId()
-			    ], 301);
-		    }
-		    $flash = " modifiée";
-	    }
+		if ($trick->getSlug() != $slug) {
+			return $this->redirectToRoute('trick.edit', [
+				'slug' => $trick->getSlug(),
+				'id'   => $trick->getId()
+			], 301);
+		}
 
 		$form = $this->createForm(TrickType::class, $trick);
-
 		$form->handleRequest($request);
-	    if ($form->isSubmitted() && $form->isValid()) {
+		if ($form->isSubmitted() && $form->isValid())
+		{
+			$update = $repository->findOneBy([
+				'author' => $user->getId(),
+				'trick' => $trick->getId()
+			]);
 
-	    	if($trick->getId() != 0){
+			if(!$update){
+				$update = new UserUpdateTrick($user, $trick);
+				$user->addUpdatedTrick($update);
+				$trick->addUpdatedBy($update);
+			}else{
+				$user->removeUpdatedTrick($update);
+				$trick->removeUpdatedBy($update);
+				$update = new UserUpdateTrick($user, $trick);
+				$user->addUpdatedTrick($update);
+				$trick->addUpdatedBy($update);
+			}
+			$this->em->persist($trick);
+			$this->em->flush();
 
-			    $update = $repository->findOneBy([
-			    	'author' => $user->getId(),
-				    'trick' => $trick->getId()
-			    ]);
+			$this->addFlash('success', "la figure <strong>{$trick->getTitle()}</strong> a bien été  modifiée !");
 
-			    if(!$update){
-				    $update = new UserUpdateTrick($user, $trick);
-				    $user->addUpdatedTrick($update);
-				    $trick->addUpdatedBy($update);
-			    }else{
-				    $user->removeUpdatedTrick($update);
-				    $trick->removeUpdatedBy($update);
-				    $update = new UserUpdateTrick($user, $trick);
-				    $user->addUpdatedTrick($update);
-				    $trick->addUpdatedBy($update);
-			    }
-		    }
-
-		    $this->em->persist($trick);
-		    $this->em->flush();
-
-		    $this->addFlash('success', "la figure <strong>{$trick->getTitle()}</strong> a bien été " . $flash);
-
-		    return $this->redirectToRoute('blog.home');
-	    }
+			return $this->redirectToRoute('blog.home');
+		}
 
 		return $this->render('form/trick.html.twig', [
-			'current_menu'    => 'create_trick',
+			'current_menu' => 'create_trick',
 			'formTrick' => $form->createView(),
-			'editMode'  => $trick->getId() !== null
+			'trick' => $trick,
+			'editMode'  => true,
+			'errorsForm' => $form->getErrors(true)
 		]);
-    }
+	}
 
 	/**
 	 * @Route("/tricks/{id}/delete", name="trick.delete", methods="DELETE", requirements={"id": "\d+"})

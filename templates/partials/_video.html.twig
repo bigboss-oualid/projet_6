@@ -1,18 +1,49 @@
 <div class="col-md-4 mb-2" id="video-{{ form.vars.name}}">
     <div class="border p-2 w-100">
-        <div class="text-center p-2">
-        {% if form.vars.value.embedCode is defined  %}
-            {{ form.vars.value.embedCode | raw}}
-        {% else %}
-
-        {%  endif %}
-            <span id="video-value-{{ form.vars.name }}"></span>
+        <div id="videos-js" class="text-center p-2">
+            <span id="video-value-{{ form.vars.name }}">
+            {% set video = form.vars.value %}
+            {% if video.embedCode is defined  %}
+                {{ video.embedCode | raw}}
+            {% else %}
+                <img id="video-holder-{{ form.vars.name }}" class="rounded" width="120" height="120" src="{{ asset('images/video-placeholder.png') }}"/>
+            {%  endif %}
+            </span>
         </div>
-        {{ form_row(form.embedCode, {
-            attr: {
-                'placeholder': 'Entrer code integré'
-            }
-        }) }}
-        <button type="button" class="btn-btn-sm btn-danger btn-remove" data-rel="#video-{{ form.vars.name }}"><i class="fa fa-trash"></i> Supprimer</button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="modal-{{ form.vars.name }}" tabindex="-1" role="dialog" aria-labelledby="modal-{{ form.vars.name }}-Label" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modal-{{ form.vars.name }}-Label">Video</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        {{ form_row(form.embedCode)}}
+                    </div>
+                    <div class="modal-footer">
+                        <a id="modal-remove-{{ form.vars.name }}" class="btn btn-danger btn-remove text-white" data-dismiss="modal">Supprimer</a>
+                        <a id="modal-btn-{{ form.vars.name }}" class="btn btn-success text-white">Ajouter</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="video-btns"  class="row mb-2 pb-2 d-flex justify-content-center">
+            <div class="mr-1">
+                <a class="btn btn-success" data-toggle="modal" data-target="#modal-{{ form.vars.name }}">
+                    {% if video.embedCode is defined  %}
+                        <i class="fa fa-pencil"></i>
+                    {% else %}
+                        <i class="fa fa-plus-circle text-white"></i>
+                    {% endif %}
+                </a>
+            </div>
+            <div class="">
+                <button type="button" class="btn btn-danger btn-remove" data-rel="#video-{{ form.vars.name }}"><i class="fa fa-trash"></i></button>
+            </div>
+        </div>
     </div>
 </div>

@@ -15,7 +15,7 @@
                 <a class="nav-link {% if current_menu is defined and current_menu == 'show' %}font-weight-bold active {% endif %}"  href="#">Tricks <span class="sr-only">(current)</span></a>
             </li>
         </ul>
-        <ul class="navbar-nav">
+        <ul class="navbar-nav" role="button">
             {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
             {#{% if app.user %}#}
                 <li class="nav-item dropdown">
@@ -39,7 +39,6 @@
                     <a class="nav-link" href="{{ path('security.login') }}"><span class="sr-only">(current)</span>Connexion</a>
                 </li>
             {% endif %}
-
         </ul>
     </div>
 </nav>
