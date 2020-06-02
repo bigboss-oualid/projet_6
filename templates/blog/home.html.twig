@@ -3,27 +3,54 @@
 {% block title %}Accueil - {{ parent() }} {% endblock %}
 
 {% block body %}
-    <div class="jumbotron text-center">
-        <h1>Jimmy S. Snowboard Tricks</h1>
-        <p>loCollectives harvest from attitudes like ancient species.Vox, verpa, et planeta.Fluff seven rhubarbs, squid, and brown sugar in a large pan over medium heat, refrigerate for twelve minutes and jumble with some quinoa.</p>
-    </div>
+    <header class="masthead text-white">
+        <div class="overlay"></div>
+        <div class="container slider-top-text">
+            <div class="row my-mt-head">
+                <div class="col-md-12 text-center">
+                    <h3 class="my-heading">BIENVENUE À <span class="bg-main">S</span>NOW<span class="bg-main">T</span>RICK</h3>
+                    <h4 class="slider-text"><span class="bg-main">J</span>immy<span class="bg-main">S</span>weat</h4>
+                    <p class="myp-slider text-center slider-text">Où les snowboarders s'unissent et s'améliorent ensemble</p>
+                    <p class="my-5 text-center slider-text d-none d-lg-block">PARTAGEZ VOS SOUVENIRS | CONNECTEZ-VOUS AVEC D'AUTRES | SE FAIRE DE NOUVEAUX AMIS</p>
+                    <a class="btn btn-join btn-outline-warning" href="{{ path('security.register') }}">REJOIGNEZ LA COMMUNAUTÉ</a>
+                </div>
+            </div>
+        </div>
+        <div id="gobottom-container" class="col-md-12 text-center fixed-bottom">
+            <div class="scroll-down">
+                <a class="btn btn-default btn-scroll floating-arrow" href="#gobottom" id="bottom"><i class="fa fa-angle-down"></i></a>
+            </div>
+        </div>
+    </header>
 
-    <div class="container">
-        <h2>Tous les Tricks</h2>
+    {% for label, messages in app.flashes%}
+        <div class="container mt-5">
+            <div class="alert alert-{{ label }}">
+                {% for message in messages %}
+                    <p class="text-center">{{ message | raw}}</p>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+
+    <section class="trick-section m-5" id="gobottom">
+        <div class="row">
+            <div class="col-md-8 mx-auto  wow fadeInUp">
+                <h3 class="home-p text-center font-weight-bold">Figures <span class="bg-main">S</span>now<span class="bg-main">T</span>ricks</h3>
+                <p class="h2 text-dark text-center">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+            </div>
+        </div>
         {% set pagesNumber = pagination.pages %}
-        {% if app.user %}
-            <a href="{{ path('trick.create') }}" class="mb-5 btn btn-success"><i class="fa fa-plus"> Ajouter nouvelle figure</i></a>
+        <div class="row load-content d-flex justify-content-center" data-pages = {{ pagesNumber }} id="tricks"></div>
+        {% if pagesNumber > 1 %}
+            {{ pagination.display() }}
+        {#{% else %}#}
         {% endif %}
-    <div class="row flex load-content" data-pages = {{ pagesNumber }} id="tricks"></div>
-    {% if pagesNumber > 0 %}
-        {{ pagination.display() }}
-    {#{% else %}#}
-
-    {% endif %}
-    </div>
+    </section>
 
 {% endblock %}
 {% block javascripts%}
     {#pagination Tricks#}
     {{ encore_entry_script_tags('loadMore') }}
+    {{ encore_entry_script_tags('home') }}
 {% endblock %}

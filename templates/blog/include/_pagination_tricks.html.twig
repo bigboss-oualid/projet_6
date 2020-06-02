@@ -1,44 +1,46 @@
 {% for trick in tricks %}
-    <div class="col-md-3">
-        <div class="card mb-4">
-            <div class="card-body">
-                <div class=" card-title text-center">
-                    <h3 class="h1">
-                        <a href="{{ path('blog.show', {slug: trick.slug, id: trick.id}) }}">
-                            {{ trick.title }}
-                        </a>
-                    </h3>
+    <div class="col-md-3 mt-4 wow bounceInUp" data-wow-duration="1.4s">
+        <div class="card h-100">
+            {% set illustration = trick.illustrations|first %}
+            <a class="item box" href="{{ path('blog.show', {slug: trick.slug, id: trick.id}) }}">
+                {% if illustration != false %}
+                    {% dump(illustration.filename) %}
+                    <img class="card-img-top" src="{{ asset('images/'~illustration.filename) }}">
+                {% else %}
+                    <img class="card-img-top" src="{{ asset('images/illustration-default.png') }}">
+                {% endif %}
+            </a>
+            <div class="card-block">
+                <h4 class="card-title text-center text-capitalize text-decoration-none">
+                    <a href="{{ path('blog.show', {slug: trick.slug, id: trick.id}) }}">
+                        {{ trick.title }}
+                    </a>
+                </h4>
+
+                <div class="card-text text-center">
+                    {% if app.user %}
+                        <div class="text-center">
+                            <a href="{{ path('trick.edit', {slug: trick.slug, id: trick.id}) }}" class="btn btn-warning my-btn-blog"><i class="fa fa-pencil"></i></a>
+                            {% if app.user == trick.author  %}
+                                <form method="post" action="{{ path('trick.delete', {id: trick.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes vous sûr de vouloir supprimer la figure: {{ trick.title }}?')">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ trick.id) }}">
+                                    <button class="btn btn-danger my-btn-blog"><i class="fa fa-trash"></i></button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card-footer text-center">
+                <small>
                     {% if trick.ratings|length > 0 %}
                         {% include 'partials/_rating.html.twig' with{'rating': trick.avgRatings} %}
                     {% else %}
                         <small>Pas encore évalué</small>
                     {% endif %}
-                </div>
-                <p class="card-text display-5">{{ trick.description}}</p>
-                <div class="row float-right">
-                    <div class="col-12 blockquote-footer">
-                        Créer le {{ trick.createdAt | format_datetime(locale='fr') }}
-                    </div>
-                    <div class="col-12">
-                        Créer par
-                        <a href="{{ path('user.show', {'username': trick.author.username}) }}">
-                            <span class="badge badge-warning">{{ trick.author.username }}</span>
-                        </a>
-                    </div>
-                </div>
+                </small>
             </div>
         </div>
-        {% if app.user %}
-        <div class="mb-5 text-center">
-            <a href="{{ path('trick.edit', {slug: trick.slug, id: trick.id}) }}" class="btn btn-secondary"><i class="fa fa-pencil"></i></a>
-            {% if app.user == trick.author  %}
-                <form method="post" action="{{ path('trick.delete', {id: trick.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes vous sûr de vouloir supprimer la figure: {{ trick.title }}?')">
-                    <input type="hidden" name="_method" value="DELETE">
-                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ trick.id) }}">
-                    <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
-                </form>
-            {% endif %}
-        </div>
-        {% endif %}
     </div>
 {% endfor %}

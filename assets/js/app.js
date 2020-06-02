@@ -19,13 +19,91 @@ import 'bootstrap'
 
 console.log('Hello Webpack Encore! Edit me in assets/js/app.js');
 
-/*Confirm delete*/
+/*Confirm delete and go down to tricks*/
 $(document).ready(function(){
     $("#confirm-del-trick").click(function(){
-        if (!confirm("Desirez vraiment supprimer la figure")){
+        if (!confirm("Voulezez-vous vraiment supprimer la figure?")){
             return false;
         }
     });
 });
+
+$(window).scroll( function(){
+    let topWindow = $(window).scrollTop();
+    topWindow = topWindow * 1.5;
+    let windowHeight = $(window).height();
+    let position = topWindow / windowHeight;
+    position = 1 - position;
+
+    $('#bottom').css('opacity', position);
+});
+
+
+$(window).on("scroll", function() {
+    let BtnBottom = $('#bottom');
+    let navBar = $("nav.navbar");
+    if ($(this).scrollTop() > 10) {
+        navBar.addClass("mybg-dark");
+        navBar.addClass("navbar-shrink");
+    } else {
+        navBar.removeClass("mybg-dark");
+        navBar.removeClass("navbar-shrink");
+        BtnBottom.show();
+    }
+});
+
+/*close dropdown menu after mouse leaves*/
+const $dropdown = $(".dropdown");
+const $dropdownToggle = $(".dropdown-toggle");
+const $dropdownMenu = $(".dropdown-menu");
+const showClass = "show";
+$(window).on("load resize", function() {
+    if (this.matchMedia("(min-width: 768px)").matches) {
+        $dropdown.hover(
+            function() {
+                const $this = $(this);
+                $this.addClass(showClass);
+                $this.find($dropdownToggle).attr("aria-expanded", "true");
+                $this.find($dropdownMenu).addClass(showClass);
+            },
+            function() {
+                const $this = $(this);
+                $this.removeClass(showClass);
+                $this.find($dropdownToggle).attr("aria-expanded", "false");
+                $this.find($dropdownMenu).removeClass(showClass);
+            }
+        );
+    } else {
+        $dropdown.off("mouseenter mouseleave");
+    }
+});
+
+/*back to top*/
+$(document).ready(function(){
+    $(window).scroll(function () {
+        if ($(this).scrollTop() > 50) {
+            $('#back-to-top').fadeIn();
+        } else {
+            $('#back-to-top').fadeOut();
+        }
+    });
+    // scroll body to 0px on click
+    $('#back-to-top').click(function () {
+        $('body,html').animate({
+            scrollTop: 0
+        }, 400);
+        return false;
+    });
+    $("#menu-icon-mobile").click(function () {
+        $("#menu-icon-mobile").toggleClass('fa-bars');
+        $(".navbar.fixed-top.navbar-expand-lg").toggleClass("menu-back");
+        $("#menu-icon-mobile").toggleClass('fa-caret-down');
+        let goBottom = $("#gobottom-container");
+        if (goBottom) $(goBottom).toggle();
+    })
+});
+
+
+
 
 
