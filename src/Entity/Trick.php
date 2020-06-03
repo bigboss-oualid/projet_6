@@ -45,7 +45,7 @@ class Trick
 	private $createdAt;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="tricks", cascade={"persist"})
+	 * @ORM\ManyToOne(targetEntity="App\Entity\Category", fetch="EAGER", inversedBy="tricks", cascade={"persist"})
 	 */
 	private $category;
 

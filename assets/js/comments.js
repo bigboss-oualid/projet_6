@@ -1,3 +1,4 @@
+new WOW().init();
 let titreDiscussion = $('#titre-discussions > .js-no-comment')
 
 //Add comment
@@ -29,16 +30,17 @@ $('#add-comment').on('click', function (e) {
             let commentError;
             if (data.status === 400) {
                 $('#comment_content').css({"border": "1px solid red"})
-                commentError = '<span id="error-comment" class="invalid-feedback d-block"><span class="d-block"><span class="mb-2 form-error-icon badge badge-danger">ERREUR </span><span class="form-error-message"> ' + data.responseJSON.errors.content[0] + '</span></span></span>'
-                $(commentError).insertBefore($('textarea')).hide().show('slow')
+                commentError = '<span id="error-comment" class="invalid-feedback d-block"><span class="d-block"><span class="mb-1 form-error-icon badge badge-danger">ERREUR </span><span class="form-error-message"> ' + data.responseJSON.errors.content[0] + '</span></span></span>'
+                $(commentError).insertBefore($('#my-error-comment')).hide().show('slow')
             }
         }
     });
 });
 
 //Load first comments
+/*
 $("document").ready(function() {
     setTimeout(function() {
         $("a.js-load").trigger('click');
     },10);
-});
+});*/

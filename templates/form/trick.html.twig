@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="container mt-5">
+    <div class="container trick-blog">
         {% if errorsForm is not empty %}
             <div class="alert alert-danger">
                 <div class="mb-1 text-center text-capitalize text-dark font-weight-bolder">Veuillez corriger les erreurs suivantes !!!</div>
@@ -19,7 +19,7 @@
                {{ form_errors(formTrick.title) }}
                {{ form_widget(formTrick.title) }}
             </div>
-            <img id="default-img-trick" src="{{ asset('images/illustration-default.png') }}" width="100%" alt="default illustration" class="rounded">
+            <img id="default-img-trick" src="{{ asset('images/illustration-default.png') }}" height="480px" width="100%" alt="default illustration" class="rounded">
             <div id="btns-img-0" class="row mt-2">
                <a id="default-edit" class="btn btn-success">
                    <i class="fa fa-pencil"></i>
@@ -70,7 +70,7 @@
                 {{ form_widget(formTrick.category) }}
             </div>
         </div>
-        <div class="row float-right">
+        <div class="row float-right mb-5">
             <div class="col col-md-auto">
                 <button type="submit" class="btn btn-success font-weight-bolder text-dark">
                     {% if editMode %}

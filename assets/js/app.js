@@ -4,6 +4,7 @@
  * We recommend including the built version of this JavaScript file
  * (and its CSS file) in your base layout (base.html.twig).
  */
+import 'wowjs/css/libs/animate.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import '@fortawesome/fontawesome-free/css/v4-shims.css';
 
@@ -26,30 +27,6 @@ $(document).ready(function(){
             return false;
         }
     });
-});
-
-$(window).scroll( function(){
-    let topWindow = $(window).scrollTop();
-    topWindow = topWindow * 1.5;
-    let windowHeight = $(window).height();
-    let position = topWindow / windowHeight;
-    position = 1 - position;
-
-    $('#bottom').css('opacity', position);
-});
-
-
-$(window).on("scroll", function() {
-    let BtnBottom = $('#bottom');
-    let navBar = $("nav.navbar");
-    if ($(this).scrollTop() > 10) {
-        navBar.addClass("mybg-dark");
-        navBar.addClass("navbar-shrink");
-    } else {
-        navBar.removeClass("mybg-dark");
-        navBar.removeClass("navbar-shrink");
-        BtnBottom.show();
-    }
 });
 
 /*close dropdown menu after mouse leaves*/
@@ -103,7 +80,26 @@ $(document).ready(function(){
     })
 });
 
+$(window).scroll( function(){
+    let topWindow = $(window).scrollTop();
+    topWindow = topWindow * 1.5;
+    let windowHeight = $(window).height();
+    let position = topWindow / windowHeight;
+    position = 1 - position;
 
+    $('#bottom').css('opacity', position);
+});
 
-
+$(window).on("scroll", function() {
+    let BtnBottom = $('#bottom');
+    let navBar = $("nav.navbar");
+    if ($(this).scrollTop() > 10) {
+        navBar.addClass("mybg-dark");
+        navBar.addClass("navbar-shrink");
+    } else {
+        navBar.removeClass("mybg-dark");
+        navBar.removeClass("navbar-shrink");
+        BtnBottom.show();
+    }
+});
 

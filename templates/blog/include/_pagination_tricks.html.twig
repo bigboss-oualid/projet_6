@@ -2,9 +2,8 @@
     <div class="col-md-3 mt-4 wow bounceInUp" data-wow-duration="1.4s">
         <div class="card h-100">
             {% set illustration = trick.illustrations|first %}
-            <a class="item box" href="{{ path('blog.show', {slug: trick.slug, id: trick.id}) }}">
+            <a class="item-card box" href="{{ path('blog.show', {slug: trick.slug, id: trick.id}) }}">
                 {% if illustration != false %}
-                    {% dump(illustration.filename) %}
                     <img class="card-img-top" src="{{ asset('images/'~illustration.filename) }}">
                 {% else %}
                     <img class="card-img-top" src="{{ asset('images/illustration-default.png') }}">

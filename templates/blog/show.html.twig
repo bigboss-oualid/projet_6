@@ -3,94 +3,128 @@
 {% block title %}Tricks - {{ parent() }} {% endblock %}
 
 {% block body %}
-    <div class="container">
-        <div class="section-row m-5">
-            <div class="section-title">
-                <h2 class="m-5 text-center">{{ trick.title }}</h2>
-            </div>
-            <div class="row">
-                <p class="mb-3">{{ trick.description }}</p>
-            </div>
-            <div class="row float-right">
-                <div class="col-12 blockquote-footer">
-                    <a href="{{ path('user.show', {'username': trick.author.username}) }}">
-                        <span class="badge badge-warning">Postée par {{ trick.author.username|title  }}</span>
+    <div class="container trick-blog">
+        <div class="row d-flex justify-content-center" id="default-illustration">
+            <h3 id="trick-title">{{ trick.title|title }}</h3>
+            {% set illustration = trick.illustrations|first %}
+            <img id="default-img-trick"  src="{% if illustration%} {{ asset('images/'~illustration.filename) }} {% else %} {{ asset('images/illustration-default.png') }} {% endif %} " width="100%" height="480px" alt="default illustration" class="rounded">
+            {% if app.user %}
+                <div id="btns-img-0" class="row mt-2">
+                    <a href="{{ path('trick.edit', {slug: trick.slug, id: trick.id}) }}" id="default-edit" class="btn btn-success">
+                        <i class="fa fa-pencil"></i>
                     </a>
-                    le {{ trick.createdAt | format_datetime('full', 'full',locale='fr') }}
+                    {% if app.user == trick.author  %}
+                        <form method="post" action="{{ path('trick.delete', {id: trick.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes vous sûr de vouloir supprimer la figure: {{ trick.title }}?')">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ trick.id) }}">
+                            <button class="ml-1 btn btn-danger float-right"><i class="fa fa-trash"></i></button>
+                        </form>
+                    {% endif %}
                 </div>
-                {% if trick.updatedBy is not empty%}
-                    {% set updated=trick.updatedBy|last %}
-                        <a href="{{ path('user.show', {'username': updated.author.username}) }}">
-                            <h1><span class="badge badge-dark">Récemment modifié par {{ updated.author.username|title  }}</span></h1>
-                        </a>
-                        <span> le {{ updated.updatedAt | format_datetime('full', 'full',locale='fr') }}</span>
-                {% endif %}
+            {% endif %}
+        </div>
+        <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true"><i class="fa fa-2x fa-window-close" style="color: red"></i></span><span class="sr-only"></span></button>
+                        <img src="" class="imagepreview">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="col-md-6 mt-5">
+                <div class="MultiCarousel" data-items="1,1,1,3" data-slide="1" id="MultiCarousel"  data-interval="1000">
+                    <div class="MultiCarousel-inner">
+                    {% if trick.illustrations %}
+                        {% for illustration in trick.illustrations%}
+                            <div class="col-md-4 item text-center">
+                                <a class="pop">
+                                    <img width="130" height="120"  src="{{ asset('images/'~illustration.filename) }}" alt="{{ illustration.oldname }}" >
+                                </a>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    </div>
+                    <button class="btn btn-primary leftLst"><i class="fa fa-step-backward text-white"></i></button>
+                    <button class="btn btn-primary rightLst"><i class="fa fa-step-forward"></i></button>
+                </div>
+            </div>
+            <div class="col-md-6 mt-5">
+                <div class="MultiCarousel" data-items="1,1,1,3" data-slide="1" id="MultiCarousel"  data-interval="1000">
+                    <div class="MultiCarousel-inner">
+                    {% if trick.videos %}
+                        {% for video in trick.videos%}
+                            <div class="col-md-4 item text-center">
+                                {{ video.embedCode | raw}}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    </div>
+                    <button class="btn btn-warning leftLst"><i class="fa fa-step-backward text-white"></i></button>
+                    <button class="btn btn-warning rightLst"><i class="fa fa-step-forward"></i></button>
+                </div>
             </div>
         </div>
 
-        <hr/>
+        <div class="row">
+            <div class="jumbotron py-1 w-100">
+                <h3 class="my-heading mb-2"><span class="bg-main">D</span>ESCRIPTION</h3>
+                <p class="h4">{{ trick.description }}</p>
+                <h3 class="my-heading float-right">GROUPE: <span class="bg-main">{{ trick.category.name }}</span></h3>
+            </div>
+        </div>
+        <div>
+            {%  include 'partials/_infos.html.twig'%}
+        </div>
+        <hr class="my-border"/>
         {% if app.user %}
-            <div class="mt-5 alert alert-info">
-                <div class="section-row">
-                    <div class="section-title">
-                        <h4 class="alert-heading text-center">Votre commentaire</h4>
-                    </div>
+            <div id="my-error-comment" class="row">
+                <div class="col-md-8 offset-md-1">
                     {{ form_start(comment_form, {'action': path('add_comment', {id: trick.id}),'attr': {'id': 'formsComment'}}) }}
                     <div class="row">
-                       <div class="col-md-12">
-                           <div class="form-group">
-                               {{ form_widget(comment_form) }}
-                           </div>
-                       </div>
-                       <div class="col-md-12">
-                           <button type="submit" id="add-comment" name="btn-1" class="btn btn-info">Ajouter</button>
-                       </div>
+                        <div class="col-sm-12">{{ form_widget(comment_form) }}</div>
+                        <div class="col-sm-12 w-100">
+                            <button type="submit" id="add-comment" name="btn-1" class="btn btn-info btn-block font-weight-bolder ">Commentez</button>
+                        </div>
                     </div>
                     {{ form_end(comment_form) }}
                 </div>
-            </div>
-            <hr/>
-
-            <div class="alert alert-warning">
-                <h4 id="titre-evaluation" class="alert-heading text-center">
-                    <div class="row align-items-center">
-                        <div  id="comment" class="col-md-2">
-                            <h4 class="alert-heading text-center"></h4>
-                            {{ form_start(rating_form) }}
-                            {{ form_widget(rating_form) }}
-                            <button type="submit" class="btn btn-warning">Evalué !</button>
-                            {{ form_end(rating_form) }}
-                        </div>
-                        <div class="col-md-5">
-                            Évaluation globale donnée par nos utilisateurs
-                        </div>
-                        <div class="col-md-5">
-                            {%  include 'partials/_rating.html.twig' with{ 'rating': trick.avgRatings} %}
-                            <br/>
-                            <small>(Calculée sur {{ trick.ratings|length }} avis !)</small>
+                <div id="titre-evaluation" class="col-md-2">
+                    {{ form_start(rating_form) }}
+                    <div class="row d-inline-flex">
+                        <div class="col-sm-5 pr-0 mt-5 ">{{ form_widget(rating_form) }}</div>
+                        <div class="col-sm-7 pl-0 mt-5">
+                            <button type="submit" class="btn btn-warning m-0 font-weight-bolder text-white">Evaluez</button>
                         </div>
                     </div>
-                </h4>
+                    {{ form_end(rating_form) }}
+                </div>
             </div>
+            <hr class="my-border"/>
+
         {% else %}
-            <h4 class="text-center">
-                <a href="{{ path('security.login') }}" class="primary-button"> Connectez-vous </a>
-                ou
-                <a href="{{ path('security.register') }}" class="primary-button"> Inscrivez-vous</a>
-                pour ajouter des commentaires
-            </h4>
+            <div class="row">
+                <div class="jumbotron py-1 w-100">
+                    <h3 class="my-heading mb-2"><span class="bg-main">D</span>ESCRIPTION</h3>
+                    <p class="text-center">
+                        Aimeriez-vous partager vos souvenir, connectez-vous avec d'autres et faire des nouveaux amis ou même évaluer les figures et créer vos propres figures <a class="" href="{{ path('security.register') }}">rejoinez-nous</a> et <a class="" href="{{ path('security.login') }}">restez en-ligne</a></p>
+                </div>
+            </div>
         {% endif %}
-            <hr/>
-            <h4 id="titre-discussions" class="my-3 text-center">
-                {%  if trick.comments|length > 0 %}<span>Espace de discussion :</span>{% else %}<span class="js-no-comment">Cette figure n'a pas encore recu de commentaires ...</span>{% endif %}</h4>
+            <div id="titre-discussions" class="my-5 text-center">
+                {%  if trick.comments|length > 0 %}<h3 class="my-heading mb-2"><span class="bg-main">E</span>SPACE DE DISCUSSION</h3>{% else %}<span class="js-no-comment"><h3 class="my-heading mb-2"><span class="bg-main">A</span>UCUN COMMENTRAIRE...</h3></span>{% endif %}</div>
             <div id="comments" class="load-content" data-pages = {{ pagination.pages }}></div>
             {% if pagination.pages > 1 %}
                 {{ pagination.display() }}
             {% endif %}
+        <div class="mb-5"></div>
     </div>
 {% endblock %}
 
 {% block javascripts%}
+    {{ encore_entry_script_tags('carousel') }}
     {{ encore_entry_script_tags('loadMore') }}
     {{ encore_entry_script_tags('comments') }}
 {% endblock %}
