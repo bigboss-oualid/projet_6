@@ -20,7 +20,7 @@ class TrickType extends ApplicationType
             ->add(
             	'title',
 	            TextType::class,
-	            $this->getConfiguration("Titre", ['placeholder' => "Tapez le titre de la figure"],['required' => false])
+	            $this->getConfiguration("Titre", ['placeholder' => "Entrez le titre de la figure"],['required' => false])
             )
 	        ->add(
 	        	'category',
