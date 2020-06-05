@@ -22,8 +22,8 @@ function loaddmore(divElt, pagesNumber){
                     } else{
                         incrementPages.text(page)
                     }
-
-                    $('html,body').animate({scrollTop: $('html,body').height()}, 1000);
+                    let elts = $('html,body');
+                    elts.animate({scrollTop: elts.height()}, 1000);
                 },
                 error: function(e)
                 {

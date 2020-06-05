@@ -22,12 +22,50 @@ console.log('Hello Webpack Encore! Edit me in assets/js/app.js');
 
 /*Confirm delete and go down to tricks*/
 $(document).ready(function(){
-    $("#confirm-del-trick").click(function(){
-        if (!confirm("Voulezez-vous vraiment supprimer la figure?")){
+    $(".js-del-out").click(function(){
+        let title = $(this).data('trickTitle');
+        if (!confirm("Voulez-vous vraiment supprimer la figure " + title + "?")){
             return false;
         }
     });
 });
+
+/*suppression des tricks*/
+    $(document).on('click','.js-del-in',function (e){
+        e.preventDefault();
+
+        let button = $(this);
+
+        let c = confirm("Voulez-vous vraiment supprimer la figure " + button.data('title') + "?");
+
+        if (c === true) {
+            $.ajax({
+                type: "DELETE",
+                url: button.attr('href'),
+                data: JSON.stringify({'_token' : button.data('token')}),
+                dataType: 'JSON',
+                beforeSend: function() {
+                    console.log('beforeSend')
+                },
+                success: function (data) {
+                    if (data.success) {
+                        let trick = $('#'+ button.data('slug'));
+                        trick.fadeOut(function(){
+                            trick.remove();
+                        });
+                    }
+                },
+                error: function(e)
+                {
+                    console.log('Error: ' + e);
+                }
+            });
+
+        } else {
+            return false;
+        }
+    });
+
 
 /*close dropdown menu after mouse leaves*/
 const $dropdown = $(".dropdown");

@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -133,13 +134,25 @@ class TrickController extends AbstractController
 	 * @param Trick   $trick
 	 * @param Request $request
 	 *
-	 * @return RedirectResponse
+	 * @return mixed
 	 */
-	public function delete(Trick $trick, Request $request):RedirectResponse
+	public function delete(Trick $trick, Request $request)
 	{
+		if($request->isXmlHttpRequest()) {
+			$data = json_decode($request->getContent(), true);
+
+			if ($this->isCsrfTokenValid('delete' . $trick->getId(), $data['_token'])) {
+				$this->em->remove($trick);
+				//$this->em->flush();
+				return new JsonResponse(['success' => true]);
+			}
+
+			return new JsonResponse(['error' => 'Token invalide'], 400);
+		}
+
 		if ($this->isCsrfTokenValid('delete' . $trick->getId(), $request->get('_token'))) {
 			$this->em->remove($trick);
-			$this->em->flush();
+			//$this->em->flush();
 			$this->addFlash(
 				'success',
 				"La figure <strong>{$trick->getTitle()}</strong> a bien été supprimée !"

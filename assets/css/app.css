@@ -5,7 +5,25 @@ body {
     background-size: cover;
 }
 .jumbotron {
-    background-color: lightgray;
+    background-color: whitesmoke;
+}
+#trick-pagination>li>a,
+#trick-pagination>li>span {
+    background-color: #FFCA0B;
+    border: 1px solid white !important;
+    font-weight: bolder;
+    color: white;
+    text-shadow: 1px 1px 1px rgba(0,0,0,3);
+}
+#trick-pagination> :not(.disabled):hover>a {
+    background: orangered!important;
+    color: #fff!important;
+    border-left: 4px solid orangered !important;
+    border-right: 4px solid orangered !important;
+}
+#trick-pagination>li.active>a {
+    background: orangered!important;
+    color: #fff!important;
 }
 /**NAV**/
 div.my-logo-text {
@@ -307,8 +325,9 @@ h3.my-heading {
     font-size: 30px;
     margin:0;
 }
-#slider-text {
+#js-home {
     text-shadow: 1px 1px 1px rgba(0,0,0,1);
+    font-family: 'Kaushan Script', cursive;
 }
 
 p.myp-slider {

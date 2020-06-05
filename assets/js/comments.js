@@ -29,8 +29,8 @@ $('#add-comment').on('click', function (e) {
             console.log(data.responseJSON.errors.content[0]);
             let commentError;
             if (data.status === 400) {
-                $('#comment_content').css({"border": "1px solid red"})
-                commentError = '<span id="error-comment" class="invalid-feedback d-block"><span class="d-block"><span class="mb-1 form-error-icon badge badge-danger">ERREUR </span><span class="form-error-message"> ' + data.responseJSON.errors.content[0] + '</span></span></span>'
+                $('#comment_content').css({"border": "1px solid red"});
+                commentError = '<div class="col-md-8 offset-md-1"><span id="error-comment" class="invalid-feedback d-block"><span class="d-block"><span class="mb-1 form-error-icon badge badge-danger">ERREUR </span><span class="form-error-message">' + data.responseJSON.errors.content[0] + '</span></span></span></div>';
                 $(commentError).insertBefore($('#my-error-comment')).hide().show('slow')
             }
         }
