@@ -3,8 +3,8 @@
         {#<a class="navbar-brand font-weight-bold" href="{{ path('blog.home') }}"><img src="{{ asset('images/logo1.png') }}" alt="SnowTricks Jimmy Sweat"></a>#}
         <div class="navbar-brand text-center my-logo-text">
             <a class="navbar-brand font-weight-bold text-white" href="{{ path('blog.home') }}">
-                <div id="snow" class=""><span class="bg-main">S</span>now<span class="bg-main">T</span>ricks</div>
-                <div id="jimmy" class=""><span class="bg-main">J</span>immy<span class="bg-main">S</span>weat</div>
+                <div id="snow"><span class="bg-main">S</span>now<span class="bg-main">T</span>ricks</div>
+                <div id="jimmy"><span class="bg-main">J</span>immy<span class="bg-main">S</span>weat</div>
             </a>
         </div>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,10 +43,10 @@
                     </li>
                 {% else %}
                     <li class="nav-item mr-lg-2">
-                        <a class="py-1 nav-link btn btn-warning btn-block btn-nav {% if current_menu is defined and current_menu == 'register' %}font-weight-bold active {% endif %}" href="{{ path('security.register') }}"><span class="sr-only">(current)</span>Inscription</a>
+                        <a class="py-1 btn btn-block btn-nav nav-link {% if current_menu is defined and current_menu == 'register' %} active-btn {% else %}nav-link btn-warning{% endif %}" href="{{ path('security.register') }}"><span class="sr-only">(current)</span>Inscription</a>
                     </li>
-                    <li class="nav-item {% if current_menu is defined and current_menu == 'login' %}font-weight-bold active {% endif %}">
-                        <a class="py-1 nav-link btn btn-warning btn-block btn-nav" href="{{ path('security.login') }}"><span class="sr-only">(current)</span>Connexion</a>
+                    <li class="nav-item">
+                        <a class="py-1 btn btn-block btn-nav nav-link {% if current_menu is defined and current_menu == 'login' %} active-btn {% else %} btn-warning{% endif %}" href="{{ path('security.login') }}"><span class="sr-only">(current)</span>Connexion</a>
                     </li>
                 {% endif %}
             </ul>

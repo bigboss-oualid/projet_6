@@ -4,11 +4,14 @@ body {
     background: url("/images/background.jpg") no-repeat center center fixed;
     background-size: cover;
 }
+.jumbotron {
+    background-color: lightgray;
+}
 /**NAV**/
 div.my-logo-text {
     font-family: 'vivaldi', cursive;
     color: #fff !important;
-    text-shadow: 1px 1px 1px rgba(0,0,0,1);
+    text-shadow: 1px 1px 1px rgba(0,0,0,3);
     padding-top: 0;
     margin-top: -10px;
 }
@@ -169,7 +172,7 @@ option[value=""] {
     width: 100%;
 }
 .trick-blog{
-    margin-top: 150px !important;
+    margin-top: 250px !important;
     margin-bottom: 200px !important;
 }
 .p-null{
@@ -240,7 +243,7 @@ header.masthead .overlay{border-radius: 0px 0px 40px 40px;position:absolute;back
     font-weight: bold;
     text-shadow: 1px 1px 1px rgba(0,0,0,1);
 }
-.btn-nav:hover, .btn-join:hover, #load:hover{
+.btn-nav:hover, .btn-join:hover, #load:hover, .active-btn{
     background: orangered !important;
     border: 2px solid white;
     color: white !important;
@@ -442,7 +445,7 @@ p.myp-font {
     z-index: 10;
     color: orangered;
     position: fixed;
-    bottom: 25px;
+    bottom: 50px;
     right: 25px;
     display: none;
 }
@@ -508,14 +511,21 @@ p.myp-font {
     #create-account-title{
         margin-top:30%;
     }
-    #snow, #jimmy{
-        font-size: 2rem !important;
-    }
+    #snow{
+        font-size: 3rem !important;
+         margin-bottom: -30px!important;
+     }
+    #jimmy{
+          font-size: 1.8rem !important;
+      }
     .user_card {
         width: 100% !important;
     }
     .form_container {
         padding: 0;
+    }
+    .container{
+        width: 100% !important;
     }
 }
 @media (min-width:768px) {
@@ -541,6 +551,9 @@ p.myp-font {
     }
     .my-grid img {
         width: 100%;
+    }
+    .container {
+        max-width: 98%!important;
     }
 }
 /*info trick*/
@@ -644,7 +657,7 @@ p.myp-font {
     color: #fff;
     text-shadow: 2px 2px 2px rgba(0,0,0,1);
     font-weight: bold;
-    font-size: 25px;
+    font-size: 4rem;
 }
 #create-account-title{
     margin-bottom:8%;

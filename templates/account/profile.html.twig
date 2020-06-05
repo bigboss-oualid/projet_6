@@ -3,40 +3,70 @@
 {% block title %}Modification du profile !{% endblock %}
 
 {% block body %}
-    <div class="container">
-        <h1>Modification de votre profil !</h1>
-
-        {{  form_start(form) }}
-        <div class="col-md-6 offset-md-3">
-            <div class="row">
-                <div class="col-md-4 text-center p-2" role="button">
-                    {% set avatar = form.vars.value.avatar %}
-                    {% if avatar.filename is defined  %}
-                        <img  id="avatar-holder" src="{{ asset('images/' ~ avatar.filename) }}" width="120" height="120" alt="{{ avatar.oldName }}">
-                    {% else %}
-                        <img id="avatar-holder" src="{{ asset('images/placeholder.png') }}" style='max-width:120px;'/>
-                    {%  endif %}
+    <div class="container justify-content-center vertical-center">
+        <div class="row">
+            <div class="col-sm-12" id="create-account-title">
+                <h3 class="titre-content mb-5 text-center"><span class="bg-main">M</span>ODIFICATION DU PROFIL</h3>
+            </div>
+            <div class="col-12">
+                <div class="user_card w-100">
+                    {{  form_start(form) }}
+                    <div class="d-flex justify-content-center">
+                        <div class="brand_logo_container" role="button">
+                            {% set avatar = form.vars.value.avatar %}
+                            {% if avatar.filename is defined  %}
+                                <img  id="avatar-holder" src="{{ asset('images/' ~ avatar.filename) }}" class="brand_logo" alt="Logo">
+                            {% else %}
+                                <img id="avatar-holder" src="{{ asset('images/placeholder.png') }}" class="brand_logo" alt="placeholder"/>
+                            {%  endif %}
+                            <div class="d-block">{{ form_errors(form.avatar) }}</div>
+                            <div class="d-none">{{ form_widget(form.avatar) }}</div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center form_container px-5">
+                        <div class="row mx-md-5">
+                            <div class="col-sm-12">
+                                <div class="form-row align-items-end">
+                                    <div class="col-md-6">
+                                        <div class="input-group mb-3">
+                                            {{ form_errors(form.firstName) }}
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                                            </div>
+                                            {{ form_widget(form.firstName) }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="input-group mb-3">
+                                            {{ form_errors(form.lastName) }}
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                                            </div>
+                                            {{ form_widget(form.lastName) }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="input-group mb-3">
+                                            {{ form_errors(form.email) }}
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="fas fa-at"></i></span>
+                                            </div>
+                                            {{ form_widget(form.email) }}
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 mt-4 mb-5">
+                                        <button type="submit" class="btn btn-warning btn-nav btn-block">Confirmer!</button>
+                                    </div>
+                                </div>
+                            </div>
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="row d-none">
-                <div class="col-md-6">{{ form_row(form.avatar) }}</div>
-            </div>
-            <div class="form-row align-items-end">
-                <div class="col-md-6">{{ form_row(form.firstName) }}</div>
-                <div class="col-md-6">{{ form_row(form.lastName) }}</div>
-                <div class="col-md-12">{{ form_row(form.email) }}</div>
-            </div>
-            <div class="row pt-4">
-                <div class="col-md-12 ">
-                    <button type="submit" class="w-100 btn btn-success">
-                        <i class="fa fa-floppy-o"></i>
-                         Confirmez les modifications
-                    </button>
-                </div>
-                {{ form_end(form) }}
             </div>
         </div>
     </div>
+
 {% endblock %}
 
 {% block javascripts%}
