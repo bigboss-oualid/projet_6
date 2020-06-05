@@ -86,7 +86,7 @@
                     <form method="post" action="{{ path('trick.delete', {id: formTrick.vars.value.id}) }}">
                         <input type="hidden" name="_method" value="DELETE">
                         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ app.request.get('id')) }}">
-                        <button id="confirm-del-trick" class="btn btn-danger font-weight-bolder text-white">Supprimer</button>
+                        <button data-trick-title ="{{ trick.title }}" class="js-del-out btn btn-danger font-weight-bolder text-white">Supprimer</button>
                     </form>
                 </div>
             {% endif %}

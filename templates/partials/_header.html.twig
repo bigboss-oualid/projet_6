@@ -22,7 +22,7 @@
                     </i> Accueil <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link nav-text {% if current_menu is defined and current_menu == 'show' %}font-weight-bolder active-nav {% endif %}"  id="goToTrick" href="">Tricks <span class="sr-only">(current)</span></a>
+                    <a class="nav-link nav-text {% if current_menu is defined and current_menu == 'tricks' %}font-weight-bolder active-nav {% endif %}" href="{{ path('blog.tricks') }}">Tricks <span class="sr-only">(current)</span></a>
                 </li>
             </ul>
             <ul class="navbar-nav">

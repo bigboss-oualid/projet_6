@@ -48,21 +48,26 @@ class BlogController extends AbstractController
 		]);
 	}
 
+	/**
+	 * @Route("/tricks/{page<\d+>?1}", name="blog.tricks")
+	 *
+	 * @param            $page
+	 * @param Pagination $pagination
+	 *
+	 * @return Response | JsonResponse
+	 */
+	public function tricks($page, Pagination $pagination)
+	{
+		$pagination->setEntityClass(Trick::class)
+			->setCurrentPage($page)
+			->setEntityTemplatePath('blog/include/_pagination_tricks.html.twig')
+			->setButtonTemplatePath('partials/_pagination.html.twig');
 
-	/*public function loadTricks(Pagination $pagination, Request $request): JsonResponse{
-
-		if($request->isXmlHttpRequest()){
-			$pagination->setEntityClass(Trick::class)
-				->setEntityTemplatePath('blog/include/_pagination_tricks.html.twig');
-
-			return new JsonResponse($pagination->renderView(), 200, [], true);
-		}
-
-		return new JsonResponse([
-			'type' => 'error',
-			'message' => 'request is not with ajax'
+		return $this->render('blog/tricks.html.twig', [
+			'current_menu'    => 'tricks',
+			'pagination' => $pagination,
 		]);
-	}*/
+	}
 
 	/**
 	 * @Route("/trick/{id}/add-comment", name="add_comment", requirements={"id": "\d+"})

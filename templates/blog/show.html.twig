@@ -14,7 +14,7 @@
                         <i class="fa fa-pencil"></i>
                     </a>
                     {% if app.user == trick.author  %}
-                        <form method="post" action="{{ path('trick.delete', {id: trick.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes vous sûr de vouloir supprimer la figure: {{ trick.title }}?')">
+                        <form method="post" action="{{ path('trick.delete', {id: trick.id}) }}"  class="d-inline-block" data-trick-title ="{{ trick.title }}" id="confirm-del-trick">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ trick.id) }}">
                             <button class="ml-1 btn btn-danger float-right"><i class="fa fa-trash"></i></button>
@@ -114,8 +114,13 @@
             </div>
         {% endif %}
             <div id="titre-discussions" class="my-5 text-center">
-                {%  if trick.comments|length > 0 %}<h3 class="my-heading mb-2"><span class="bg-main">E</span>SPACE DE DISCUSSION</h3>{% else %}<span class="js-no-comment"><h3 class="my-heading mb-2"><span class="bg-main">A</span>UCUN COMMENTRAIRE...</h3></span>{% endif %}</div>
-            <div id="comments" class="load-content" data-pages = {{ pagination.pages }}></div>
+                {%  if trick.comments|length > 0 %}
+                    <h3 class="my-heading mb-2"><span class="bg-main">E</span>SPACE DE DISCUSSION</h3>
+                {% else %}
+                    <span class="js-no-comment"><h3 class="my-heading mb-2"><span class="bg-main">A</span>UCUN COMMENTRAIRE...</h3></span>
+                {% endif %}
+            </div>
+            <div id="comments" class="load-content wow fadeInLeft" data-wow-duration="4s" data-pages = {{ pagination.pages }}></div>
             {% if pagination.pages > 1 %}
                 {{ pagination.display() }}
             {% endif %}

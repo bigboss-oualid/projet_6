@@ -42,7 +42,7 @@
             </div>
         </div>
         <hr class="my-border">
-        <h3 class="my-heading text-center my-5"> <span class="bg-main">{% if connected  %}MES FIGURES</span>{% else %}LES FIGURES DE {{ user.fullName }}{% endif %}</h3>
+        <h3 class="my-heading text-center my-5"> <span class="bg-main">{% if connected is defined  %}MES FIGURES</span>{% else %}LES FIGURES DE {{ user.fullName }}{% endif %}</h3>
         {% if user.tricks | length > 0 %}
             <div class="row d-flex justify-content-center ">
                 {%  include 'blog/include/_pagination_tricks.html.twig' with {'tricks': pagination.data}%}

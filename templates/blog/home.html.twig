@@ -8,11 +8,11 @@
         <div class="container slider-top-text">
             <div class="row my-mt-head">
                 <div class="col-md-12 text-center">
-                    <h3 class="my-heading">BIENVENUE À <span class="bg-main">S</span>NOW<span class="bg-main">T</span>RICK</h3>
-                    <h4 class="slider-text"><span class="bg-main">J</span>immy<span class="bg-main">S</span>weat</h4>
-                    <p class="myp-slider text-center slider-text">Où les snowboarders s'unissent et s'améliorent ensemble</p>
-                    <p class="my-5 text-center slider-text d-none d-lg-block">PARTAGEZ VOS SOUVENIRS | CONNECTEZ-VOUS AVEC D'AUTRES | SE FAIRE DE NOUVEAUX AMIS</p>
-                    <a class="btn btn-join btn-outline-warning" href="{{ path('security.register') }}">REJOIGNEZ LA COMMUNAUTÉ</a>
+                    <h3 class="my-heading wow bounceInDown" data-wow-duration="1.5s">BIENVENUE À <span class="bg-main">S</span>NOW<span class="bg-main">T</span>RICKS</h3>
+                    <p class="myp-slider text-center slider-text mt-5 wow slideInRight" data-wow-duration="2.5s">Où les snowboarders s'unissent et s'améliorent ensemble</p>
+                    <p class="mb-0 text-center slider-text d-none d-lg-block wow slideInLeft" data-wow-duration="3s">PARTAGEZ VOS SOUVENIRS | CONNECTEZ-VOUS AVEC D'AUTRES | SE FAIRE DE NOUVEAUX AMIS</p>
+                    <h4 class="wow bounceIn mb-3" data-wow-duration="4s" data-wow-delay="3s" id="js-home"><span class="bg-main">J</span>immy<span class="bg-main">S</span>weat</h4>
+                    <a data-wow-duration="2s" class="btn btn-join btn-outline-warning  wow bounceInUp" href="{{ path('security.register') }}">REJOIGNEZ LA COMMUNAUTÉ</a>
                 </div>
             </div>
         </div>
@@ -22,16 +22,6 @@
             </div>
         </div>
     </header>
-
-    {% for label, messages in app.flashes%}
-        <div class="container mt-5">
-            <div class="alert alert-{{ label }}">
-                {% for message in messages %}
-                    <p class="text-center">{{ message | raw}}</p>
-                {% endfor %}
-            </div>
-        </div>
-    {% endfor %}
 
     <section class="trick-section m-5" id="gobottom">
         <div class="row">

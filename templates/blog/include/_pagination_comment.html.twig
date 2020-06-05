@@ -1,12 +1,12 @@
 {% for comment in comments %}
-<div class="mt-3 p-3 wow flip">
+<div class="mt-3 p-3 wow fadeInUp" data-wow-duration="4s">
     <div class="row">
-        <div class="col-1">
+        <div class="col-sm-2 p-0">
             <a href="{{ path('user.show', {'username': comment.author.username}) }}">
-                <img src="{{ asset('images/' ~ comment.author.avatar.filename) }}" alt="{{ comment.author.fullName }}" class="mb-1 avatar-medium">
+                <img src="{{ asset('images/' ~ comment.author.avatar.filename) }}" alt="{{ comment.author.fullName }}" class="mb-5 avatar float-right">
             </a>
         </div>
-        <div class="comment-container col-10 col-offset-1">
+        <div class="comment-container col-sm-10 mt-4">
             <div class="row py-3">
                 <p class="col-12 float-left h4 commenter">
                     <strong>{{ comment.author.fullName }}</strong> :

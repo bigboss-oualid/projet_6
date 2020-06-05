@@ -79,7 +79,6 @@ class AccountController extends AbstractController
 			if(!password_verify($passwordUpdate->getOldPassword(), $user->getHash())){
 				$form->get('oldPassword')->addError(new FormError("Le mot de passe que vous avez tapé n'est pas votre mot de passe actuel !"));
 			} else {
-				//$newPassword = $passwordUpdate->getNewPassword();
 
 				$hash = $encoder->encodePassword($user, $passwordUpdate->getNewPassword());
 				$user->setHash($hash);
