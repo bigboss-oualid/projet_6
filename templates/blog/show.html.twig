@@ -72,7 +72,12 @@
             <div class="jumbotron py-1 w-100">
                 <h3 class="my-heading mb-2"><span class="bg-main">D</span>ESCRIPTION</h3>
                 <p class="h4">{{ trick.description }}</p>
-                <h3 class="my-heading float-right">GROUPE: <span class="bg-main">{{ trick.category.name }}</span></h3>
+                <h3 class="my-heading float-right">GROUPE:
+                {% set groups = trick.groups %}
+                {% for group in groups %}
+                    <span class="bg-main mr-1">{{ groups }}</span>
+                {% endfor %}
+                </h3>
             </div>
         </div>
         <div>

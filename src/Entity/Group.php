@@ -7,9 +7,10 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\GroupRepository")
+ * @ORM\Table(name="`group`")
  */
-class Category
+class Group
 {
     /**
      * @ORM\Id()
@@ -19,12 +20,12 @@ class Category
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=150)
+     * @ORM\Column(type="string", length=100)
      */
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Trick", mappedBy="category")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Trick", inversedBy="groups")
      */
     private $tricks;
 
@@ -43,7 +44,7 @@ class Category
         return $this->name;
     }
 
-    public function setName(?string $name): self
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -62,7 +63,6 @@ class Category
     {
         if (!$this->tricks->contains($trick)) {
             $this->tricks[] = $trick;
-            $trick->setCategory($this);
         }
 
         return $this;
@@ -72,10 +72,6 @@ class Category
     {
         if ($this->tricks->contains($trick)) {
             $this->tricks->removeElement($trick);
-            // set the owning side to null (unless already changed)
-            if ($trick->getCategory() === $this) {
-                $trick->setCategory(null);
-            }
         }
 
         return $this;
