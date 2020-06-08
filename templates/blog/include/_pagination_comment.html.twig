@@ -3,17 +3,17 @@
     <div class="row">
         <div class="col-sm-2 p-0">
             <a href="{{ path('user.show', {'username': comment.author.username}) }}">
-                <img src="{{ comment.author.avatar.path) }}" alt="{{ comment.author.fullName }}" class="mb-5 avatar float-right">
+                <img src="{{ asset(comment.author.avatar.path) }}" alt="{{ comment.author.fullName }}" class="mb-5 avatar float-right">
             </a>
         </div>
-        <div class="comment-container col-sm-10 mt-4">
-            <div class="row py-3">
+        <div class="comment-container col-sm-10 my-5">
+            <div class="row">
                 <p class="col-12 float-left h4 commenter">
                     <strong>{{ comment.author.fullName }}</strong> :
                 </p>
-                <blockquote class="col-12 h5">
+                <div class="col-12 h5 ml-2">
                     {{ comment.content }}
-                </blockquote>
+                </div>
                 <div class="col-12">
                     <small class="font-weight-bold mt-3 float-right text-info">Le {{ comment.createdAt| format_datetime(pattern="dd/MM/YYYY 'à' hh:mm")}}</small>
                 </div>

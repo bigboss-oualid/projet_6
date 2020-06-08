@@ -31,6 +31,22 @@ $(document).ready(function(){
     });
 });
 
+/*show media on sm*/
+$(document).ready(function(){
+    $('#media-show').on('click',function (e) {
+        e.preventDefault();
+        $('#trick-media').toggleClass('hidden');
+        $(this).text(($(this).text() === 'Afficher media') ? 'Cacher media' : 'Afficher media').fadeIn();
+    });
+});
+/*Close Flashes message*/
+
+$(function (){
+    $(".close").click(function() {
+        $(".flash-container").hide("slow");
+    });
+});
+
 /*suppression des tricks*/
     $(document).on('click','.js-del-in',function (e){
         e.preventDefault();

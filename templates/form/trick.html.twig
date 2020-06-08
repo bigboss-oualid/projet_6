@@ -3,7 +3,8 @@
 {% block body %}
     <div class="container trick-blog">
         {% if errorsForm is not empty %}
-            <div class="alert alert-danger">
+            <div class="flash-container alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
                 <div class="mb-1 text-center text-capitalize text-dark font-weight-bolder">Veuillez corriger les erreurs suivantes !!!</div>
                 {% for error in errorsForm%}
                     <div class="text-danger">{{ loop.index }}- {{ error.message | raw}}</div>
@@ -13,7 +14,6 @@
 
         {{ form_start(formTrick) }}
         {{ form_widget(formTrick._token) }}
-        {{ form_errors(formTrick) }}
         <div class="row d-flex justify-content-center mb-4" id="default-illustration">
             <div id="trick-title-edit" class="col-md-4 mb-2">
                {{ form_errors(formTrick.title) }}
@@ -29,7 +29,14 @@
                </a>
            </div>
         </div>
-        <div class="row">
+        <div class="my-4 row d-flex justify-content-center d-none d-sm-block d-md-none">
+            <div class="col-md-4">
+                <a id="media-show" href="" class="mt-4 btn btn-nav nav-link btn-warning">Afficher media</a>
+            </div>
+        </div>
+        <span id="trick-media" class="hidden">
+            {{ form_errors(formTrick) }}
+            <div class="row">
             <div class="col-md-6">
                 <div id="illustrations" class="row mt-4" data-index="{{ formTrick.illustrations|length > 0 ? formTrick.illustrations|last.vars.name+1 : 0 }}" data-prototype="{{ include("partials/_image.html.twig", { form: formTrick.illustrations.vars.prototype })|e("html_attr") }}">
                     {% for illustration in formTrick.illustrations%}
@@ -59,6 +66,8 @@
                 <button type="button" class="btn btn-sm btn-warning btn-block btn-add-video" data-rel="#videos"><i class="fa fa-plus"></i><strong> Video </strong><small> (code integré)</small></button>
             </div>
         </div>
+        </span>
+
         {% if editMode %}
             {%  include 'partials/_infos.html.twig'%}
         {% endif %}

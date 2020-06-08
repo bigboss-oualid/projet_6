@@ -7,6 +7,10 @@ body {
 .jumbotron {
     background-color: whitesmoke;
 }
+.flash-container{
+    border: 1px solid white !important;
+    border-radius: 15px;
+}
 /*change color select2*/
 .select2-container--default .select2-selection__choice{
     background-color: #FFC107 !important;
@@ -549,6 +553,9 @@ p.myp-font {
     text-align: center!important;
 }
 @media screen and (max-width: 767px) {
+    #trick-media.hidden{
+        display: none;
+    }
     #create-account-title{
         margin-top:30%;
     }

@@ -55,7 +55,7 @@ class TrickController extends AbstractController
 
 		    $this->addFlash('success', "la figure <strong>{$trick->getTitle()}</strong> a bien été crée !" );
 
-		    return $this->redirectToRoute('blog.home');
+		    return $this->redirectToRoute('blog.tricks');
 	    }
 
 		return $this->render('form/trick.html.twig', [
@@ -115,7 +115,7 @@ class TrickController extends AbstractController
 
 			$this->addFlash('success', "la figure <strong>{$trick->getTitle()}</strong> a bien été  modifiée !");
 
-			return $this->redirectToRoute('blog.home');
+			return $this->redirectToRoute('blog.tricks');
 		}
 
 		return $this->render('form/trick.html.twig', [
@@ -143,7 +143,7 @@ class TrickController extends AbstractController
 
 			if ($this->isCsrfTokenValid('delete' . $trick->getId(), $data['_token'])) {
 				$this->em->remove($trick);
-				//$this->em->flush();
+				$this->em->flush();
 				return new JsonResponse(['success' => true]);
 			}
 
@@ -152,12 +152,12 @@ class TrickController extends AbstractController
 
 		if ($this->isCsrfTokenValid('delete' . $trick->getId(), $request->get('_token'))) {
 			$this->em->remove($trick);
-			//$this->em->flush();
+			$this->em->flush();
 			$this->addFlash(
 				'success',
 				"La figure <strong>{$trick->getTitle()}</strong> a bien été supprimée !"
 			);
 		}
-		return $this->redirectToRoute('blog.home');
+		return $this->redirectToRoute('blog.tricks');
 	}
 }
