@@ -216,7 +216,7 @@ option[value=""] {
     width: 100%;
 }
 .trick-blog{
-    margin-top: 250px !important;
+    margin-top: 150px;
     margin-bottom: 200px !important;
 }
 .p-null{
@@ -525,6 +525,11 @@ p.myp-font {
     margin-bottom: 100px;
 }
 
+#create-account-title{
+    margin-top:18%;
+    margin-bottom:8%;
+}
+
 /*Carousel*/
 .MultiCarousel { float: left; overflow: hidden; padding: 15px; width: 100%; position:relative; }
 .MultiCarousel .MultiCarousel-inner { transition: 1s ease all; float: left; }
@@ -555,9 +560,6 @@ p.myp-font {
 @media screen and (max-width: 767px) {
     #trick-media.hidden{
         display: none;
-    }
-    #create-account-title{
-        margin-top:30%;
     }
     #snow{
         font-size: 3rem !important;
@@ -708,7 +710,6 @@ p.myp-font {
     font-size: 4rem;
 }
 #create-account-title{
-    margin-bottom:8%;
 }
 
 .select2-container--default .select2-results__option--highlighted[aria-selected] {
@@ -716,6 +717,9 @@ p.myp-font {
     text-shadow: 1px 1px 1px rgba(0,0,0,1);
     color: #fff;
     font-weight: bold;
+}
+.m-bottom{
+    margin-bottom: 150px;
 }
 
 @media only screen and (min-width:2560px){}

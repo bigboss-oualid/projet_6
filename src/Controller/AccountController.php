@@ -87,7 +87,7 @@ class AccountController extends AbstractController
 				$em->flush();
 				$this->addFlash('success', "Votre mot de passe a bien été modifié !");
 
-				return $this->redirectToRoute('account.profile');
+				return $this->redirectToRoute('account.index');
 			}
 		}
 
