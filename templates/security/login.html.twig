@@ -4,11 +4,12 @@
 
 {% block body %}
     <div class="container justify-content-center vertical-center m-bottom">
-        <div class="row id="create-account-title">
+        <div class="row">
+            <div class="col-sm-12" id="create-account-title">
                 <h3 class="titre-content mb-5 text-center"><span class="bg-main">C</span>ONNEXION</h3>
             </div>
             {% include'partials/_flashes.html.twig' %}
-            <div class="col-12">
+            <div class="col-sm-12">
                 <div class="user_card w-100">
                     <div class="d-flex justify-content-center">
                         <div class="brand_logo_container">
@@ -58,7 +59,8 @@
                             <div class="col-sm-12">
                                 <div class="mt-4">
                                     <div class="d-flex justify-content-center text-white">
-                                        Vous n'avez pas de compte? <a href="{{ path('security.register') }}" class="ml-2 normal-link">S'inscrire</a>
+                                        <span class="d-none d-sm-block">Vous avez un compte? </span>
+                                        <a href="{{ path('security.register') }}" class="ml-2 normal-link">S'inscrire</a>
                                     </div>
                                     <div class="d-flex justify-content-center links">
                                         <a class="float-right normal-link"  href="{{ path('security.forgotten_password') }}">Mot de passe oublié?</a>

@@ -17,7 +17,7 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-center form_container px-5">
-                        <div class="row mx-5">
+                        <div class="row mx-md-5">
                             <div class="col-sm-12">
                                 <form action="{{ path('security.confirm_account', {username: app.request.get('username'), tokenCode: app.request.get('tokenCode')}) }}" method="post">
                                     <div class="input-group mb-3">

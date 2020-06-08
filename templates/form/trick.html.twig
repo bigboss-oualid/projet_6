@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="container trick-blog">
+    <div class="container m-top m-bottom">
         {% if errorsForm is not empty %}
             <div class="flash-container alert alert-danger">
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -43,7 +43,7 @@
                         {{ include("partials/_image.html.twig", { form: illustration }) }}
                     {% endfor %}
                 </div>
-                <div class="row mt-2 mb-4 d-md-none">
+                <div class="row-3 mt-1 mb-1 d-md-none">
                     <button type="button" class="btn btn-sm btn-primary btn-block btn-add-image" data-rel="#illustrations"><i class="fa fa-plus"></i><strong> Photo </strong><small> (jpeg, png)</small></button>
                 </div>
             </div>
@@ -53,7 +53,7 @@
                         {{ include("partials/_video.html.twig", { form: video }) }}
                     {% endfor %}
                 </div>
-                <div class="row-2 mt-2 mb-4 d-md-none">
+                <div class="row-3 mt-2 mb-4 d-md-none">
                     <button type="button" class="btn btn-sm btn-warning btn-block btn-add-video" data-rel="#videos"><i class="fa fa-plus"></i><strong> Video </strong><small> (code integré)</small></button>
                 </div>
             </div>

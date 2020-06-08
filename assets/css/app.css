@@ -51,6 +51,11 @@ body {
     background: orangered!important;
     color: #fff!important;
 }
+#trick-pagination>li.disabled>a {
+    background: lightgray!important;
+    color: darkgray!important;
+    text-shadow: 1px 1px 1px rgba(255,2555,255,1);
+}
 /**NAV**/
 div.my-logo-text {
     font-family: 'vivaldi', cursive;
@@ -214,10 +219,6 @@ option[value=""] {
 }
 .imagepreview{
     width: 100%;
-}
-.trick-blog{
-    margin-top: 150px;
-    margin-bottom: 200px !important;
 }
 .p-null{
     padding: 0!important;
@@ -526,8 +527,7 @@ p.myp-font {
 }
 
 #create-account-title{
-    margin-top:18%;
-    margin-bottom:8%;
+    margin-bottom:4%;
 }
 
 /*Carousel*/
@@ -558,15 +558,26 @@ p.myp-font {
     text-align: center!important;
 }
 @media screen and (max-width: 767px) {
+
+    #comments{
+        margin-right: 0px;
+        margin-left: 0px;
+    }
+    #gobottom{
+        margin:5px!important;
+    }
+    #home-section{
+        font-size: 4rem;
+    }
     #trick-media.hidden{
         display: none;
     }
     #snow{
-        font-size: 3rem !important;
-         margin-bottom: -30px!important;
+        font-size: 2rem !important;
+        margin-bottom: -20px!important;
      }
     #jimmy{
-          font-size: 1.8rem !important;
+          font-size: 1rem !important;
       }
     .user_card {
         width: 100% !important;
@@ -576,6 +587,15 @@ p.myp-font {
     }
     .container{
         width: 100% !important;
+    }
+    .titre-content{
+        font-size: 30px !important;
+    }
+    .vertical-center{
+        margin-top: 20%!important;
+    }
+    #rating_rating{
+        margin-top: 50px;
     }
 }
 @media (min-width:768px) {
@@ -720,6 +740,9 @@ p.myp-font {
 }
 .m-bottom{
     margin-bottom: 150px;
+}
+.m-top{
+    margin-top: 15%!important;
 }
 
 @media only screen and (min-width:2560px){}

@@ -3,7 +3,7 @@
 {% block title %}Tricks - {{ parent() }} {% endblock %}
 
 {% block body %}
-    <div class="container trick-blog">
+    <div class="container m-top m-bottom">
         <div class="row d-flex justify-content-center" id="default-illustration">
             <h3 id="trick-title">{{ trick.title|title }}</h3>
             {% set illustration = trick.illustrations|first %}
@@ -33,48 +33,50 @@
                 </div>
             </div>
         </div>
-        <div class="my-4 row d-flex justify-content-center d-none d-sm-block d-md-none">
-            <div class="col-md-4">
-                <a id="media-show" href="" class="mt-4 btn btn-nav nav-link btn-warning">Afficher media</a>
-            </div>
-        </div>
-        <div id="trick-media" class="row mb-5 align-items-center hidden">
-            <div class="col-md-6 mt-5">
-                <div class="MultiCarousel" data-items="1,1,1,3" data-slide="1" id="MultiCarousel"  data-interval="1000">
-                    <div class="MultiCarousel-inner">
-                    {% if trick.illustrations %}
-                        {% for illustration in trick.illustrations%}
-                            <div class="col-md-4 item text-center">
-                                <a class="pop">
-                                    <img width="130" height="120"  src="{{ asset(illustration.path) }}" alt="illustration {{ trick.title }}" >
-                                </a>
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                    </div>
-                    <button class="btn btn-primary leftLst"><i class="fa fa-step-backward text-white"></i></button>
-                    <button class="btn btn-primary rightLst"><i class="fa fa-step-forward"></i></button>
+        {% if trick.illustrations is not empty or trick.videos is not empty%}
+            <div class="my-4 row d-flex justify-content-center d-none d-sm-block d-md-none">
+                <div class="col-md-4">
+                    <a id="media-show" href="" class="mt-4 btn btn-nav nav-link btn-warning">Afficher media</a>
                 </div>
             </div>
-            <div class="col-md-6 mt-5">
-                <div class="MultiCarousel" data-items="1,1,1,3" data-slide="1" id="MultiCarousel"  data-interval="1000">
-                    <div class="MultiCarousel-inner">
-                    {% if trick.videos %}
-                        {% for video in trick.videos%}
-                            <div class="col-md-4 item text-center">
-                                {{ video.embedCode | raw}}
-                            </div>
-                        {% endfor %}
-                    {% endif %}
+            <div id="trick-media" class="row mb-5 align-items-center hidden">
+                <div class="col-md-6 mt-5">
+                    <div class="MultiCarousel" data-items="1,1,1,3" data-slide="1" id="MultiCarousel"  data-interval="1000">
+                        <div class="MultiCarousel-inner">
+                        {% if trick.illustrations %}
+                            {% for illustration in trick.illustrations%}
+                                <div class="col-md-4 item text-center">
+                                    <a class="pop">
+                                        <img width="130" height="120"  src="{{ asset(illustration.path) }}" alt="illustration {{ trick.title }}" >
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        </div>
+                        <button class="btn btn-primary leftLst"><i class="fa fa-step-backward text-white"></i></button>
+                        <button class="btn btn-primary rightLst"><i class="fa fa-step-forward"></i></button>
                     </div>
-                    <button class="btn btn-warning leftLst"><i class="fa fa-step-backward text-white"></i></button>
-                    <button class="btn btn-warning rightLst"><i class="fa fa-step-forward"></i></button>
+                </div>
+                <div class="col-md-6 mt-5">
+                    <div class="MultiCarousel" data-items="1,1,1,3" data-slide="1" id="MultiCarousel"  data-interval="1000">
+                        <div class="MultiCarousel-inner">
+                        {% if trick.videos %}
+                            {% for video in trick.videos%}
+                                <div class="col-md-4 item text-center">
+                                    {{ video.embedCode | raw}}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        </div>
+                        <button class="btn btn-warning leftLst"><i class="fa fa-step-backward text-white"></i></button>
+                        <button class="btn btn-warning rightLst"><i class="fa fa-step-forward"></i></button>
+                    </div>
                 </div>
             </div>
-        </div>
+        {% endif %}
 
         <div class="row">
-            <div class="jumbotron py-1 w-100">
+            <div class="jumbotron mt-2 py-1 w-100">
                 <h3 class="my-heading mb-2"><span class="bg-main">D</span>ESCRIPTION</h3>
                 <p class="h4">{{ trick.description|raw }}</p>
                 <h3 class="my-heading float-right">Groupes:
@@ -94,12 +96,12 @@
         </div>
         <hr class="my-border"/>
         {% if app.user %}
-            <div id="my-error-comment" class="row">
+            <div id="my-error-comment" class="row align-items-end">
                 <div class="col-md-8 offset-md-1">
                     {{ form_start(comment_form, {'action': path('add_comment', {id: trick.id}),'attr': {'id': 'formsComment'}}) }}
                     <div class="row">
                         <div class="col-sm-12">{{ form_widget(comment_form) }}</div>
-                        <div class="col-sm-12 w-100">
+                        <div class="col-sm-12">
                             <button type="submit" id="add-comment" name="btn-1" class="btn btn-info btn-block font-weight-bolder ">Commentez</button>
                         </div>
                     </div>
@@ -107,11 +109,9 @@
                 </div>
                 <div id="titre-evaluation" class="col-md-2">
                     {{ form_start(rating_form) }}
-                    <div class="row d-inline-flex">
-                        <div class="col-sm-5 pr-0 mt-5 ">{{ form_widget(rating_form) }}</div>
-                        <div class="col-sm-7 pl-0 mt-5">
-                            <button type="submit" class="btn btn-warning m-0 font-weight-bolder text-white">Evaluez</button>
-                        </div>
+                    <div class="">{{ form_widget(rating_form) }}</div>
+                    <div class="">
+                        <button type="submit" class="btn btn-warning btn-block font-weight-bolder text-white">Evaluez</button>
                     </div>
                     {{ form_end(rating_form) }}
                 </div>
@@ -127,18 +127,17 @@
                 </div>
             </div>
         {% endif %}
-            <div id="titre-discussions" class="my-5 text-center">
-                {%  if trick.comments|length > 0 %}
-                    <h3 class="my-heading mb-2"><span class="bg-main">E</span>SPACE DE DISCUSSION</h3>
-                {% else %}
-                    <span class="js-no-comment"><h3 class="my-heading mb-2"><span class="bg-main">A</span>UCUN COMMENTRAIRE...</h3></span>
-                {% endif %}
-            </div>
-            <div id="comments" class="load-content wow fadeInLeft" data-wow-duration="4s" data-pages = {{ pagination.pages }}></div>
-            {% if pagination.pages > 1 %}
-                {{ pagination.display() }}
+        <div id="titre-discussions" class="my-5 text-center">
+            {%  if trick.comments|length > 0 %}
+                <h3 class="my-heading mb-2"><span class="bg-main">E</span>SPACE DE DISCUSSION</h3>
+            {% else %}
+                <span class="js-no-comment"><h3 class="my-heading mb-2"><span class="bg-main">A</span>UCUN COMMENTRAIRE...</h3></span>
             {% endif %}
-        <div class="mb-5"></div>
+        </div>
+        <div id="comments" class="load-content wow fadeInLeft" data-wow-duration="4s" data-pages = {{ pagination.pages }}></div>
+        {% if pagination.pages > 1 %}
+            {{ pagination.display() }}
+        {% endif %}
     </div>
 {% endblock %}
 

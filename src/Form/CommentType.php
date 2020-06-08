@@ -15,7 +15,7 @@ class CommentType extends ApplicationType
             ->add('content',
 	            TextareaType::class,
 	            $this->getConfiguration(false, ['placeholder' => "Écrivez ici votre message...",
-		            'rows'=> 4]))
+		            'rows'=> 1]))
         ;
     }
 

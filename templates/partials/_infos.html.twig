@@ -35,18 +35,13 @@
             <a class="text-decoration-none" href="{{ path('blog.show', {slug: trick.slug, id: trick.id}) ~ '/#titre-discussions'}}">
                 <div class="row info-trick mr-auto">
                     <div class="col-12 text-center font-weight-bold">Commentaires</div>
-                    <div class="col-md-4 info-trick-img">
-                        <div class="my-2 mobile-center">
-                            <span class="fa-comments fa fa-3x"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-8 align-self-center mobile-center">
+                    <div class="col-12 text-center">
                         {% set nbrComments = trick.countComment %}
                         {% if nbrComments == 0 %}
-                            <small>Aucun commentaire</small>
+                            <span class="text-warning fa-comment-slash fa fa-3x  pb-3"></span>
                         {% else  %}
-                            <span class="font-weight-bolder">{{ nbrComments }} </span>
-                            <small>personne{% if nbrComments>1%}s ont {% else %} a {% endif %}commenté la figure</small>
+                            <span class="font-weight-bolder bg-main text-center h1">{{ nbrComments }} </span>
+                            <span class="text-warning fa-comments fa fa-3x  pb-3"></span>
                         {% endif %}
                     </div>
                 </div>
@@ -58,12 +53,12 @@
                     <div class="row info-trick mr-auto">
                         <div class="col-12 text-center font-weight-bold">Difficulté
                         </div>
-                        <div class="col-md-4 info-trick-img">
-                            <div class="my-2 mobile-center">
+                        <div class="col-md-4 text-center">
+                            <div class="my-2 ">
                                 <span class="mbr-iconfont fa-heartbeat fa fa-3x"></span>
                             </div>
                         </div>
-                        <div class="col-md-8 align-self-center mobile-center">
+                        <div class="col-md-8 align-self-center text-center">
                             {%  include 'partials/_rating.html.twig' with{ 'rating': trick.avgRatings} %}
                             <small>(Calculée sur {{ trick.ratings|length }} avis)</small>
                         </div>

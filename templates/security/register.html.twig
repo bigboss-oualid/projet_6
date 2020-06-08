@@ -9,7 +9,7 @@
                 <h3 class="titre-content mb-5 text-center"><span class="bg-main">C</span>RÉER UN COMPTE</h3>
                 {% include'partials/_flashes.html.twig' %}
             </div>
-            <div class="col-12">
+            <div class="col-sm-12">
                 <div class="user_card w-100">
                     {{  form_start(form) }}
                     <div class="d-flex justify-content-center">
@@ -86,7 +86,8 @@
                             <div class="col-sm-12">
                                 <div class="mt-4">
                                     <div class="d-flex justify-content-center text-white">
-                                        Vous avez un compte? <a href="{{ path('security.register') }}" class="ml-2 normal-link">Se connecter</a>
+                                        <span class="d-none d-sm-block">Vous avez un compte? </span>
+                                        <a href="{{ path('security.register') }}" class="normal-link ml-2"> Se connecter</a>
                                     </div>
                                     <div class="d-flex justify-content-center links">
                                         <a class="float-right normal-link"  href="{{ path('security.forgotten_password') }}">Mot de passe oublié?</a>
