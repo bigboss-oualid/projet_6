@@ -2,7 +2,6 @@
 
 namespace App\Form;
 
-use App\Entity\Category;
 use App\Entity\Group;
 use App\Entity\Trick;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -31,7 +30,6 @@ class TrickType extends ApplicationType
 				        'choice_label' => function(?Group $group) {
 					        return $group ? strtoupper($group->getName()) : '';
 				        },
-				        'placeholder' => 'Choisir les groupes',
 				        'multiple' => true,
 			        ])
 		        )

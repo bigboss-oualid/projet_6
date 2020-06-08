@@ -89,7 +89,7 @@ class Trick
     private $ratings;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Group", mappedBy="tricks",cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="App\Entity\Group", inversedBy="tricks",cascade={"persist"})
      */
     private $groups;
 

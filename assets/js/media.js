@@ -173,3 +173,11 @@ $("body").on("click", ".btn-remove", function() {
 
 /*Add disbled att to select category input*/
 $('select > option[value= ""]').attr('disabled', true);
+
+/*Add select2*/
+import 'select2';
+
+$('select').select2({
+    placeholder: 'Choisir les groupes',
+    allowClear: true
+});

@@ -19,6 +19,7 @@
     },
     "dependencies": {
         "copy-webpack-plugin": "^6.0.1",
+        "select2": "^4.0.13",
         "wowjs": "^1.1.3"
     }
 }
