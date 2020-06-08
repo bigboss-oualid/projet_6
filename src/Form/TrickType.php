@@ -31,8 +31,8 @@ class TrickType extends ApplicationType
 				        'choice_label' => function(?Group $group) {
 					        return $group ? strtoupper($group->getName()) : '';
 				        },
-				        //'multiple' => true,
 				        'placeholder' => 'Choisir les groupes',
+				        'multiple' => true,
 			        ])
 		        )
             ->add(

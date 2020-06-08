@@ -64,7 +64,7 @@ class Trick
 	/**
 	 * @ORM\Column(type="boolean")
 	 */
-	private $published;
+	private $published = 1;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="tricks")
@@ -89,7 +89,7 @@ class Trick
     private $ratings;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Group", mappedBy="tricks")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Group", mappedBy="tricks",cascade={"persist"})
      */
     private $groups;
 
@@ -405,7 +405,7 @@ class Trick
         return $this->groups;
     }
 
-    public function addGroup(Group $group): self
+    public function addGroup(?Group $group): self
     {
         if (!$this->groups->contains($group)) {
             $this->groups[] = $group;
