@@ -15,9 +15,9 @@
                         <div class="brand_logo_container" role="button">
                             {% set avatar = form.vars.value.avatar %}
                             {% if avatar.filename is defined  %}
-                                <img  id="avatar-holder" src="{{ asset('images/' ~ avatar.filename) }}" class="brand_logo" alt="Logo">
+                                <img  id="avatar-holder" src="{{ asset(avatar.path) }}" class="brand_logo" alt="Logo">
                             {% else %}
-                                <img id="avatar-holder" src="{{ asset('images/placeholder.png') }}" class="brand_logo" alt="placeholder"/>
+                                <img id="avatar-holder" src="{{ asset('images/defaults/default-avatar.png') }}" class="brand_logo" alt="default avatar"/>
                             {%  endif %}
                             <div class="d-block">{{ form_errors(form.avatar) }}</div>
                             <div class="d-none">{{ form_widget(form.avatar) }}</div>

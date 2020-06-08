@@ -4,9 +4,9 @@
             {% set illustration = trick.illustrations|first %}
             <a class="item-card box" href="{{ path('blog.show', {slug: trick.slug, id: trick.id}) }}">
                 {% if illustration != false %}
-                    <img class="card-img-top" src="{{ asset('images/'~illustration.filename) }}">
+                    <img class="card-img-top" src="{{ asset(illustration.path) }}">
                 {% else %}
-                    <img class="card-img-top" src="{{ asset('images/illustration-default.png') }}">
+                    <img class="card-img-top" src="{{ asset('images/defaults/illustration-default.png') }}">
                 {% endif %}
             </a>
             <div class="card-block">

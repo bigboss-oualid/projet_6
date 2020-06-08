@@ -35,12 +35,12 @@ function showDefaultImg() {
     let src = '';
     $(nextImg).each(function () {
         src = $(this).find('img').attr('src');
-        if (src !== '/images/placeholder.png'){
+        if (src !== '/images/defaults/placeholder.png'){
             return false;
         }
     });
-    if(src ==="/images/placeholder.png" || src === '') {
-        $('#default-img-trick').attr('src','/images/illustration-default.png');
+    if(src ==="/images/defaults/placeholder.png" || src === '') {
+        $('#default-img-trick').attr('src','/images/defaults/illustration-default.png');
     } else {
         $('#default-img-trick').attr('src',src);
     }
@@ -129,7 +129,7 @@ $(document).on('focus', '[id*="trick_videos_"]', function(){
             videoHolder.show();
             $('#video-value-'+ index + '> iframe').remove();
         } else if(!patt.test(oldEmbedCode)){
-            let holder = '<img id="video-holder-'+index+'" width="120" height="118" src="{{ asset(\'images/video-placeholder.png\') }}"/>';
+            let holder = '<img id="video-holder-'+index+'" width="120" height="118" src="{{ asset(\'images/defaults/video-placeholder.png\') }}"/>';
             $(holder).insertBefore($('#video-value-'+index));
             $('#video-value-'+ index + '> iframe').remove();
         }
@@ -188,7 +188,9 @@ ClassicEditor
     .create( document.querySelector( '#trick_description' ), {
         language: 'fr',
         toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote','undo','redo' ],
+        height: 500
     })
     .catch( error => {
         console.log( error );
-    });
+    }
+);

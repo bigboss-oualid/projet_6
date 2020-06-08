@@ -30,7 +30,7 @@
                 {#{% if app.user %}#}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle nav-text" id="accountDropdownLink" data-toggle="dropdown">
-                            <img class="avatar avatar-small" src="{{ asset('images/' ~ app.user.avatar.filename) }}" alt="{{ app.user.fullName }}"> {{ app.user.fullName }}
+                            <img class="avatar avatar-small" src="{{ asset(app.user.avatar.path) }}" alt="{{ app.user.fullName }}"> {{ app.user.fullName }}
                         </a>
                         <div style="background-color: transparent !important;" class="dropdown-menu dropdown-menu-right" aria-labelledby="accountDropdownLink">
                             <a href="{{ path('trick.create') }}" class="nav-text dropdown-item {% if current_menu is defined and current_menu == 'create_trick' %}font-weight-bold active-nav {% endif %}">Créer une Figure</a>

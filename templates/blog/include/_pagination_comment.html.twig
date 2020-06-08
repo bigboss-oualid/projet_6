@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-sm-2 p-0">
             <a href="{{ path('user.show', {'username': comment.author.username}) }}">
-                <img src="{{ asset('images/' ~ comment.author.avatar.filename) }}" alt="{{ comment.author.fullName }}" class="mb-5 avatar float-right">
+                <img src="{{ comment.author.avatar.path) }}" alt="{{ comment.author.fullName }}" class="mb-5 avatar float-right">
             </a>
         </div>
         <div class="comment-container col-sm-10 mt-4">

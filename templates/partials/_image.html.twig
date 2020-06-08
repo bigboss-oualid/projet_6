@@ -5,7 +5,7 @@
             {% if file.value.filename is defined %}
                 <img id="illustration-holder-{{ file.name }}" class="rounded" src="{{ asset(file.value.path) }}" width="120" height="120" alt="illustration-{{ file.name}}"/>
             {% else %}
-                <img id="illustration-holder-{{ file.name }}" class="rounded" src="{{ asset('images/placeholder.png') }}"/>
+                <img id="illustration-holder-{{ file.name }}" width="120" height="120" class="rounded" src="{{ asset('images/defaults/placeholder.png') }}"/>
             {% endif %}
             <div class="row mt-2 d-flex justify-content-center">
                 <label class="custom-file-upload">

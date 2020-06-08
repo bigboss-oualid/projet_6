@@ -6,7 +6,7 @@
             {% if video.embedCode is defined  %}
                 {{ video.embedCode | raw}}
             {% else %}
-                <img id="video-holder-{{ form.vars.name }}" class="rounded" width="120" height="120" src="{{ asset('images/video-placeholder.png') }}"/>
+                <img id="video-holder-{{ form.vars.name }}" class="rounded" width="120" height="120" src="{{ asset('images/defaults/video-placeholder.png') }}"/>
             {%  endif %}
             </span>
         </div>

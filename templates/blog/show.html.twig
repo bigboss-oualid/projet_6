@@ -7,7 +7,7 @@
         <div class="row d-flex justify-content-center" id="default-illustration">
             <h3 id="trick-title">{{ trick.title|title }}</h3>
             {% set illustration = trick.illustrations|first %}
-            <img id="default-img-trick"  src="{% if illustration%} {{ asset('images/'~illustration.filename) }} {% else %} {{ asset('images/illustration-default.png') }} {% endif %} " width="100%" height="480px" alt="default illustration" class="rounded">
+            <img id="default-img-trick"  src="{% if illustration%} {{ asset(illustration.path) }} {% else %} {{ asset('images/defaults/illustration-default.png') }} {% endif %} " width="100%" height="480px" alt="illustration" class="rounded">
             {% if app.user %}
                 <div id="btns-img-0" class="row mt-2">
                     <a href="{{ path('trick.edit', {slug: trick.slug, id: trick.id}) }}" id="default-edit" class="btn btn-success">
@@ -41,7 +41,7 @@
                         {% for illustration in trick.illustrations%}
                             <div class="col-md-4 item text-center">
                                 <a class="pop">
-                                    <img width="130" height="120"  src="{{ asset('images/'~illustration.filename) }}" alt="{{ illustration.oldname }}" >
+                                    <img width="130" height="120"  src="{{ asset(illustration.path) }}" alt="illustration {{ trick.title }}" >
                                 </a>
                             </div>
                         {% endfor %}
@@ -71,11 +71,15 @@
         <div class="row">
             <div class="jumbotron py-1 w-100">
                 <h3 class="my-heading mb-2"><span class="bg-main">D</span>ESCRIPTION</h3>
-                <p class="h4">{{ trick.description }}</p>
-                <h3 class="my-heading float-right">GROUPE:
+                <p class="h4">{{ trick.description|raw }}</p>
+                <h3 class="my-heading float-right">Groupes:
                 {% set groups = trick.groups %}
                 {% for group in groups %}
-                    <span class="bg-main mr-1">{{ groups }}</span>
+                    <span class="bg-main mr-1">
+                        {{ group.name }}
+                        {% if loop.index != loop.last%},
+                        {% endif %}
+                    </span>
                 {% endfor %}
                 </h3>
             </div>
