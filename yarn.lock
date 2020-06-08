@@ -743,6 +743,11 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
+"@ckeditor/ckeditor5-build-classic@^19.0.2":
+  version "19.0.2"
+  resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-build-classic/-/ckeditor5-build-classic-19.0.2.tgz#ecab0e38d3f6fa7560f6937d18f711243b20b978"
+  integrity sha512-yz2M9Q6jMy9zF+JiQiSoaG/m7Eu48H+Yi3FgtVGDFpLDqGUJntNsW26g3qZld5Pa4pgVPRmDcfKHzLTWAo3iRg==
+
 "@fortawesome/fontawesome-free@^5.13.0":
   version "5.13.0"
   resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free/-/fontawesome-free-5.13.0.tgz#fcb113d1aca4b471b709e8c9c168674fbd6e06d9"

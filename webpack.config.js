@@ -27,7 +27,7 @@ Encore
     .addEntry('home', './assets/js/home.js')
     .addEntry('loadMore', './assets/js/loadMore.js')
     .addEntry('comments', './assets/js/comments.js')
-    .addEntry('media', './assets/js/media.js')
+    .addEntry('form', './assets/js/form.js')
     .addEntry('loadAvatar', './assets/js/loadAvatar.js')
     .addEntry('carousel', './assets/js/carousel.js')
     //.addEntry('page1', './assets/js/page1.js')

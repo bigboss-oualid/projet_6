@@ -181,3 +181,14 @@ $('select').select2({
     placeholder: 'Choisir les groupes',
     allowClear: true
 });
+
+import '@ckeditor/ckeditor5-build-classic/build/translations/fr';
+const ClassicEditor = require( '@ckeditor/ckeditor5-build-classic/build/ckeditor' );
+ClassicEditor
+    .create( document.querySelector( '#trick_description' ), {
+        language: 'fr',
+        toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote','undo','redo' ],
+    })
+    .catch( error => {
+        console.log( error );
+    });

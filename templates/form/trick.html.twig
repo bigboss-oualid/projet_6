@@ -63,7 +63,7 @@
             {%  include 'partials/_infos.html.twig'%}
         {% endif %}
         {{ form_errors(formTrick.description) }}
-        {{ form_widget(formTrick.description) }}
+        {{ form_widget(formTrick.description|raw) }}
         <div class="row my-2">
             <div class="col-4">
                 {{ form_errors(formTrick.groups) }}
@@ -96,5 +96,5 @@
 
 {% block javascripts %}
     {#add media#}
-    {{ encore_entry_script_tags('media') }}
+    {{ encore_entry_script_tags('form') }}
 {% endblock %}
