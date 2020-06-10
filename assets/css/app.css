@@ -1,5 +1,11 @@
 @import "~bootstrap";
 
+@import '~@fortawesome/fontawesome-free/css/all.min.css';
+@import '~@fortawesome/fontawesome-free/css/v4-shims.css';
+@import "~simplelightbox/dist/simple-lightbox.min.css";
+@import "~slick-carousel/slick/slick.css";
+@import "~slick-carousel/slick/slick-theme.css";
+
 body {
     background: url("/images/slider/background.jpg") no-repeat center center fixed;
     background-size: cover;
@@ -11,6 +17,28 @@ body {
     border: 1px solid white !important;
     border-radius: 15px;
 }
+/*carousel-slick*/
+.slick-prev:before, .slick-next:before {
+    font-size: 40px !important;
+    border-radius: 50%;
+    background: rgba(255, 69, 0, 1) !important;
+    color: #FFC107;
+}
+.slick-disabled{
+    border-radius: 50% ;
+}
+
+.slick-dots li button:before
+{
+    font-size: 24px;
+    line-height: 20px;
+    margin-top: 10px;
+    border-radius: 50% ;
+    color: #FFC107!important;
+    box-shadow: 0.5pt 1pt 1pt 1pt orangered;
+}
+
+
 /*change color select2*/
 .select2-container--default .select2-selection__choice{
     background-color: #FFC107 !important;
@@ -530,17 +558,6 @@ p.myp-font {
     margin-bottom:4%;
 }
 
-/*Carousel*/
-.MultiCarousel { float: left; overflow: hidden; padding: 15px; width: 100%; position:relative; }
-.MultiCarousel .MultiCarousel-inner { transition: 1s ease all; float: left; }
-.MultiCarousel .MultiCarousel-inner .item { float: left;}
-.MultiCarousel .MultiCarousel-inner .item > div { text-align: center; padding:10px; margin:10px; background:#f1f1f1; color:#666;}
-.MultiCarousel .leftLst, .MultiCarousel .rightLst { position:absolute; border-radius:50%;top:calc(50% - 20px); }
-.MultiCarousel .leftLst { left:0; }
-.MultiCarousel .rightLst { right:0; }
-
-.MultiCarousel .leftLst.over, .MultiCarousel .rightLst.over { pointer-events: none; background:#ccc; }
-/*****/
 /*-------------------responsive-----------------*/
 .navbar-toggler:focus,
 .navbar-toggler:active,
@@ -558,7 +575,10 @@ p.myp-font {
     text-align: center!important;
 }
 @media screen and (max-width: 767px) {
-
+    .media-width-mobile, iframe{
+        width: 100% !important;
+        height: 100% !important;
+    }
     #comments{
         margin-right: 0px;
         margin-left: 0px;

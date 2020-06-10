@@ -7,8 +7,6 @@
 // any CSS you import will output into a single css file (app.css in this case)
 
 import 'wowjs/css/libs/animate.css';
-import '@fortawesome/fontawesome-free/css/all.min.css';
-import '@fortawesome/fontawesome-free/css/v4-shims.css';
 import 'select2/dist/css/select2.min.css'
 import '../css/app.css';
 
@@ -37,10 +35,15 @@ $(document).ready(function(){
         e.preventDefault();
         $('#trick-media').toggleClass('hidden');
         $(this).text(($(this).text() === 'Afficher media') ? 'Cacher media' : 'Afficher media').fadeIn();
+
+            setTimeout(function() {
+                $(".slider").slick('setPosition');
+            }, 200);
+
     });
 });
-/*Close Flashes message*/
 
+/*Close Flashes message*/
 $(function (){
     $(".close").click(function() {
         $(".flash-container").hide("slow");

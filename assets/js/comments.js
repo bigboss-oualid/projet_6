@@ -49,7 +49,7 @@ else {
         element.addEventListener(event, handler, false);
     };
 }
-function init () {
+function initTextarea() {
     let text = document.getElementById('comment_content');
     function resize () {
         text.style.height = 'auto';
@@ -69,7 +69,9 @@ function init () {
     text.select();
     resize();
 }
-init();
+document.getElementById('comment_content').addEventListener("focus", function (e) {
+    initTextarea();
+});
 
 //Load first comments
 /*

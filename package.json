@@ -21,6 +21,8 @@
         "@ckeditor/ckeditor5-build-classic": "^19.0.2",
         "copy-webpack-plugin": "^6.0.1",
         "select2": "^4.0.13",
+        "simplelightbox": "^2.2.1",
+        "slick-carousel": "^1.8.1",
         "wowjs": "^1.1.3"
     }
 }
