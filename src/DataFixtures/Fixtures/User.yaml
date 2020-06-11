@@ -1,0 +1,63 @@
+admin:
+  Firstname: Admin
+  Lastname: Bigboss
+  Username: bigboss
+  Password: bigboss
+  Email: bigboss@snowtricks.com
+  Reference:
+    Avatar: admin
+
+female_1:
+  Firstname: Kerstin
+  Lastname: Qwertz
+  Username: qwertz
+  Password: qwertz
+  Email: qwertz@yahoo.com
+  Reference:
+    Avatar: female_1
+
+
+female_2:
+  Firstname: Sara
+  Lastname: Baby
+  Username: baby
+  Password: baby
+  Email: baby@gmx.com
+  Reference:
+    Avatar: female_2
+
+female_3:
+  Firstname: Laya
+  Lastname: Freundin
+  Username: freundin
+  Password: freundin
+  Email: freundin@hotmail.com
+  Reference:
+    Avatar: female_3
+
+male_1:
+  Firstname: Odin
+  Lastname: Held
+  Username: held
+  Password: held
+  Email: held@hotmail.com
+  Reference:
+    Avatar: male_1
+
+male_2:
+  Firstname: Ifrit
+  Lastname: Gforce
+  Username: gforce
+  Password: gforce
+  Email: gforce@final.fantasy.com
+  Reference:
+    Avatar: male_2
+
+male_3:
+  Firstname: Kratos
+  Lastname: GOF
+  Username: gof
+  Password: gof
+  Email: gof@kratos.com
+  Reference:
+    Avatar: male_3

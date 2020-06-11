@@ -1,0 +1,107 @@
+mute:
+  Title: Mute
+  Description: <p>La main avant saisit la pointe des pieds entre les orteils ou devant le pied avant. Les variations incluent le Mute Stiffy, dans lequel une prise de silence est effectuée tout en redressant les deux jambes, ou alternativement, certains snowboarders attraperont muet et feront pivoter le bord avant de 90 degrés.</p>
+  Reference:
+    Author: admin
+    Illustrations:
+      - illustration_mute_1
+      - illustration_mute_2
+      - illustration_mute_3
+      - illustration_mute_4
+      - illustration_mute_5
+    Videos:
+      - video_mute_1
+      - video_mute_2
+      - video_mute_3
+      - video_mute_4
+    Groups:
+      - grab
+      - flip
+
+melancholie:
+  Title: Melancholie
+  Description: <p> saisie de la carre backside de la planche, entre les deux pieds, avec la main avant.  saisie de la carre backside de la planche, entre les deux pieds, avec la main avant,  saisie de la carre backside de la planche, entre les deux pieds, avec la main avant.</p>
+  Reference:
+    Author: admin
+    Illustrations:
+      - illustration_melancholie_1
+      - illustration_melancholie_2
+    Videos:
+      - video_melancholie_1
+    Groups:
+      - grab
+
+backside:
+  Title: Backside
+  Description: <p>En langage snowboard, un cork est une rotation horizontale plus ou moins désaxée, selon un mouvement d'épaules effectué juste au moment du saut. </p>
+  Reference:
+      Author: admin
+      Illustrations:
+        - illustration_backside_1
+        - illustration_backside_2
+      Videos:
+        - video_backside_1
+        - video_backside_2
+      Groups:
+        - flip
+
+method_air:
+  Title: Method Air
+  Description: <p>Cette figure – qui consiste à attraper sa planche d'une main et le tourner perpendiculairement au sol – est un classique "old school".</p>
+  Reference:
+    Author: male_1
+    Illustrations:
+      - illustration_method_air_1
+      - illustration_method_air_2
+    Videos:
+      - video_method_air_1
+    Groups:
+      - flip
+      - grab
+
+japan:
+  Title: Japan
+  Description: <p>La main avant saisit la pointe entre les pieds et le genou avant est tiré vers la planche.</p>
+  Reference:
+      Author: male_1
+      Illustrations:
+        - illustration_japan_1
+      Videos:
+        - video_japan_1
+      Groups:
+        - grab
+
+nose_grab:
+  Title: Nose Grab
+  Description: <p>La main va attraper l'arrière de la planche.</p>
+  Reference:
+        Author: female_1
+        Illustrations:
+          - illustration_nose_grab_1
+        Videos:
+          - video_nose_grab_1
+        Groups:
+          - grab
+
+gutterball:
+  Title: GutterBall
+  Description: <p>Le Gutterball est un slide avant à un pied (le pied avant est attaché et le pied arrière est dégagé) avec une pince de ceinture de sécurité arrière, ressemblant à la position du corps après avoir lâché une boule de bowling dans un allié. Cette astuce a été inventée et nommée par Jeremy Cameron, qui lui a valu une première place au concours "FAME WAR" de Morrow Snowboards en 2009.</p>
+  Reference:
+    Author: female_3
+    Illustrations:
+      - illustration_gutterball_1
+    Videos:
+      - video_gutterball_1
+    Groups:
+      - grab
+      - slide
+
+flip900:
+  Title: Flip 900
+  Description: <p>Le snowboarder effectue une rotation de 900 degrès pendant le saut.</p>
+  Reference:
+    Author: female_3
+    Illustrations:
+    Videos:
+    Groups:
+      - flip

@@ -1,0 +1,28 @@
+video_mute_1 :
+  iFrame: <iframe width="120" height="120" src="https://www.youtube.com/embed/CA5bURVJ5zk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+video_mute_2 :
+  iFrame: <iframe width="120" height="120" src="https://www.youtube.com/embed/CA5bURVJ5zk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+video_mute_3 :
+  iFrame: <iframe width="120" height="120" src="https://www.youtube.com/embed/hih9jIzOoRg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+video_mute_4 :
+  iFrame: <iframe width="120" height="120" src="https://www.youtube.com/embed/CzDjM7h_Fwo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+video_melancholie_1 :
+  iFrame: <iframe width="120" height="120" src="https://www.youtube.com/embed/m2jMAbjfSII" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+video_backside_1 :
+  iFrame: <iframe width="120" height="120" src="https://www.youtube.com/embed/Br6ZJM01I6s" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+video_backside_2 :
+  iFrame: <iframe width="120" height="120" src="https://www.youtube.com/embed/YAABnJfKJ5w" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+video_method_air_1 :
+  iFrame: <iframe width="120" height="120" src="https://www.youtube.com/embed/2Ul5P-KucE8" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+video_japan_1 :
+  iFrame: <iframe width="120" height="120" src="https://www.youtube.com/embed/Rca2XYqehjU" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+video_nose_grab_1 :
+  iFrame: <iframe width="120" height="120" src="https://www.youtube.com/embed/jPAsCuoRvoY" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+video_gutterball_1 :
+  iFrame: <iframe width="120" height="120" src="https://www.youtube.com/embed/evMsZSr6hGM" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>

@@ -1,0 +1,55 @@
+illustration_mute_1 :
+  filename   : mute-1.jpg
+  path       : images/defaults/tricks/mute-1.jpg
+
+illustration_mute_2 :
+  filename   : mute-2.jpg
+  path       : images/defaults/tricks/mute-2.jpg
+
+illustration_mute_3 :
+  filename   : mute-3.jpg
+  path       : images/defaults/tricks/mute-3.jpg
+
+illustration_mute_4 :
+  filename   : mute-4.jpg
+  path       : images/defaults/tricks/mute-4.jpg
+
+illustration_mute_5 :
+  filename   : mute-5.jpg
+  path       : images/defaults/tricks/mute-5.jpg
+
+illustration_melancholie_1:
+  filename   : melancholie-1.jpg
+  path       : images/defaults/tricks/melancholie-1.jpg
+
+illustration_melancholie_2:
+  filename   : melancholie-2.jpg
+  path       : images/defaults/tricks/melancholie-2.jpg
+
+illustration_backside_1 :
+  filename   : backside-1.jpg
+  path       : images/defaults/tricks/backside-1.jpg
+
+illustration_backside_2 :
+  filename   : backside-2.jpg
+  path       : images/defaults/tricks/backside-2.jpg
+
+illustration_method_air_1 :
+  filename   : backside-1.jpg
+  path       : images/defaults/tricks/method-air-1.jpg
+
+illustration_method_air_2 :
+  filename   : method-air-2.jpg
+  path       : images/defaults/tricks/method-air-2.jpg
+
+illustration_japan_1 :
+  filename   : japan-1.jpg
+  path       : images/defaults/tricks/japan-1.jpg
+
+illustration_nose_grab_1 :
+  filename   : nose-grab-1.jpg
+  path       : images/defaults/tricks/nose-grab-1.jpg
+
+illustration_gutterball_1 :
+  filename   : gutterball-1.jpg
+  path       : images/defaults/tricks/gutterball-1.jpg

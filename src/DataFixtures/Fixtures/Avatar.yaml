@@ -1,0 +1,27 @@
+admin :
+  filename   : admin.png
+  path       : images/defaults/users/admin.png
+
+female_1 :
+  filename   : female-1.png
+  path       : images/defaults/users/female-1.png
+
+female_2 :
+  filename   : female-2.png
+  path       : images/defaults/users/female-2.png
+
+female_3 :
+  filename   : female-3.png
+  path       : images/defaults/users/female-3.png
+
+male_1 :
+  filename   : female-1.png
+  path       : images/defaults/users/male-1.png
+
+male_2 :
+  filename   : female-2.png
+  path       : images/defaults/users/male-2.png
+
+male_3 :
+  filename   : female-3.png
+  path       : images/defaults/users/male-3.png
