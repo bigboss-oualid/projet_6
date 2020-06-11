@@ -26,7 +26,7 @@ class FileUploader
 		 * @var UploadedFile $file
 		 */
 		$file = $entity->getImageFile();
-		$relativeDir = 'images/'.$this->getName($entity);
+		$relativeDir = 'images/'.$this->getClassName($entity);
 		$absoluteUploadDir = $this->targetDirectory.'/'.$relativeDir;
 
 		$originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
@@ -60,7 +60,7 @@ class FileUploader
 	 *
 	 * @return bool|string
 	 */
-	private function getName($object)
+	private function getClassName($object)
 	{
 		return strtolower(substr(strrchr(get_class($object), "\\"), 1));
 	}

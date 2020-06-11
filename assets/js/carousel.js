@@ -1,7 +1,16 @@
 import 'slick-carousel/slick/slick.min.js'
 
 $(document).ready(function() {
+    let illustrations = $('.illustrations');
+    let videos = $('.videos');
+    if (illustrations.length>2)
+        illustrations.parent().addClass('slider');
+    if (videos.length>2)
+        videos.parent().addClass('slider');
     $(".slider").slick({
+        slidesToShow: 3,
+        slidesToScroll: 1,
+        dots: true,
         infinite: false,
         responsive: [{
             breakpoint: 1024,
@@ -24,10 +33,3 @@ $(document).ready(function() {
 
 import 'simplelightbox/dist/simple-lightbox.jquery.min'
 $('.gallery a').simpleLightbox();
-
-/*$(function() {
-    $('.pop').on('click', function() {
-        $('.imagepreview').attr('src', $(this).find('img').attr('src'));
-        $('#imagemodal').modal('show');
-    });
-});*/

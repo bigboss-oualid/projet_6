@@ -3,7 +3,7 @@
 {% block title %}Page de {{ user.fullName }}{% endblock %}
 
 {% block body %}
-    <div class="container m-top my-auto">
+    <div class="container m-top my-auto m-bottom">
         <div class="row mt-5 justify-content-center jumbotron">
             {% include'partials/_flashes.html.twig' %}
             <div class="col-md-3 col-sm-12 text-center"><img src="{{ asset(user.avatar.path) }}" alt="{{ user.fullName }}" class="mb-1 avatar">
@@ -45,14 +45,14 @@
         <hr class="my-border">
         <h3 class="my-heading text-center my-5"> <span class="bg-main">{% if connected is defined  %}MES FIGURES</span>{% else %}LES FIGURES DE {{ user.fullName }}{% endif %}</h3>
         {% if user.tricks | length > 0 %}
-            <div class="row d-flex justify-content-center ">
+            <div class="row d-flex justify-content-center m-bottom">
                 {%  include 'blog/include/_pagination_tricks.html.twig' with {'tricks': pagination.data}%}
             </div>
             {% if pagination.pages > 1 %}
                 {{ pagination.display() }}
             {% endif %}
         {% else %}
-            <div class="alert alert-warning">
+            <div class="alert alert-warning m-bottom">
                 <p><strong>{{ user.fullName }}</strong></p> n'a pas encore de figure sur le site !
             </div>
         {% endif %}

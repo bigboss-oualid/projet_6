@@ -43,9 +43,9 @@
                 <div class="col-md-5">
                     {% if trick.illustrations %}
                         <div class="container">
-                            <div class="row slider align-items-center" data-slick='{"slidesToShow": 3, "slidesToScroll": 1, "dots": true}'>
+                            <div class="row justify-content-center">
                                 {% for illustration in trick.illustrations%}
-                                <div class="col-lg-4 col-md-6 col-sm-12 gallery">
+                                <div class="illustrations col-lg-4 col-md-6 col-sm-12 gallery">
                                     <a href="{{ asset(illustration.path) }}"><img height="120" width="130" class="media-width-mobile"  src="{{ asset(illustration.path) }}" alt="illustration {{ trick.title }}" ></a>
                                 </div>
                                 {% endfor %}
@@ -56,9 +56,9 @@
                 <div class="col-md-5 offset-md-1">
                     {% if trick.videos %}
                         <div class="container">
-                            <div class="row slider justify-content-between" data-slick='{"slidesToShow": 3, "slidesToScroll": 1, "dots": true}'>
+                            <div class="row justify-content-center">
                                 {% for video in trick.videos%}
-                                <div class="col-lg-4 col-md-6 col-sm-12 gallery">
+                                <div class="videos col-lg-4 col-md-6 col-sm-12 gallery">
                                     {{ video.embedCode | raw}}
                                 </div>
                                 {% endfor %}
