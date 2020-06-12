@@ -1,0 +1,37 @@
+{%  extends 'base.html.twig' %}
+
+{%  block title %}Autorisation non valide{% endblock %}
+
+{% block stylesheets %}{{ encore_entry_link_tags('error.css') }}{% endblock %}
+
+{% block body %}
+    <section class="error_section">
+
+        <h1 class="error_title">
+            <p class="mobile-size">Focntion non autorisé</p>
+            Focntion non autorisé
+        </h1>
+        <div class="row mx-5">
+            <div class="col-md-12 error_section_subtitle mx-5 text-center">Le lien que vous tentez n'existe pas!</div>
+        </div>
+        {#<p>{{ exception.message }}</p>#}
+
+        <h1 class="error_status">
+            <p>{{ exception.statusCode }}</p>
+            {{ exception.statusCode }}
+        </h1>
+
+        <div class="btn-toolbar">
+            <div class="mb-3 mx-auto-mobile mr-2">
+                <a href="{{ path('blog.home') }}" class="btn btn-warning btn-nav  py-3"> Retour à l'accueil</a>
+            </div>
+            <div class="mb-3 mx-auto-mobile">
+                <a href="{{ path('blog.tricks') }}" class="btn btn-warning btn-nav  py-3"> Visiter nos figures</a>
+            </div>
+        </div>
+    </section >
+{% endblock%}
+
+{% block javascripts%}
+    {{ encore_entry_script_tags('error.js') }}
+{% endblock %}
