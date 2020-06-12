@@ -17,6 +17,7 @@ class Pagination
 {
 	private $entityClass;
 	private $limit;
+	private $offset;
 	private $currentPage = 1;
 	private $route;
 	/**
@@ -34,7 +35,9 @@ class Pagination
 		$request = $requestStack->getCurrentRequest();
 		$this->route        = $request->attributes->get('_route');
 		if($request->get('page'))
-		$this->currentPage  = $request->get('page');
+			$this->currentPage  = $request->get('page');
+		if($request->get('offset'))
+			$this->offset  = $request->get('offset');
 		$this->em           = $em;
 		$this->twig         = $twig;
 		$this->buttonTemplatePath = $buttonTemplatePath;
@@ -58,17 +61,21 @@ class Pagination
 	/**
 	 * Display button load more
 	 *
+	 * @param int|null $startPage
+	 *
 	 * @throws \Twig\Error\LoaderError
 	 * @throws \Twig\Error\RuntimeError
 	 * @throws \Twig\Error\SyntaxError
-	 * @throws \Exception
 	 */
-	public function display(){
+	public function display(int $startPage = null){
+		$currentPage = $startPage;
+		if (!$startPage)
+			$currentPage = $this->currentPage;
 
 		$this->twig->display($this->buttonTemplatePath, [
 			'pages' => $this->getPages(),
 			'route' => $this->route,
-			'page'  => $this->currentPage,
+			'page'  => $currentPage,
 			'parameters' => $this->routeParameters
 		]);
 	}
@@ -79,10 +86,12 @@ class Pagination
 	 */
 	public function getData(){
 		$this->error();
-		$offset = $this->currentPage * $this->limit - $this->limit;
+		//determine offset if object isn't deleted
+		if($this->offset == null)
+			$this->offset = $this->currentPage * $this->limit - $this->limit;
 		$repository = $this->em->getRepository($this->entityClass);
 
-		return $repository->findBy($this->criteria, ['createdAt' => 'DESC'], $this->limit, $offset);
+		return $repository->findBy($this->criteria, ['createdAt' => 'DESC'], $this->limit, $this->offset);
 	}
 
 	/**
@@ -133,6 +142,26 @@ class Pagination
 	public function setLimit(int $limit): self
 	{
 		$this->limit = $limit;
+
+		return $this;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getOffset()
+	{
+		return $this->offset;
+	}
+
+	/**
+	 * @param mixed $offset
+	 *
+	 * @return self
+	 */
+	public function setOffset($offset): self
+	{
+		$this->offset = $offset;
 
 		return $this;
 	}

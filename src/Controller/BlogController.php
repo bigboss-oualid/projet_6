@@ -49,16 +49,20 @@ class BlogController extends AbstractController
 	}
 
 	/**
-	 * @Route("/tricks/{page<\d+>?1}", name="blog.tricks")
+	 * determine value of offset only for next page, for previous page offset should be determined in service pagination in function getData()
+	 *
+	 * @Route("/tricks/page/{!page}/{offset<\d+>?null}",  name="blog.tricks", requirements={"page": "\d+"}, defaults={"page": 1})
 	 *
 	 * @param            $page
+	 * @param            $offset
 	 * @param Pagination $pagination
 	 *
 	 * @return Response | JsonResponse
 	 */
-	public function tricks($page, Pagination $pagination)
+	public function tricks($page, $offset, Pagination $pagination)
 	{
 		$pagination->setEntityClass(Trick::class)
+			->setOffset($offset)
 			->setCurrentPage($page)
 			->setEntityTemplatePath('blog/include/_pagination_tricks.html.twig')
 			->setButtonTemplatePath('partials/_pagination.html.twig');

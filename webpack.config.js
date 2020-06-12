@@ -26,10 +26,13 @@ Encore
     .addEntry('app', './assets/js/app.js')
     .addEntry('home', './assets/js/home.js')
     .addEntry('loadMore', './assets/js/loadMore.js')
+    .addEntry('pagination', './assets/js/pagination.js')
     .addEntry('comments', './assets/js/comments.js')
     .addEntry('form', './assets/js/form.js')
     .addEntry('loadAvatar', './assets/js/loadAvatar.js')
     .addEntry('carousel', './assets/js/carousel.js')
+    .addEntry('error.js', './assets/js/error.js')
+    .addEntry('error.css', './assets/css/error.css')
     //.addEntry('page1', './assets/js/page1.js')
     //.addEntry('page2', './assets/js/page2.js')
 

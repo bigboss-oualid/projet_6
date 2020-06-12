@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil - {{ parent() }} {% endblock %}
+{% block title %}Tricks - {{ parent() }} {% endblock %}
 
 {% block body %}
     <div class="container mt-5">
@@ -20,6 +20,5 @@
 {% endblock %}
 {% block javascripts%}
     {#pagination Tricks#}
-    {{ encore_entry_script_tags('loadMore') }}
-    {{ encore_entry_script_tags('home') }}
+    {{ encore_entry_script_tags('pagination') }}
 {% endblock %}

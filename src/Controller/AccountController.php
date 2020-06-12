@@ -98,19 +98,20 @@ class AccountController extends AbstractController
 	}
 
 	/**
-	 * @Route("/account/{page<\d+>?1}", name="account.index")
+	 * @Route("/my-account/page/{!page}/{offset<\d+>?null}", name="account.index", requirements={"page": "\d+"}, defaults={"page": 1})
 	 * @IsGranted("ROLE_USER")
 	 *
 	 * @param            $page
+	 * @param            $offset
 	 * @param Pagination $pagination
 	 *
 	 * @return Response
-	 * @throws \Exception
 	 */
-	public function myAccount($page, Pagination $pagination): Response
+	public function myAccount($page, $offset, Pagination $pagination): Response
 	{
 		$user = $this->getUser();
 		$pagination->setEntityClass(Trick::class)
+			->setOffset($offset)
 			->setCriteria(['author' => $user])
 			->setCurrentPage($page)
 			->setEntityTemplatePath('blog/include/_pagination_tricks.html.twig')

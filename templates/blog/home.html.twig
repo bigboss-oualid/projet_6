@@ -26,14 +26,15 @@
     <section class="trick-section m-5" id="gobottom">
         <div class="row">
             <div class="col-md-8 mx-auto wow fadeInUp" data-wow-duration="1.6s">
-                <h3 id="home-section" class="home-p text-center mb-5 font-weight-bold">Figures <span class="bg-main">S</span>now<span class="bg-main">T</span>ricks</h3>
-                <p class="h2 text-dark text-center">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+                <h3 id="home-section" class="home-p text-center mb-3 font-weight-bold">Figures <span class="bg-main">S</span>now<span class="bg-main">T</span>ricks</h3>
+                <p class="h2 text-dark text-center mb-5">Avant de commencer à apprendre des figures, même ceux qui sont faciles, vous devriez avoir maîtrisé certaines des bases. Vous devez surtout être sûr de rouler dans les deux sens (interrupteur de conduite) sur la montagne avant de vous lancer dans des tricks.</p>
             </div>
         </div>
-        {% set pagesNumber = pagination.pages %}
-        <div class="row load-content d-flex justify-content-center" data-pages = {{ pagesNumber }} id="tricks"></div>
-        {% if pagesNumber > 1 %}
-            {{ pagination.display() }}
+        <div id="tricks" class="row load-content d-flex justify-content-center" data-pagination = '[{"pagesNumber":"{{  pagination.pages }}","currentPage":"2"}]'>
+            {% include 'blog/include/_pagination_tricks.html.twig' with {'tricks': pagination.data}%}
+        </div>
+        {% if  pagination.pages > 0 %}
+            {{ pagination.display(2) }}
         {#{% else %}#}
         {% endif %}
     </section>

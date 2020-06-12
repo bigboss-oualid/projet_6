@@ -12,19 +12,22 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserController extends AbstractController
 {
 	/**
-	 * @Route("/user/{username}/{page<\d+>?1}", name="user.show", requirements={"username": "[a-z0-9\-]*"})
+	 * @Route("/user/{username}/page/{!page}/{offset<\d+>?null}", name="user.show", requirements={"username": "[a-z0-9\-]*", "page": "\d+"}, defaults={"page": 1})
+	 *
 	 * @param User       $user
 	 * @param            $page
+	 * @param            $offset
 	 * @param Pagination $pagination
 	 *
 	 * @return Response
 	 */
-	public function index(User $user, $page, Pagination $pagination): Response
+	public function index(User $user, $page, $offset, Pagination $pagination): Response
 	{
 		if($user == $this->getUser())
 			return $this->redirectToRoute('account.index');
 
 		$pagination->setEntityClass(Trick::class)
+			->setOffset($offset)
 			->setCriteria(['author' => $user])
 			->setCurrentPage($page)
 			->setRouteParameters(['username' => $user->getUsername()])

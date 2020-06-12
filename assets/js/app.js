@@ -71,7 +71,7 @@ $(function (){
                     if (data.success) {
                         let trick = $('#'+ button.data('slug'));
                         trick.fadeOut(function(){
-                            trick.remove();
+                            $(this).remove();
                         });
                     }
                 },

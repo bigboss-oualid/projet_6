@@ -129,8 +129,8 @@
                 <span class="js-no-comment"><h3 class="my-heading mb-2"><span class="bg-main">A</span>UCUN COMMENTRAIRE...</h3></span>
             {% endif %}
         </div>
-        <div id="comments" class="load-content wow fadeInLeft" data-wow-duration="4s" data-pages = {{ pagination.pages }}></div>
-        {% if pagination.pages > 1 %}
+        <div id="comments" class="load-content wow fadeInLeft" data-wow-duration="4s" data-pagination = '[{"pagesNumber":"{{  pagination.pages }}","currentPage":"1"}]'></div>
+        {% if pagination.pages > 0 %}
             {{ pagination.display() }}
         {% endif %}
     </div>
