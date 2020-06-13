@@ -715,11 +715,13 @@ p.myp-font {
     cursor: pointer;
 }
 .ptxt-parent{
-    background-color: white !important;
+    background-color: orangered !important;
+    border-radius:0 0.25rem 0.25rem 0!important;
 }
 .ptxt:hover{
-    color: orangered !important;
+    color: white !important;
 }
+
 
 .input_user,
 .input_pass:focus {
@@ -760,9 +762,6 @@ p.myp-font {
     font-weight: bold;
     font-size: 4rem;
 }
-#create-account-title{
-}
-
 .select2-container--default .select2-results__option--highlighted[aria-selected] {
     background-color: orangered;
     text-shadow: 1px 1px 1px rgba(0,0,0,1);
