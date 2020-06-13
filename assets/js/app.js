@@ -115,29 +115,32 @@ $(window).on("load resize", function() {
 
 /*back to top*/
 $(document).ready(function(){
+    let top = $('#back-to-top');
     $(window).scroll(function () {
         if ($(this).scrollTop() > 50) {
-            $('#back-to-top').fadeIn();
+            top.fadeIn();
         } else {
-            $('#back-to-top').fadeOut();
+            top.fadeOut();
         }
     });
     // scroll body to 0px on click
-    $('#back-to-top').click(function () {
+    top.click(function () {
         $('body,html').animate({
             scrollTop: 0
         }, 400);
         return false;
     });
-    $("#menu-icon-mobile").click(function () {
-        $("#menu-icon-mobile").toggleClass('fa-bars');
+    let mobileIcon = $("#menu-icon-mobile");
+    mobileIcon.click(function () {
+        $(this).toggleClass('fa-bars');
         $(".navbar.fixed-top.navbar-expand-lg").toggleClass("menu-back");
-        $("#menu-icon-mobile").toggleClass('fa-caret-down');
+        $(this).toggleClass('fa-caret-down');
         let goBottom = $("#gobottom-container");
         if (goBottom) $(goBottom).toggle();
     })
 });
 
+/*hide and show gobottom btn by scrolling the mouse or by clicking goBttom*/
 $(window).scroll( function(){
     let topWindow = $(window).scrollTop();
     topWindow = topWindow * 1.5;
@@ -147,7 +150,6 @@ $(window).scroll( function(){
 
     $('#bottom').css('opacity', position);
 });
-
 $(window).on("scroll", function() {
     let BtnBottom = $('#bottom');
     let navBar = $("nav.navbar");
@@ -160,4 +162,19 @@ $(window).on("scroll", function() {
         BtnBottom.show();
     }
 });
+
+/*show hide password*/
+$(document).ready(function(){
+    $('.ptxt').on('click', function(){
+        if ($(this).hasClass('fa-eye')) {
+            $(this).removeClass('fa-eye').addClass(' fa-eye-slash');
+        } else {
+            $(this).removeClass('fa-eye-slash').addClass(' fa-eye');
+        }
+        $('.show_pass').attr('type', function(index, attr){return attr === 'password' ? 'text' : 'password'; });
+    });
+});
+
+
+
 

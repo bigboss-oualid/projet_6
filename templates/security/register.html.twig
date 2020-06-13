@@ -19,7 +19,7 @@
                             <div class="d-none">{{ form_widget(form.avatar) }}</div>
                         </div>
                     </div>
-                    <div class="d-flex justify-content-center form_container px-5">
+                    <div class="d-flex justify-content-center form_container">
                         <div class="row mx-md-5">
                             <div class="col-sm-12">
                                 <div class="form-row align-items-end">
@@ -65,7 +65,10 @@
                                             <div class="input-group-append">
                                                 <span class="input-group-text"><i class="fas fa-unlock"></i></span>
                                             </div>
-                                            {{ form_widget(form.hash) }}
+                                            {{ form_widget(form.hash, {'attr':{'class': 'show_pass'}}) }}
+                                            <div class="input-group-append">
+                                                <span class="input-group-text ptxt-parent"><i class="ptxt fas fa-eye"></i></span>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-sm-12">
@@ -74,7 +77,7 @@
                                             <div class="input-group-append">
                                                 <span class="input-group-text"><i class="fas fa-lock"></i></span>
                                             </div>
-                                            {{ form_widget(form.passwordConfirm) }}
+                                            {{ form_widget(form.passwordConfirm, {'attr':{'class': 'show_pass'}}) }}
                                         </div>
                                     </div>
                                     <div class="col-sm-12 mt-4">

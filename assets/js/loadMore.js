@@ -4,7 +4,7 @@ function loaddmore(holder, pagesNumber, currentPage){
         loadBtn.remove()
     }
 
-    let incrementPages = $('span.js-label')
+    let incrementPages = $('span.js-label');
     loadBtn.on('click', function (e) {
         let offset = $('.js-offset').length;
         e.preventDefault();
@@ -33,7 +33,7 @@ function loaddmore(holder, pagesNumber, currentPage){
                 },
                 error: function(e)
                 {
-                    console.log(e)
+                    console.log(e);
                     alert('Error: ' + "une erreur technique est survenue, essayez d'actualiser la page!");
                 }
             }

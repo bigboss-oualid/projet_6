@@ -705,11 +705,22 @@ p.myp-font {
     outline: 0px !important;
 }
 .input-group-text {
-    background: #FFC107 !important;
-    color: white !important;
+    background: #FFC107 ;
+    color: white ;
     border: 0 !important;
     border-radius: 0.25rem 0 0 0.25rem !important;
 }
+.ptxt {
+    color: #FFC107 !important;
+    cursor: pointer;
+}
+.ptxt-parent{
+    background-color: white !important;
+}
+.ptxt:hover{
+    color: orangered !important;
+}
+
 .input_user,
 .input_pass:focus {
 }

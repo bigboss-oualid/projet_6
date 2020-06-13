@@ -1,13 +1,13 @@
-const title = document.querySelector('.error_title')
+const title = document.querySelector('.error_title');
 
 //////// Light //////////
 document.onmousemove = function(e) {
     let x = e.pageX - window.innerWidth/2;
     let y = e.pageY - window.innerHeight/2;
 
-    title.style.setProperty('--x', x + 'px')
-    title.style.setProperty('--y', y + 'px')
-}
+    title.style.setProperty('--x', x + 'px');
+    title.style.setProperty('--y', y + 'px');
+};
 
 ////////////// Shadow ///////////////////
 title.onmousemove = function(e) {
@@ -20,7 +20,7 @@ title.onmousemove = function(e) {
     let x_shadow = Math.round(length * Math.cos(rad));
     let y_shadow = Math.round(length * Math.sin(rad));
 
-    title.style.setProperty('--x-shadow', - x_shadow + 'px')
-    title.style.setProperty('--y-shadow', - y_shadow + 'px')
+    title.style.setProperty('--x-shadow', - x_shadow + 'px');
+    title.style.setProperty('--y-shadow', - y_shadow + 'px');
 
-}
+};
