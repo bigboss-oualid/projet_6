@@ -7,7 +7,7 @@
 // any CSS you import will output into a single css file (app.css in this case)
 
 import 'wowjs/css/libs/animate.css';
-import 'select2/dist/css/select2.min.css'
+import 'select2/dist/css/select2.min.css';
 import '../css/app.css';
 
 // Need jQuery? Install it with "yarn add jquery", then uncomment to import it.
@@ -15,19 +15,92 @@ import $ from 'jquery';
 // create global $ and jQuery variables
 global.$ = global.jQuery = $;
 
-import 'bootstrap'
+import 'bootstrap';
+import 'sweetalert/dist/sweetalert.min';
 
 console.log('Hello Webpack Encore! Edit me in assets/js/app.js');
 
 /*Confirm delete and go down to tricks*/
+/*delete trick by editing*/
 $(document).ready(function(){
-    $(".js-del-out").click(function(){
+    $(".js-del-out").click(function(e){
+        e.preventDefault();
+
         let title = $(this).data('trickTitle');
-        if (!confirm("Voulez-vous vraiment supprimer la figure " + title + "?")){
-            return false;
-        }
+        let form = $(this).parents('form:first');
+        let timer = 1800;
+        swal({
+            title: "Confirmation",
+            text: "Voulez-vous vraiment supprimer la figure " + title + "?",
+            icon: "warning",
+            dangerMode: true,
+            buttons:["Annuler", "Supprimer"]
+        }).then(function(isConfirm) {
+            if (isConfirm ){
+                swal("La figure "+title+" a été supprimé avec succès!", {
+                    icon: "success",
+                    timer: timer,
+                });
+                form.submit();
+            }else {
+                swal("La figure "+title+" n'est pas supprimer!", {
+                    icon: "error",
+                    timer: timer,
+                });
+            }
+        })
     });
 });
+/*delete Trick with ajax*/
+$(document).on('click','.js-del-in',function (e){
+    e.preventDefault();
+    let title = $(this).data('title');
+    let button = $(this);
+    let timer = 1800;
+
+    swal({
+        title: "Confirmation",
+        text: "Voulez-vous vraiment supprimer la figure " + title + "?",
+        icon: "warning",
+        dangerMode: true,
+        buttons:["Annuler", "Supprimer"]
+    }).then(function(isConfirm) {
+        if (isConfirm ){
+            $.ajax({
+                type: "DELETE",
+                url: button.attr('href'),
+                data: JSON.stringify({'_token' : button.data('token')}),
+                dataType: 'JSON',
+                beforeSend: function() {
+                    console.log('beforeSend')
+                },
+                success: function (data) {
+                    if (data.success) {
+                        swal("La figure "+title+" a été supprimé avec succès!", {
+                            icon: "success",
+                            timer: timer,
+                        });
+                        let trick = $('#'+ button.data('slug'));
+                        trick.fadeOut(function(){
+                            $(this).remove();
+                        });
+                    }
+                },
+                error: function(e)
+                {
+                    console.log('Error: ' + e);
+                }
+            });
+        } else {
+            swal("La figure "+title+" n'est pas supprimer!", {
+                icon: "error",
+                timer: timer,
+            });
+        }
+    })
+});
+
+
 
 /*show media on sm*/
 $(document).ready(function(){
@@ -49,42 +122,6 @@ $(function (){
         $(".flash-container").hide("slow");
     });
 });
-
-/*suppression des tricks*/
-    $(document).on('click','.js-del-in',function (e){
-        e.preventDefault();
-
-        let button = $(this);
-
-        let c = confirm("Voulez-vous vraiment supprimer la figure " + button.data('title') + "?");
-
-        if (c === true) {
-            $.ajax({
-                type: "DELETE",
-                url: button.attr('href'),
-                data: JSON.stringify({'_token' : button.data('token')}),
-                dataType: 'JSON',
-                beforeSend: function() {
-                    console.log('beforeSend')
-                },
-                success: function (data) {
-                    if (data.success) {
-                        let trick = $('#'+ button.data('slug'));
-                        trick.fadeOut(function(){
-                            $(this).remove();
-                        });
-                    }
-                },
-                error: function(e)
-                {
-                    console.log('Error: ' + e);
-                }
-            });
-
-        } else {
-            return false;
-        }
-    });
 
 
 /*close dropdown menu after mouse leaves*/

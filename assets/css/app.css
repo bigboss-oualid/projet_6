@@ -38,6 +38,11 @@ body {
     box-shadow: 0.5pt 1pt 1pt 1pt orangered;
 }
 
+/*swal*/
+.swal-overlay {
+    background-color: rgba(43, 165, 137, 0.45);
+}
+
 
 /*change color select2*/
 .select2-container--default .select2-selection__choice{
