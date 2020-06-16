@@ -16,11 +16,16 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
+/**
+ * Class AccountController
+ * @package App\Controller
+ *
+ * @IsGranted("ROLE_USER")
+ */
 class AccountController extends AbstractController
 {
 	/**
 	 * @Route("/account/profile", name="account.profile")
-	 * @IsGranted("ROLE_USER")
 	 *
 	 * @param Request                $request
 	 * @param EntityManagerInterface $em
@@ -57,7 +62,6 @@ class AccountController extends AbstractController
 
 	/**
 	 * @Route("/account/password-update", name="account.password")
-	 * @IsGranted("ROLE_USER")
 	 *
 	 * @param Request                      $request
 	 * @param EntityManagerInterface       $em
@@ -99,7 +103,6 @@ class AccountController extends AbstractController
 
 	/**
 	 * @Route("/my-account/page/{!page}/{offset<\d+>?null}", name="account.index", requirements={"page": "\d+"}, defaults={"page": 1})
-	 * @IsGranted("ROLE_USER")
 	 *
 	 * @param            $page
 	 * @param            $offset

@@ -309,10 +309,11 @@ header.masthead {
     background-size: cover;
     padding-top: 8rem;
     padding-bottom: 8rem;
-    border-radius: 0px 0px 40px 40px;
+    border-radius: 0 0 40px 40px;
+    box-shadow: 0 0 80px 25px #000000;
 }
 
-header.masthead .overlay{border-radius: 0px 0px 40px 40px;position:absolute;background-color:#212529;height:100%;width:100%;top:0;left:0;opacity:.6}
+header.masthead .overlay{border-radius: 0 0 40px 40px;position:absolute;background-color:#212529;height:100%;width:100%;top:0;left:0;opacity:.6}
 
 .btn-nav, .btn-join, #load {
     padding-left: 20px !important;
@@ -419,7 +420,7 @@ p.myp-font {
     margin-left: 80px;
 }
 .comment-container{
-    border-radius: 0px 25px 25px 25px;
+    border-radius: 0 25px 25px 25px;
     background: white;
 }
 .commenter{
@@ -585,8 +586,8 @@ p.myp-font {
         height: 100% !important;
     }
     #comments{
-        margin-right: 0px;
-        margin-left: 0px;
+        margin-right: 0;
+        margin-left: 0;
     }
     #gobottom{
         margin:5px!important;
@@ -661,7 +662,7 @@ p.myp-font {
 
 /*Login in*/
 .vertical-center {
-    min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+   /*min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
     min-height: 100vh; /* These two lines are counted as one :-)       */
     display: flex;
     align-items: center;
@@ -707,7 +708,7 @@ p.myp-font {
 }
 .login_btn:focus {
     box-shadow: none !important;
-    outline: 0px !important;
+    outline: 0 !important;
 }
 .input-group-text {
     background: #FFC107 ;

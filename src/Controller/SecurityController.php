@@ -175,6 +175,8 @@ class SecurityController extends AbstractController
 					$this->em->persist($user);
 					$this->em->flush();
 
+					$this->addFlash('danger', "Votre compte est activé, désormais vous pouvez vous connectez!");
+
 					return $this->redirectToLogin();
 				}
 				$this->addFlash('danger', "Une erreur est servenue, le lien <srong>[ token ]</strong> est invalide");
@@ -242,6 +244,7 @@ class SecurityController extends AbstractController
 
 	/**
 	 * @Route("/reset-password/{tokenCode}", name="security.reset_password")
+	 *
 	 * @param Request                      $request
 	 * @param String                       $tokenCode
 	 * @param UserPasswordEncoderInterface $passwordEncoder
@@ -291,7 +294,7 @@ class SecurityController extends AbstractController
 
 	private function redirectToLogin(){
 
-		return $this->redirectToRoute('security.login',['current_menu'=>'login']);
+		return $this->redirectToRoute('security.login');
 	}
 }
 

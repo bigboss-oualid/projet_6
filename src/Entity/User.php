@@ -69,7 +69,7 @@ class User implements UserInterface
 	 * @Assert\Length(min=8, minMessage="Votre mot de passe doit faire au moins 8 caractères !", )
 	 * @Assert\Regex(
 	 *     pattern="/.*^(?=.*[A-Z]).*$/",
-	 *     message="Le mot de passe devrait contenir au moindes lettres en majuscules et en minuscules !"
+	 *     message="Le mot de passe devrait contenir au moin une lettre en majuscule et en minuscule !"
 	 * )
 	 * @Assert\Regex(
 	 *     pattern="/.*^(?=.*\d).*$/",
@@ -77,7 +77,7 @@ class User implements UserInterface
 	 * )
 	 * @Assert\Regex(
 	 *     pattern="/.*^(?=.*\W).*$/",
-	 *     message="Le mot de passe devrait contenir des caractères spéciaux !"
+	 *     message="Le mot de passe devrait contenir au moin  un caractère spécial!"
 	 * )
 	 */
     //pattern="/.*^(?=.{8,20})(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).*$/"
@@ -291,21 +291,20 @@ class User implements UserInterface
 
 
 	public function getRoles(): array
-                              	{
-                              		 $roles = $this->userRoles->map(function (Role $role){
-                              		     return $role->getTitle();
-                              		 })->toArray();
-                              
-                              		 $roles[] = 'ROLE_USER';
-                              		 //dd($roles);
-                              
-                              		  return $roles;
-                              	}
+    {
+         $roles = $this->userRoles->map(function (Role $role){
+             return $role->getTitle();
+         })->toArray();
+
+         $roles[] = 'ROLE_USER';
+
+          return array_unique($roles);
+    }
 
 	public function getPassword():? String
-                              	{
-                              		return $this->hash;
-                              	}
+    {
+        return $this->hash;
+    }
 
 	public function getSalt() {}
 
