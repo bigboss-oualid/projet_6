@@ -14,6 +14,8 @@ class Illustration extends Picture
      */
     private $trick;
 
+	protected $path = 'images/defaults/default-illustration.png';
+
 	public function getTrick(): Trick
     {
         return $this->trick;

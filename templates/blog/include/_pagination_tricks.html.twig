@@ -3,10 +3,10 @@
         <div class="card h-100">
             {% set illustration = trick.illustrations|first %}
             <a class="item-card box" href="{{ path('blog.show', {slug: trick.slug, id: trick.id}) }}">
-                {% if illustration != false %}
+                {% if illustration%}
                     <img class="card-img-top" src="{{ asset(illustration.path) }}">
                 {% else %}
-                    <img class="card-img-top" src="{{ asset('images/defaults/illustration-default.png') }}">
+                    <img class="card-img-top" src="{{ asset('images/defaults/default-illustration.png') }}">
                 {% endif %}
             </a>
             <div class="card-block">

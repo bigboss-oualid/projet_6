@@ -51,8 +51,9 @@
                 {{ pagination.display() }}
             {% endif %}
         {% else %}
-            <div class="alert alert-warning m-bottom">
-                <p><strong>{{ user.fullName }}</strong></p> n'a pas encore de figure sur le site !
+            <div class="alert alert-warning m-bottom text-center ">
+                <p class="h4"><strong>{{ user.fullName }}</strong> n'a pas encore de figure sur le site !</p>
+                <p class="h5">Pour créer une figure <a href="{{ path('trick.create') }}">Cliquez ici</a></p>
             </div>
         {% endif %}
     </div>

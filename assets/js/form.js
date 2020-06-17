@@ -40,7 +40,7 @@ function showDefaultImg() {
         }
     });
     if(src ==="/images/defaults/placeholder.png" || src === '') {
-        $('#default-img-trick').attr('src','/images/defaults/illustration-default.png');
+        $('#default-img-trick').attr('src','/images/defaults/default-illustration.png');
     } else {
         $('#default-img-trick').attr('src',src);
     }
