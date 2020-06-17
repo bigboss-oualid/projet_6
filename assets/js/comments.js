@@ -18,7 +18,7 @@ $('#add-comment').on('click', function (e) {
         success: function (data) {
             if (titreDiscussion.text() !== ""){
                 parentElt = titreDiscussion.parent().hide('slow');
-                spanElt = '<span class="js-comment">Espace de discussion :</span>';
+                spanElt = '<h3 class="my-heading mb-2"><span class="bg-main">E</span>SPACE DE DISCUSSION</h3>';
                 $( ".js-no-comment" ).detach();
                 parentElt.prepend(spanElt).show('slow');
             }
