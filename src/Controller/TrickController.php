@@ -12,7 +12,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -54,7 +53,6 @@ class TrickController extends AbstractController
 		    $this->em->flush();
 
 		    $this->addFlash('success', "la figure <strong>{$trick->getTitle()}</strong> a bien été crée !" );
-
 		    return $this->redirectToRoute('blog.tricks');
 	    }
 
@@ -73,7 +71,6 @@ class TrickController extends AbstractController
 	 * @param Trick|null                $trick
 	 * @param String                    $slug
 	 * @param Request                   $request
-	 *
 	 * @param UserUpdateTrickRepository $repository
 	 *
 	 * @return Response
@@ -98,7 +95,7 @@ class TrickController extends AbstractController
 				'author' => $user->getId(),
 				'trick' => $trick->getId()
 			]);
-
+			//Save every author only one time by updating
 			if(!$update){
 				$update = new UserUpdateTrick($user, $trick);
 				$user->addUpdatedTrick($update);
@@ -110,11 +107,11 @@ class TrickController extends AbstractController
 				$user->addUpdatedTrick($update);
 				$trick->addUpdatedBy($update);
 			}
+
 			$this->em->persist($trick);
 			$this->em->flush();
 
 			$this->addFlash('success', "la figure <strong>{$trick->getTitle()}</strong> a bien été  modifiée !");
-
 			return $this->redirectToRoute('blog.tricks');
 		}
 

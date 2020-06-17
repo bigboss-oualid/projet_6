@@ -51,7 +51,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 	    //if user try to connect with email
     	if($email = filter_var($username, FILTER_VALIDATE_EMAIL)){
 		    /** @var User $user */
-		    $user = $this->entityManager->getRepository(User::class)->findOneByEmail( $username);
+		    $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' =>$email]);
 		    $username = $user->getUsername();
 	    }
 
@@ -110,7 +110,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 
         return new RedirectResponse($this->urlGenerator->generate('blog.home'));
 
-        //throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }
 
     protected function getLoginUrl()

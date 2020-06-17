@@ -16,7 +16,7 @@ class UserChecker implements UserCheckerInterface
 
 		// user is deleted, show a generic Account Not Found message.
 		if (!$user->isEnabled()) {
-			$exception = new AccountDisabledException("Votre compte n'est pas activé !");
+			$exception = new AccountDisabledException("Votre compte n'est pas activé!");
 			throw $exception;
 		}
 	}
