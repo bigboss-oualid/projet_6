@@ -1,0 +1,13 @@
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="h1 card-title text-center">
+            <a href="{{ path('pages.show', {slug: trick.slug, id: trick.id}) }}">
+                {{ trick.title }}
+            </a>
+        </h5>
+        <p class="card-text display-5">{{ trick.description}}</p>
+        <div class="blockquote-footer float-right">
+            Créer le {{ trick.createdAt | format_datetime(locale='fr') }}
+        </div>
+    </div>
+</div>
