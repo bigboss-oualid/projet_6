@@ -13,7 +13,7 @@ function readURL(input) {
         showDefaultImg();
     };
     reader.onerror = function() {
-        alert("Une erreur est servenue: " + this.error.code);
+        alert("Une erreur est survenue: " + this.error.code);
     };
     reader.readAsDataURL(inputFiles[0]);
 
@@ -140,6 +140,14 @@ $(document).on('focus', '[id*="trick_videos_"]', function(){
     }
 });
 
+/*Display tooltip info 'how to add video embedded code?'*/
+$(document).on('click',".tooltip-info",function() {
+    console.log('hallo');
+    $(this).popover('toggle');
+}).on('blur',".tooltip-info",function() {
+    $(this).popover('hide');
+});
+
 /*remove video from modal*/
 $(document).on('click','[id*="modal-remove-"]', function(){
     let index = $(this).attr('id').split("-");
@@ -171,7 +179,7 @@ $("body").on("click", ".btn-remove", function() {
     $(strBtn).remove();
 });
 
-/*Add disbled att to select category input*/
+/*Add disabled attr to select group input*/
 $('select > option[value= ""]').attr('disabled', true);
 
 /*Add select2*/

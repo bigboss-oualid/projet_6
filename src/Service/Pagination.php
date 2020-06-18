@@ -288,7 +288,7 @@ class Pagination
 	private function error(){
 
 		if(empty($this->entityClass)){
-			throw  new \Exception("The entity used by pagination service is not specified ! Resolve the problem by using the method [ setEntityClass() ] from object 'Pagination'");
+			throw  new \UnexpectedValueException("The entity used by pagination service is not specified ! Resolve the problem by using the method [ setEntityClass() ] from object 'Pagination'");
 		}
 	}
 }

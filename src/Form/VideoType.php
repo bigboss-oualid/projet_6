@@ -17,8 +17,8 @@ class VideoType extends AbstractType
 			->add('embedCode', TextareaType::class, [
 				'label' => false,
 				'attr' => [
-					'placeholder' 	=> "Entrer le code inegré de la video",
-					//'style' => 'display:none'
+					'placeholder' => "Entrer le code inegré de la video",
+					'rows' => 5
 				]
 			])
 		;
