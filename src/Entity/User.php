@@ -121,12 +121,24 @@ class User implements UserInterface
      */
     private $enabled;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="author", orphanRemoval=true)
+     */
+    private $comments;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Rating", mappedBy="author", orphanRemoval=true)
+     */
+    private $ratings;
+
     public function __construct()
     {
-        $this->tricks = new ArrayCollection();
-	    $this->createdAt = new \DateTime();
-        $this->userRoles = new ArrayCollection();
+        $this->tricks        = new ArrayCollection();
+	    $this->createdAt     = new \DateTime();
+        $this->userRoles     = new ArrayCollection();
         $this->updatedTricks = new ArrayCollection();
+        $this->comments      = new ArrayCollection();
+        $this->ratings       = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -159,9 +171,9 @@ class User implements UserInterface
     }
 
 	public function getFullName(): String
-	{
-		return ucwords("{$this->getFirstName()} {$this->getLastName()}");
-	}
+                              	{
+                              		return ucwords("{$this->getFirstName()} {$this->getLastName()}");
+                              	}
 
     public function getUsername(): ?string
     {
@@ -200,21 +212,21 @@ class User implements UserInterface
     }
 
 	public function getToken(): ?Token
-    {
-        return $this->token;
-    }
+                                  {
+                                      return $this->token;
+                                  }
 
 	public function setToken(?Token $token): self
-    {
-        $this->token = $token;
-
-        // set the owning side of the relation if necessary
-        if ($token != null && $token->getUser() !== $this) {
-            $token->setUser($this);
-        }
-
-        return $this;
-    }
+                                  {
+                                      $this->token = $token;
+                              
+                                      // set the owning side of the relation if necessary
+                                      if ($token != null && $token->getUser() !== $this) {
+                                          $token->setUser($this);
+                                      }
+                              
+                                      return $this;
+                                  }
 
     public function getCreatedAt(): ?\DateTimeInterface
     {
@@ -277,21 +289,21 @@ class User implements UserInterface
 
 
 	public function getRoles(): array
-	{
-		 $roles = $this->userRoles->map(function (Role $role){
-		     return $role->getTitle();
-		 })->toArray();
-
-		 $roles[] = 'ROLE_USER';
-		 //dd($roles);
-
-		  return $roles;
-	}
+                              	{
+                              		 $roles = $this->userRoles->map(function (Role $role){
+                              		     return $role->getTitle();
+                              		 })->toArray();
+                              
+                              		 $roles[] = 'ROLE_USER';
+                              		 //dd($roles);
+                              
+                              		  return $roles;
+                              	}
 
 	public function getPassword():? String
-	{
-		return $this->hash;
-	}
+                              	{
+                              		return $this->hash;
+                              	}
 
 	public function getSalt() {}
 
@@ -364,6 +376,68 @@ class User implements UserInterface
     public function setEnabled(bool $enabled): self
     {
         $this->enabled = $enabled;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->contains($comment)) {
+            $this->comments->removeElement($comment);
+            // set the owning side to null (unless already changed)
+            if ($comment->getAuthor() === $this) {
+                $comment->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Rating[]
+     */
+    public function getRatings(): Collection
+    {
+        return $this->ratings;
+    }
+
+    public function addRating(Rating $rate): self
+    {
+        if (!$this->ratings->contains($rate)) {
+            $this->ratings[] = $rate;
+	        $rate->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRating(Rating $rate): self
+    {
+        if ($this->ratings->contains($rate)) {
+            $this->ratings->removeElement($rate);
+            // set the owning side to null (unless already changed)
+            if ($rate->getAuthor() === $this) {
+	            $rate->setAuthor(null);
+            }
+        }
 
         return $this;
     }

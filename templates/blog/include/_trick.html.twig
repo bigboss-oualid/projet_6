@@ -1,10 +1,17 @@
 <div class="card mb-4">
     <div class="card-body">
-        <h5 class="h1 card-title text-center">
-            <a href="{{ path('blog.show', {slug: trick.slug, id: trick.id}) }}">
-                {{ trick.title }}
-            </a>
-        </h5>
+        <div class=" card-title text-center">
+            <h3 class="h1">
+                <a href="{{ path('blog.show', {slug: trick.slug, id: trick.id}) }}">
+                    {{ trick.title }}
+                </a>
+            </h3>
+            {% if trick.ratings|length > 0 %}
+                {% include 'partials/_rating.html.twig' with{'rating': trick.avgRatings} %}
+            {% else %}
+                <small>Pas encore évalué</small>
+            {% endif %}
+        </div>
         <p class="card-text display-5">{{ trick.description}}</p>
         <div class="row float-right">
             <div class="col-12 blockquote-footer">

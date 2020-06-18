@@ -34,6 +34,15 @@ class UserUpdateTrick
      */
     private $updatedAt;
 
+	/**
+	 * set the creation date automatically
+	 *
+	 * @ORM\PrePersist()
+	 */
+	public function prePersist(): void{
+		$this->updatedAt = new \DateTime();
+	}
+
     public function __construct(User $author, Trick $trick)
     {
     	$this->trick = $trick;

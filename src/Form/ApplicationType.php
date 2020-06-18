@@ -19,7 +19,7 @@ class ApplicationType extends AbstractType
 	 *
 	 * @return array
 	 */
-	protected function getConfiguration($label, $attr, $options = []): array {
+	protected function getConfiguration($label, $attr = [], $options = []): array {
 		return array_merge([
 			'label' => $label,
 			'attr'  => $attr
