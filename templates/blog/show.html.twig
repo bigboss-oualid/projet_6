@@ -6,8 +6,24 @@
     <div class="container text-center">
         <h3 class="m-5">{{ trick.title }}</h3>
         <p >{{ trick.description }}</p>
-        <div class="blockquote-footer float-right">
-            Créer le {{ trick.createdAt | format_datetime(locale='fr') }}
+        <div class="row float-right">
+            <div class="col-12 blockquote-footer">
+                Créer le {{ trick.createdAt | format_datetime(locale='fr') }}
+            </div>
+            <div class="col-12">
+                <a href="{{ path('user.show', {'username': trick.author.username}) }}">
+                    <span class="badge badge-warning">par {{ trick.author.username|title  }}</span>
+                </a>
+            </div>
+            {% if trick.updatedBy is not empty%}
+                {% set updated=trick.updatedBy|last %}
+            <div class="col-12">
+                <a href="{{ path('user.show', {'username': updated.author.username}) }}">
+                    <span class="badge badge-dark"> Récemment modifié par {{ updated.author.username|title  }}</span>
+                </a>
+                <span> à {{ updated.updatedAt | format_datetime(locale='fr') }}</span>
+            </div>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

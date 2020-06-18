@@ -6,13 +6,28 @@
             </a>
         </h5>
         <p class="card-text display-5">{{ trick.description}}</p>
-        <div class="blockquote-footer float-right">
-            Créer le {{ trick.createdAt | format_datetime(locale='fr') }}
+        <div class="row float-right">
+            <div class="col-12 blockquote-footer">
+                Créer le {{ trick.createdAt | format_datetime(locale='fr') }}
+            </div>
+            <div class="col-12">
+                Créer par
+                <a href="{{ path('user.show', {'username': trick.author.username}) }}">
+                    <span class="badge badge-warning">{{ trick.author.username }}</span>
+                </a>
+            </div>
         </div>
-        {% if trick.published%}
-            <div class="text-success  float-right"> Publier</div>
-        {% else %}
-            <div class="text-danger blockquote-footer float-right"> brouillon</div>
-        {% endif %}
     </div>
 </div>
+{% if app.user %}
+<div class="mb-5 text-center">
+    <a href="{{ path('trick.edit', {slug: trick.slug, id: trick.id}) }}" class="btn btn-secondary"><i class="fa fa-pencil"></i></a>
+    {% if app.user == trick.author  %}
+        <form method="post" action="{{ path('trick.delete', {id: trick.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes vous sûr de vouloir supprimer la figure: {{ trick.title }}?')">
+            <input type="hidden" name="_method" value="DELETE">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ trick.id) }}">
+            <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
+        </form>
+    {% endif %}
+</div>
+{% endif %}

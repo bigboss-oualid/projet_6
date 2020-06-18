@@ -18,9 +18,14 @@ class BlogController extends AbstractController
 	 */
 	public function home(TrickRepository $repository): Response
 	{
-		$tricks = $repository->findBy([
-			"published" => true
-		]);
+
+		if($this->getUser()){
+			$tricks = $repository->findAll();
+		}else{
+			$tricks = $repository->findBy([
+				"published" => true
+			]);
+		}
 
 		return $this->render('blog/home.html.twig', [
 			'current_menu'    => 'home',
@@ -32,6 +37,7 @@ class BlogController extends AbstractController
 	 * @Route("/tricks/{slug}/{id}", name="blog.show", requirements={"slug": "[a-z0-9\-]*", "id": "\d+"})
 	 * @param Trick   $trick
 	 * @param String  $slug
+	 *
 	 * @return Response
 	 */
 	public function show(Trick $trick, String $slug)

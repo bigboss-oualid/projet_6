@@ -25,20 +25,18 @@ abstract class Picture
 	 * @var File|null
 	 * @Assert\Image(
 	 *     mimeTypes={"image/jpeg", "image/png", "image/jpg"},
-	 *     maxSize="2M"
+	 *     maxSize="2M",
+	 *     mimeTypesMessage = "Veuillez télécharger une image valide",
+	 *     maxSizeMessage = "Veuillez télécharger une image <= 2Mo"
+	 *
 	 * )
 	 */
 	private $imageFile;
 
     /**
-     * @ORM\Column(type="string", length=100)
-     */
-    protected $title;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
-    protected $altName;
+    protected $oldName;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -72,34 +70,21 @@ abstract class Picture
 	public function setImageFile(?File $imageFile): self
 	{
 		if($imageFile){
-			$originName = $imageFile->getClientOriginalName();
-			$this->altName = $originName;
+			$this->oldName = $imageFile->getClientOriginalName();
 		}
 		$this->imageFile = $imageFile;
 
 		return $this;
 	}
 
-	public function getTitle(): ?string
-	{
-		return $this->title;
-	}
-
-    public function setTitle(string $title): self
+    public function getOldName(): ?string
     {
-        $this->title = $title;
-
-        return $this;
+        return $this->oldName;
     }
 
-    public function getAltName(): ?string
+    public function setOldName(string $oldName): self
     {
-        return $this->altName;
-    }
-
-    public function setAltName(string $altName): self
-    {
-        $this->altName = $altName;
+        $this->oldName = $oldName;
         return $this;
     }
 
