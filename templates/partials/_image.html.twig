@@ -1,0 +1,29 @@
+
+<div class="col-md-4 mb-2" id="illustration-{{ form.vars.name}}">
+    <div class="border p-2 w-100">
+        <div class="text-center p-2">
+        {% if form.vars.value.filename is defined  %}
+            <img  id="illustration-holder-{{ form.vars.name }}" src="{{ asset('images/' ~ form.vars.value.filename) }}" width="120" height="120" alt="{{ form.vars.value.altName }}">
+        {% else %}
+            <img id="illustration-holder-{{ form.vars.name }}" src="{{ asset('images/placeholder.png') }}" style='max-width:120px;'/>
+        {%  endif %}
+        </div>
+
+        {% if form.vars.value.altName is defined and form.vars.value.altName != null%}
+            {{ form_row(form.imageFile, {
+                attr: {
+                    'placeholder': form.vars.value.altName
+                }
+                })
+            }}
+        {% else %}
+            {{ form_row(form.imageFile, {
+                attr: {
+                    'placeholder': 'Choisir une illustration'
+                }
+            })
+            }}
+        {% endif %}
+        <button type="button" class="btn-btn-sm btn-danger btn-remove" data-rel="#illustration-{{ form.vars.name }}"><i class="fa fa-trash"></i> Supprimer</button>
+    </div>
+</div>

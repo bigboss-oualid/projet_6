@@ -15,7 +15,7 @@ class Illustration extends Picture
      */
     private $trick;
 
-    public function getTrick(): Trick
+	public function getTrick(): Trick
     {
         return $this->trick;
     }
@@ -23,7 +23,9 @@ class Illustration extends Picture
     public function setTrick(Trick $trick): self
     {
         $this->trick = $trick;
+	    parent::setTitle($trick->getTitle());
 
         return $this;
     }
+
 }

@@ -4,6 +4,8 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    locale: 'fr'
+    uploads_absolute_dir: '%kernel.project_dir%/public/images'
 
 services:
     # default configuration for services in *this* file
@@ -22,6 +24,17 @@ services:
     App\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
+
+    App\Service\FileUploader:
+        arguments:
+          $targetDirectory: '%uploads_absolute_dir%'
+
+    App\Listener\FileUploaderSubscriber:
+        arguments:
+          $uploader: '@App\Service\FileUploader'
+          $targetDirectory: '%uploads_absolute_dir%'
+        tags:
+          - { name: doctrine.event_subscriber }
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

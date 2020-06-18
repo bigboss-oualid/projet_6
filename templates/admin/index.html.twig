@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des Tricks - {{ parent() }} {% endblock %}
+
+{% block body %}
+    <div class="jumbotron text-center">
+        <h1>Jimmy S. Snowboard Tricks</h1>
+        <p>loCollectives harvest from attitudes like ancient species.Vox, verpa, et planeta.Fluff seven rhubarbs, squid, and brown sugar in a large pan over medium heat, refrigerate for twelve minutes and jumble with some quinoa.</p>
+    </div>
+
+    <div class="container">
+        <h2 class="mb-4">Tous les Tricks</h2>
+        <a href="{{ path('admin.trick.create') }}" class="mb-5 btn btn-success"><i class="fa fa-plus"> Ajouter nouvelle figure</i></a>
+        <div class="row flex">
+            {% for trick in tricks%}
+                <div class="col-3">
+                    {% include 'admin/include/_trick.html.twig' %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}
