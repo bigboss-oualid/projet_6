@@ -23,8 +23,9 @@ class Illustration extends Picture
 
     public function setTrick(?Trick $trick): self
     {
-    	if($trick)
-            $this->trick = $trick;
+    	if($trick){
+		    $this->trick = $trick;
+	    }
 
         return $this;
     }

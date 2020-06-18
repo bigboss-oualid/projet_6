@@ -99,7 +99,8 @@ abstract class Picture
     public function setFilename(string $filename): self
     {
         $this->filename = $filename;
-	    if($this->imageFile = null){}
+	    //resolve serializer problem
+	    $this->imageFile = null;
 
         return $this;
     }

@@ -182,16 +182,15 @@ class SecurityController extends AbstractController
 					$this->em->flush();
 
 					$this->addFlash('info', "Votre compte est activé, désormais vous pouvez vous connectez!");
-					return $this->redirectToLogin();
+
+				}else {
+					$this->addFlash('danger', "Une erreur est survenue, le token <strong>[ {$tokenCode} ]</strong> du lien d'activation est incorrect!</br>Vérifier l'email de confirmation à nouveau!");
 				}
-				$this->addFlash('danger', "Une erreur est survenue, le token <strong>[ {$tokenCode} ]</strong> du lien d'activation est incorrect!</br>Vérifier l'email de confirmation à nouveau!");
-
-				return $this->redirectToLogin();
 			} else {
-				$this->addFlash('warning', "!!!  Cher utilisateur <strong>{$user->getFullName()}</strong> !!!<br/> Votre compte est déjà activé, désormais vous pouvez vous connecter !");
-
-				return $this->redirectToLogin();
+				$this->addFlash('warning', "!!!  Cher utilisateur <strong>{$user->getFullName()}</strong> !!!<br/> Votre compte est déjà activé, désormais vous pouvez vous connecter!");
 			}
+
+			return $this->redirectToLogin();
 		}
 
 		return $this->render('security/confirm_account.html.twig',[
@@ -266,25 +265,21 @@ class SecurityController extends AbstractController
 			/* @var $user User */
 			$user =	$this->tokenManager->getUserFromToken($tokenCode);
 
-			if ($user === null) {
+			if ($user === null || $this->tokenManager->isTokenExpired()) {
 
 				$this->addFlash('danger', "Le lien est incorrect ou expiré, veuillez demander un nouveau lien, afin de  réinitialiser votre mot de passe !");
-				return $this->redirectToLogin();
+
+			} else {
+
+				$user->setHash($passwordEncoder->encodePassword($user, $request->request->get('password_update')['newPassword']));
+
+				$this->em->persist($user);
+				$this->tokenManager->deleteToken();
+				$this->em->flush();
+
+				$this->addFlash('success', 'Votre mot de passe est mis à jour, Veuillez vous connecter avec votre nouveau mot de passe');
 			}
 
-			if($this->tokenManager->isTokenExpired()){
-
-				$this->addFlash('danger', 'Le lien est expiré, veuillez demander un nouveau lien, afin de réinitialiser votre mot de passe !');
-				return $this->redirectToLogin();
-			}
-
-			$user->setHash($passwordEncoder->encodePassword($user, $request->request->get('password_update')['newPassword']));
-
-			$this->em->persist($user);
-			$this->tokenManager->deleteToken();
-			$this->em->flush();
-
-			$this->addFlash('success', 'Votre mot de passe est mis à jour, Veuillez vous connecter avec votre nouveau mot de passe');
 
 			return $this->redirectToLogin();
 		}

@@ -88,8 +88,9 @@ final class AppFixtures extends Fixture
 				->setHash($this->encoder->encodePassword($userEntity, $user['Password']))
 				->setAvatar($avatar)
 				->setEnabled(True);
-			if($user['Firstname'] === 'Admin')
+			if($user['Firstname'] === 'Admin'){
 				$userEntity->addUserRole($adminRole);
+			}
 
 			$manager->persist($avatar);
 			$manager->persist($userEntity);

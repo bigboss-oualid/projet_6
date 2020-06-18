@@ -34,10 +34,12 @@ class Pagination
 	{
 		$request = $requestStack->getCurrentRequest();
 		$this->route        = $request->attributes->get('_route');
-		if($request->get('page'))
+		if($request->get('page')){
 			$this->currentPage  = $request->get('page');
-		if($request->get('offset'))
+		}
+		if($request->get('offset')){
 			$this->offset  = $request->get('offset');
+		}
 		$this->em           = $em;
 		$this->twig         = $twig;
 		$this->buttonTemplatePath = $buttonTemplatePath;
@@ -68,14 +70,14 @@ class Pagination
 	 * @throws \Twig\Error\SyntaxError
 	 */
 	public function display(int $startPage = null){
-		$currentPage = $startPage;
-		if (!$startPage)
-			$currentPage = $this->currentPage;
+		if (!$startPage){
+			$startPage = $this->currentPage;
+		}
 
 		$this->twig->display($this->buttonTemplatePath, [
 			'pages' => $this->getPages(),
 			'route' => $this->route,
-			'page'  => $currentPage,
+			'page'  => $startPage,
 			'parameters' => $this->routeParameters
 		]);
 	}
@@ -87,8 +89,9 @@ class Pagination
 	public function getData(){
 		$this->error();
 		//determine offset if object isn't deleted
-		if($this->offset == null)
+		if($this->offset == null){
 			$this->offset = $this->currentPage * $this->limit - $this->limit;
+		}
 		$repository = $this->em->getRepository($this->entityClass);
 
 		return $repository->findBy($this->criteria, ['createdAt' => 'DESC'], $this->limit, $this->offset);

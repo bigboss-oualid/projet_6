@@ -23,8 +23,9 @@ class UserController extends AbstractController
 	 */
 	public function index(User $user, $page, $offset, Pagination $pagination): Response
 	{
-		if($user == $this->getUser())
+		if($user == $this->getUser()){
 			return $this->redirectToRoute('account.index');
+		}
 
 		$pagination->setEntityClass(Trick::class)
 			->setOffset($offset)

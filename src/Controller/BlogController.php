@@ -163,25 +163,24 @@ class BlogController extends AbstractController
 
 		$this->pagination->setRoute('/tricks/' . $slug . '/'. $trick->getId());
 
+		$data = [
+			'current_menu'    => 'show',
+			'trick'           => $trick,
+			'pagination' => $this->pagination,
+		];
+
 		/** @var User $user */
 		if($user = $this->getUser()){
 
 			$forms = $this->handleCommentOrRating($trick, $user, $request);
 
-			return $this->render('blog/show.html.twig', [
-				'current_menu'    => 'show',
-				'trick'           => $trick,
+			$data = array_merge($data,[
 				'rating_form'     => $forms['rating']->createView(),
 				'comment_form'    => $forms['comment']->createView(),
-				'pagination' => $this->pagination
 			]);
 		}
 
-		return $this->render('blog/show.html.twig', [
-			'current_menu'    => 'show',
-			'trick'           => $trick,
-			'pagination' => $this->pagination,
-		]);
+		return $this->render('blog/show.html.twig', $data);
 	}
 
 	/**
@@ -198,10 +197,8 @@ class BlogController extends AbstractController
 			$errors[] = $error->getMessage();
 		}
 		foreach ($form->all() as $childForm) {
-			if ($childForm instanceof FormInterface) {
-				if ($childErrors = $this->getErrorsFromForm($childForm)) {
-					$errors[$childForm->getName()] = $childErrors;
-				}
+			if ($childForm instanceof FormInterface && $childErrors = $this->getErrorsFromForm($childForm)) {
+				$errors[$childForm->getName()] = $childErrors;
 			}
 		}
 		return $errors;

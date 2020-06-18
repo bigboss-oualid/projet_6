@@ -204,9 +204,9 @@ class Trick
 	    if ($this->videos->contains($video)) {
 	        $this->videos->removeElement($video);
 	        // set the owning side to null (unless already changed)
-	        /*if ($video->getTrick() === $this) {
+	        if ($video->getTrick() === $this) {
 	            $video->setTrick(null);
-	        }*/
+	        }
 	    }
 
 	    return $this;
@@ -228,8 +228,9 @@ class Trick
 	public function createSlug(EventArgs $event): void
 	{
 	  //create slug if trick is new or his title is modified
-	    if($this->id == null || (isset($event->getEntityChangeSet()['title'])))
-	        $this->slug = $this->slugify($this->title);
+	    if($this->id == null || (isset($event->getEntityChangeSet()['title']))){
+		    $this->slug = $this->slugify($this->title);
+	    }
 	}
 
 	public function isPublished(): ?bool
@@ -342,10 +343,12 @@ class Trick
 	 * @return Int
 	 */
 	public function countComment(): Int{
-               		if($this->comments) return count($this->comments);
-               
-               		return 0;
-               	}
+        if($this->comments){
+	        return count($this->comments);
+        }
+
+        return 0;
+    }
 
     public function removeRating(Rating $rating): self
     {
