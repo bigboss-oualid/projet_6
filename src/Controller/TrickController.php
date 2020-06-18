@@ -84,9 +84,6 @@ class TrickController extends AbstractController
 				    $user->addUpdatedTrick($update);
 				    $trick->addUpdatedBy($update);
 			    }
-
-			    //$update->setUpdatedAt(new \DateTime());
-
 		    }
 
 		    $this->em->persist($trick);
@@ -98,6 +95,7 @@ class TrickController extends AbstractController
 	    }
 
 		return $this->render('form/trick.html.twig', [
+			'current_menu'    => 'create_trick',
 			'formTrick' => $form->createView(),
 			'editMode'  => $trick->getId() !== null
 		]);

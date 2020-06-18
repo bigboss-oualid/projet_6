@@ -23,7 +23,7 @@
                         <img class="avatar avatar-small" src="{{ asset('images/' ~ app.user.avatar.filename) }}" alt="avatar de {{ app.user.fullName }}"> {{ app.user.fullName }}
                     </a>
                     <div class="navbar-light bg-warning dropdown-menu dropdown-menu-right" aria-labelledby="accountDropdownLink">
-                        <a href="{{ path('trick.create') }}" class="dropdown-item">Créer une Figure</a>
+                        <a href="{{ path('trick.create') }}" class="dropdown-item {% if current_menu is defined and current_menu == 'create_trick' %}font-weight-bold {% endif %}">Créer une Figure</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item {% if current_menu is defined and current_menu == 'index' %}font-weight-bold {% endif %}" href="{{ path('account.index') }}"><span class="sr-only">(current)</span>Mon Compte</a>
                         <a class="dropdown-item {% if current_menu is defined and current_menu == 'profile' %}font-weight-bold {% endif %}" href="{{ path('account.profile') }}"><span class="sr-only">(current)</span>Mdifier mon profil</a>

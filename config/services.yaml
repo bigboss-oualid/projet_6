@@ -6,6 +6,7 @@
 parameters:
     locale: 'fr'
     uploads_absolute_dir: '%kernel.project_dir%/public/images'
+    limit_pagination: 4
 
 services:
     # default configuration for services in *this* file
@@ -35,6 +36,11 @@ services:
           $targetDirectory: '%uploads_absolute_dir%'
         tags:
           - { name: doctrine.event_subscriber }
+
+    App\Service\Pagination:
+        arguments:
+          $buttonTemplatePath: 'partials/_load_more.html.twig'
+          $limit: '%limit_pagination%'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
