@@ -86,9 +86,9 @@ $(document).on('click','.js-del-in',function (e){
                         });
                     }
                 },
-                error: function(e)
+                error: function(error)
                 {
-                    console.log('Error: ' + e);
+                    console.log('Error: ' + error);
                 }
             });
         } else {

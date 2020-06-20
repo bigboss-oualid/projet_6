@@ -5,6 +5,8 @@
 @import "~simplelightbox/dist/simple-lightbox.min.css";
 @import "~slick-carousel/slick/slick.css";
 @import "~slick-carousel/slick/slick-theme.css";
+@import "~typeface-kaushan-script";
+@import "~typeface-open-sans";
 
 body {
     background: url("/images/slider/background.jpg") no-repeat center center fixed;
