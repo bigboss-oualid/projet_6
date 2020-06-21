@@ -170,7 +170,6 @@ class SecurityController extends AbstractController
 
 						$this->addFlash('danger', "le code que vous avez entré <strong>[ $confirmationCode]</strong> est invalide<br/>!!! Vérifier votre code svp !!!");
 						return $this->redirectToRoute('security.confirm_account', [
-							'current_menu'    => 'login',
 							'username'        => $user->getUsername(),
 							'tokenCode'       => $tokenCode
 						]);

@@ -96,19 +96,13 @@ class TrickController extends AbstractController
 				'trick' => $trick->getId()
 			]);
 			//Save every author only one time by updating
-			if(!$update){
-				$update = new UserUpdateTrick($user, $trick);
-				$user->addUpdatedTrick($update);
-				$trick->addUpdatedBy($update);
-			}else{
-				$user->removeUpdatedTrick($update);
+			if($update){
 				$trick->removeUpdatedBy($update);
-				$update = new UserUpdateTrick($user, $trick);
-				$user->addUpdatedTrick($update);
-				$trick->addUpdatedBy($update);
 			}
 
-			$this->em->persist($trick);
+			$update = new UserUpdateTrick($user, $trick);
+
+			$this->em->persist($update);
 			$this->em->flush();
 
 			$this->addFlash('success', "la figure <strong>{$trick->getTitle()}</strong> a bien été  modifiée !");

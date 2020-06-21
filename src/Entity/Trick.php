@@ -62,11 +62,6 @@ class Trick
 	private $slug;
 
 	/**
-	 * @ORM\Column(type="boolean")
-	 */
-	private $published = 1;
-
-	/**
 	 * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="tricks")
 	 * @ORM\JoinColumn(nullable=false)
 	 */
@@ -136,13 +131,6 @@ class Trick
 	public function getCreatedAt(): ?\DateTimeInterface
 	{
 		return $this->createdAt;
-	}
-
-	public function setCreatedAt(\DateTimeInterface $createdAt): self
-	{
-	    $this->createdAt = $createdAt;
-
-	    return $this;
 	}
 
 	/**
@@ -227,22 +215,20 @@ class Trick
 	 */
 	public function createSlug(EventArgs $event): void
 	{
-	  //create slug if trick is new or his title is modified
+	    //create slug if trick is new or his title is modified
 	    if($this->id == null || (isset($event->getEntityChangeSet()['title']))){
-		    $this->slug = $this->slugify($this->title);
+		    $delimiter = '-';
+		    $oldLocale = setlocale(LC_ALL, '0');
+		    setlocale(LC_ALL, 'en_US.UTF-8');
+		    $clean = iconv('UTF-8', 'ASCII//TRANSLIT', $this->title);
+		    $clean = preg_replace("/[^a-zA-Z0-9\/_|+ -]/", '', $clean);
+		    $clean = preg_replace("/[\/_|+ -]+/", $delimiter, $clean);
+		    $clean = strtolower($clean);
+		    $clean = trim($clean, $delimiter);
+		    setlocale(LC_ALL, $oldLocale);
+
+		    $this->slug = $clean;
 	    }
-	}
-
-	public function isPublished(): ?bool
-	{
-	    return $this->published;
-	}
-
-	public function setPublished(bool $published): self
-	{
-	    $this->published = $published;
-
-	    return $this;
 	}
 
 	public function getAuthor(): ?User
@@ -296,29 +282,6 @@ class Trick
         return $this->comments;
     }
 
-    public function addComment(Comment $comment): self
-    {
-        if (!$this->comments->contains($comment)) {
-            $this->comments[] = $comment;
-            $comment->setTrick($this);
-        }
-
-        return $this;
-    }
-
-    public function removeComment(Comment $comment): self
-    {
-        if ($this->comments->contains($comment)) {
-            $this->comments->removeElement($comment);
-            // set the owning side to null (unless already changed)
-            if ($comment->getTrick() === $this) {
-                $comment->setTrick(null);
-            }
-        }
-
-        return $this;
-    }
-
     /**
      * @return Collection|Rating[]
      */
@@ -327,18 +290,8 @@ class Trick
         return $this->ratings;
     }
 
-    public function addRating(Rating $rating): self
-    {
-        if (!$this->ratings->contains($rating)) {
-            $this->ratings[] = $rating;
-	        $rating->setTrick($this);
-        }
-
-        return $this;
-    }
-
 	/**
-	 * get Average of Ratings
+	 * count comments
 	 *
 	 * @return Int
 	 */
@@ -348,19 +301,6 @@ class Trick
         }
 
         return 0;
-    }
-
-    public function removeRating(Rating $rating): self
-    {
-        if ($this->ratings->contains($rating)) {
-            $this->ratings->removeElement($rating);
-            // set the owning side to null (unless already changed)
-            if ($rating->getTrick() === $this) {
-	            $rating->setTrick(null);
-            }
-        }
-
-        return $this;
     }
 
 	/**
@@ -378,26 +318,6 @@ class Trick
 	    }
 
 	    return 0;
-	}
-
-	/**
-	 * Initialize le slug
-	 *
-	 * @param string $string
-	 * @param string $delimiter
-	 *
-	 * @return string
-	 */
-	private function slugify(String $string, String $delimiter = '-'): string {
-	    $oldLocale = setlocale(LC_ALL, '0');
-	    setlocale(LC_ALL, 'en_US.UTF-8');
-	    $clean = iconv('UTF-8', 'ASCII//TRANSLIT', $string);
-	    $clean = preg_replace("/[^a-zA-Z0-9\/_|+ -]/", '', $clean);
-	    $clean = preg_replace("/[\/_|+ -]+/", $delimiter, $clean);
-	    $clean = strtolower($clean);
-	    $clean = trim($clean, $delimiter);
-	    setlocale(LC_ALL, $oldLocale);
-	    return $clean;
 	}
 
     /**
