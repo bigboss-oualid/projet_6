@@ -6,6 +6,10 @@ use App\Entity\Picture;
 use App\Service\FileUploader;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Mapping\PostRemove;
+use Doctrine\ORM\Mapping\PrePersist;
+use Doctrine\ORM\Mapping\PreRemove;
+use Doctrine\ORM\Mapping\PreUpdate;
 
 class FileUploaderSubscriber implements EventSubscriber
 {
@@ -30,10 +34,10 @@ class FileUploaderSubscriber implements EventSubscriber
 	public function getSubscribedEvents()
 	{
 		return [
-			'prePersist',
-			'preUpdate',
-			'preRemove',
-			'postRemove'
+			PrePersist::class =>'prePersist',
+			PreUpdate::class  =>'preUpdate',
+			PreRemove::class  =>'preRemove',
+			PostRemove::class =>'postRemove'
 		];
 	}
 

@@ -22,10 +22,11 @@ use Symfony\Component\Yaml\Yaml;
  */
 final class AppFixtures extends Fixture
 {
+
 	/**
 	 * @var UserPasswordEncoderInterface
 	 */
-	private $encoder;
+	protected $encoder;
 
 	/**
 	 * AppFixtures constructor.
@@ -42,7 +43,7 @@ final class AppFixtures extends Fixture
 	 *
 	 * @return array
 	 */
-	private function getDataFixture(string $entityName) :array
+	protected function getDataFixture(string $entityName) :array
 	{
 		return Yaml::parse(file_get_contents(__DIR__.'/Fixtures/'. $entityName .'.yaml', true));
 	}
@@ -60,42 +61,10 @@ final class AppFixtures extends Fixture
 		$comments      = $this->getDataFixture('Comment');
 		$groups        = $this->getDataFixture('Group');
 		//Create Groups
-		foreach ($groups as $name => $group) {
-			$groupEntity = new Group();
-			$groupEntity->setName($group['Name']);
-
-			$this->addReference($name, $groupEntity);
-			$manager->persist($groupEntity);
-		}
-
-		//Create admin role
-		$adminRole = new Role();
-		$adminRole->setTitle('ROLE_ADMIN');
-		$manager->persist($adminRole);
+		$this->addGroups($groups, $manager);
 
 		//Create users
-		foreach ($users as $name => $user) {
-			$avatar = new Avatar();
-			$userEntity = new User();
-
-			$avatar->setFilename($avatars[$name]['filename'])
-				->setPath($avatars[$name]['path'])
-				->setUser($userEntity);
-			$userEntity->setUsername($user['Username'])
-				->setLastName($user['Lastname'])
-				->setFirstName($user['Firstname'])
-				->setEmail($user['Email'])
-				->setHash($this->encoder->encodePassword($userEntity, $user['Password']))
-				->setAvatar($avatar)
-				->setEnabled(True);
-			if($user['Firstname'] === 'Admin'){
-				$userEntity->addUserRole($adminRole);
-			}
-
-			$manager->persist($avatar);
-			$manager->persist($userEntity);
-			$this->addReference($name, $userEntity);
-		}
+		$this->addUsers($users, $avatars, $manager);
 
 		//Set references entries to managed $objects (ilustrations & videos)
 		foreach ($illustrations as $name => $illustration) {
@@ -115,6 +84,57 @@ final class AppFixtures extends Fixture
 		}
 
 		//Create Tricks
+		$this->addTricks($tricks, $manager);
+
+		//Create Comments
+		$this->addComments($comments, $manager);
+
+
+		$manager->flush();
+		echo "\n Loading fixtures is terminated!\n";
+	}
+
+	private function addGroups($groups, ObjectManager $manager){
+		foreach ($groups as $name => $group) {
+			$groupEntity = new Group();
+			$groupEntity->setName($group['Name']);
+
+			$this->addReference($name, $groupEntity);
+			$manager->persist($groupEntity);
+		}
+	}
+
+	private function addUsers($users, $avatars, ObjectManager $manager){
+		//Create admin role
+		$adminRole = new Role();
+		$adminRole->setTitle('ROLE_ADMIN');
+		$manager->persist($adminRole);
+
+		foreach ($users as $name => $user) {
+			$avatar = new Avatar();
+			$userEntity = new User();
+
+			$avatar->setUser($userEntity)
+				->setFilename($avatars[$name]['filename'])
+				->setPath($avatars[$name]['path']);
+			$userEntity->setUsername($user['Username'])
+				->setLastName($user['Lastname'])
+				->setFirstName($user['Firstname'])
+				->setEmail($user['Email'])
+				->setHash($this->encoder->encodePassword($userEntity, $user['Password']))
+				->setAvatar($avatar)
+				->setEnabled(True);
+			if($user['Firstname'] === 'Admin'){
+				$userEntity->addUserRole($adminRole);
+			}
+
+			$manager->persist($avatar);
+			$manager->persist($userEntity);
+			$this->addReference($name, $userEntity);
+		}
+	}
+
+	private function addTricks($tricks, objectManager $manager){
 		foreach ($tricks as $name => $trick) {
 			/**@var User $author */
 			$author = $this->getReference($trick['Reference']['Author']);
@@ -152,11 +172,13 @@ final class AppFixtures extends Fixture
 
 			$this->addReference($name, $trickEntity);
 		}
+	}
 
-		//Create Comments
+	private function addComments($comments, ObjectManager $manager){
 		foreach ($comments as $comment) {
 			/**@var Trick $trick*/
 			$trick = $this->getReference($comment['Reference']['Trick']);
+			/**@var User $author*/
 			$author = $this->getReference($comment['Reference']['Author']);
 
 			$commentEntity = new Comment();
@@ -166,8 +188,7 @@ final class AppFixtures extends Fixture
 
 			$manager->persist($commentEntity);
 		}
-
-		$manager->flush();
-		echo "\n Loading fixtures is terminated!\n";
 	}
 }
+
+
