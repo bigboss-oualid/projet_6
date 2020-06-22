@@ -110,32 +110,19 @@ class SecurityController extends AbstractController
 			if($user->getAvatar()->getImageFile() == null){
 				$user->setAvatar(null);
 			}
-			$hash = $encoder->encodePassword($user, $user->getHash());
-			$user->setHash($hash);
+			$user->setHash($encoder->encodePassword($user, $user->getHash()));
 
 			//Create token to activate new account
 			$token = $this->tokenManager->createToken($user, WITH_CONFIRMATION);
 
-			$url = $this->generateUrl('security.confirm_account',
-				[
-					'tokenCode' => $token->getTokenCode(),
-					'username' => $user->getUsername()
-				],
-				UrlGeneratorInterface::ABSOLUTE_URL
-			);
+			$url = $this->generateUrl('security.confirm_account', ['tokenCode' => $token->getTokenCode(), 'username' => $user->getUsername() ],UrlGeneratorInterface::ABSOLUTE_URL);
+
 			$token->setUrlActivation($url);
 
 			$this->em->persist($user);
 			$this->em->flush();
 
-			$this->mailer->send(
-				'emails/partials/confirmation_account.html.twig',
-				'Confirmation de votre compte',
-				[
-					'user' => $user,
-					'url'  => $url,
-					'confirmationCode' => $token->getConfirmationCode()
-				]);
+			$this->mailer->send('emails/partials/confirmation_account.html.twig','Confirmation de votre compte', ['user' => $user, 'url'  => $url, 'confirmationCode' => $token->getConfirmationCode()]);
 
 			$this->addFlash('success', "!!!  Félicitations  !!!<br/> Votre compte a bien été créé ! <br/>Un email de confirmation à été envoyé à <strong>{$user->getEmail()}</strong>!");
 			return $this->redirectToLogin();
@@ -169,10 +156,7 @@ class SecurityController extends AbstractController
 					if($confirmationCode != $userToken->getConfirmationCode()){
 
 						$this->addFlash('danger', "le code que vous avez entré <strong>[ $confirmationCode]</strong> est invalide<br/>!!! Vérifier votre code svp !!!");
-						return $this->redirectToRoute('security.confirm_account', [
-							'username'        => $user->getUsername(),
-							'tokenCode'       => $tokenCode
-						]);
+						return $this->redirectToRoute('security.confirm_account', ['username'=>$user->getUsername(), 'tokenCode'=> $tokenCode]);
 					}
 
 					$this->activateUser($user, $userToken);
@@ -183,7 +167,7 @@ class SecurityController extends AbstractController
 					$this->addFlash('info', "Votre compte est activé, désormais vous pouvez vous connectez!");
 
 				}else {
-					$this->addFlash('danger', "Une erreur est survenue, le token <strong>[ {$tokenCode} ]</strong> du lien d'activation est incorrect!</br>Vérifier l'email de confirmation à nouveau!");
+					$this->addFlash('danger', "Une erreur est survenue, le token <strong>[ {$tokenCode} ]</strong> du lien d'activation est incorrect!");
 				}
 			} else {
 				$this->addFlash('warning', "!!!  Cher utilisateur <strong>{$user->getFullName()}</strong> !!!<br/> Votre compte est déjà activé, désormais vous pouvez vous connecter!");
@@ -221,18 +205,9 @@ class SecurityController extends AbstractController
 			$token = $this->tokenManager->createToken($user);
 			$this->em->flush();
 
-			$url = $this->generateUrl('security.reset_password', [
-				'tokenCode' => $token->getTokenCode()],
-				UrlGeneratorInterface::ABSOLUTE_URL
-			);
+			$url = $this->generateUrl('security.reset_password', ['tokenCode' => $token->getTokenCode()],UrlGeneratorInterface::ABSOLUTE_URL);
 
-			$this->mailer->send(
-				'emails/partials/reset_password.html.twig',
-				'Réinitialisation du mot de passe',
-				[
-					'user' => $user,
-					'url'  => $url
-				]);
+			$this->mailer->send('emails/partials/reset_password.html.twig','Réinitialisation du mot de passe', ['user' => $user, 'url'  => $url]);
 
 			$this->addFlash('success', "Nous avons envoyé un lien à <strong>{$email}</strong>, pour rénitialiser votre mot de passe.<br/> Le lien expirera dans les deux heures suivantes!");
 
@@ -278,7 +253,6 @@ class SecurityController extends AbstractController
 
 				$this->addFlash('success', 'Votre mot de passe est mis à jour, Veuillez vous connecter avec votre nouveau mot de passe');
 			}
-
 
 			return $this->redirectToLogin();
 		}
