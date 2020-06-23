@@ -26,7 +26,7 @@ class FileUploader
 		 * @var UploadedFile $file
 		 */
 		$file = $entity->getImageFile();
-		$relativeDir = 'images/'.$this->getClassName($entity);
+		$relativeDir = 'images/uploads/'.$this->getClassName($entity);
 		$absoluteUploadDir = $this->targetDirectory.'/'.$relativeDir;
 
 		$originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);

@@ -31,8 +31,6 @@ services:
           $targetDirectory: '%absolute_uploads_dir%'
 
     App\Listener\FileUploaderSubscriber:
-        arguments:
-          $targetDirectory: '%absolute_uploads_dir%'
         tags:
           - { name: doctrine.event_subscriber }
 

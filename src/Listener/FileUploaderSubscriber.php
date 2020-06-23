@@ -17,27 +17,24 @@ class FileUploaderSubscriber implements EventSubscriber
 	 * @var FileUploader
 	 */
 	private $uploader;
-	private $targetDirectory;
 
 	/**
 	 * FileUploaderSubscriber constructor.
 	 *
 	 * @param FileUploader $uploader
-	 * @param              $targetDirectory
 	 */
-	public function __construct(FileUploader $uploader, $targetDirectory)
+	public function __construct(FileUploader $uploader)
 	{
 		$this->uploader = $uploader;
-		$this->targetDirectory = $targetDirectory;
 	}
 
 	public function getSubscribedEvents()
 	{
 		return [
-			PrePersist::class =>'prePersist',
-			PreUpdate::class  =>'preUpdate',
-			PreRemove::class  =>'preRemove',
-			PostRemove::class =>'postRemove'
+			PrePersist::class => 'prePersist',
+			PreUpdate::class  => 'preUpdate',
+			PreRemove::class  => 'preRemove',
+			PostRemove::class => 'postRemove'
 		];
 	}
 
