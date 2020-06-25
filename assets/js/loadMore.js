@@ -1,6 +1,6 @@
-function loaddmore(holder, pagesNumber, currentPage){
+function loaddmore(holder, pages, currentPage){
     let loadBtn = $('a.js-load');
-    if (currentPage > pagesNumber){
+    if (currentPage > pages){
         loadBtn.remove()
     }
 
@@ -23,7 +23,7 @@ function loaddmore(holder, pagesNumber, currentPage){
                 success: function(data) {
                     holder.append(data);
                     currentPage++;
-                    if (currentPage > pagesNumber){
+                    if (currentPage > pages){
                         e.currentTarget.remove()
                     } else{
                         incrementPages.text(currentPage)
@@ -43,8 +43,8 @@ function loaddmore(holder, pagesNumber, currentPage){
 
 
 
-let holder = $(".load-content");
-let data = holder.data('pagination')[0];
-let currentPage = data.currentPage;
+let holderContent = $(".load-content");
+let data = holderContent.data('pagination')[0];
+let page = data.currentPage;
 let pagesNumber = data.pagesNumber;
-$(document).ready(loaddmore(holder, pagesNumber, currentPage));
+$(document).ready(loaddmore(holderContent, pagesNumber, page));

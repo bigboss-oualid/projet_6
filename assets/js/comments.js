@@ -17,8 +17,8 @@ $('#add-comment').on('click', function (e) {
         dataType : 'json',
         success: function (data) {
             if (titreDiscussion.text() !== ""){
-                parentElt = titreDiscussion.parent().hide('slow');
-                spanElt = '<h3 class="my-heading mb-2"><span class="bg-main">E</span>SPACE DE DISCUSSION</h3>';
+                let parentElt = titreDiscussion.parent().hide('slow');
+                let spanElt = '<h3 class="my-heading mb-2"><span class="bg-main">E</span>SPACE DE DISCUSSION</h3>';
                 $( ".js-no-comment" ).detach();
                 parentElt.prepend(spanElt).show('slow');
             }
