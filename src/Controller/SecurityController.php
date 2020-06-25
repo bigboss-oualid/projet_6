@@ -115,7 +115,7 @@ class SecurityController extends AbstractController
 			//Create token to activate new account
 			$token = $this->tokenManager->createToken($user, WITH_CONFIRMATION);
 
-			$url = $this->generateUrl('security.confirm_account', ['tokenCode' => $token->getTokenCode(), 'username' => $user->getUsername() ],UrlGeneratorInterface::ABSOLUTE_URL);
+			$url = $this->generateUrl('security.confirm_account', ['tokenCode' => $token->getTokenCode(), 'username' => $user->getUsername()],UrlGeneratorInterface::ABSOLUTE_URL);
 
 			$token->setUrlActivation($url);
 
@@ -169,8 +169,8 @@ class SecurityController extends AbstractController
 				}else {
 					$this->addFlash('danger', "Une erreur est survenue, le token <strong>[ {$tokenCode} ]</strong> du lien d'activation est incorrect!");
 				}
-			} else {
-				$this->addFlash('warning', "!!!  Cher utilisateur <strong>{$user->getFullName()}</strong> !!!<br/> Votre compte est déjà activé, désormais vous pouvez vous connecter!");
+			}else {
+				$this->addFlash('warning', "!!! Cher utilisateur <strong>{$user->getFullName()}</strong> !!!<br/>Votre compte est déjà activé, désormais vous pouvez vous connecter!");
 			}
 
 			return $this->redirectToLogin();
@@ -237,11 +237,11 @@ class SecurityController extends AbstractController
 
 		if ($form->isSubmitted() && $form->isValid()) {
 			/* @var $user User */
-			$user =	$this->tokenManager->getUserFromToken($tokenCode);
+			$user = $this->tokenManager->getUserFromToken($tokenCode);
 
-			if ($user === null || $this->tokenManager->isTokenExpired()) {
+			if ($user === null | $this->tokenManager->isTokenExpired()) {
 
-				$this->addFlash('danger', "Le lien est incorrect ou expiré, veuillez demander un nouveau lien, afin de  réinitialiser votre mot de passe !");
+				$this->addFlash('danger', "Le lien est incorrect ou expiré, veuillez demander un nouveau lien, afin de réinitialiser votre mot de passe !");
 
 			} else {
 

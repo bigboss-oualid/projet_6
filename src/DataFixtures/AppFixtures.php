@@ -60,35 +60,16 @@ final class AppFixtures extends Fixture
 		$videos        = $this->getDataFixture('Video');
 		$comments      = $this->getDataFixture('Comment');
 		$groups        = $this->getDataFixture('Group');
-		//Create Groups
-		$this->addGroups($groups, $manager);
 
-		//Create users
+		$this->addGroups($groups, $manager);
 		$this->addUsers($users, $avatars, $manager);
 
 		//Set references entries to managed $objects (ilustrations & videos)
-		foreach ($illustrations as $name => $illustration) {
-			$illustrationEntity = new Illustration();
-			$illustrationEntity->setFilename($illustration['filename'])
-				->setPath($illustration['path']);
+		$this->addIllustrations($illustrations, $manager);
+		$this->addVideos($videos, $manager);
 
-			$this->addReference($name, $illustrationEntity);
-			$manager->persist($illustrationEntity);
-		}
-		foreach ($videos as $name => $video) {
-			$videoEntity = new Video();
-			$videoEntity->setEmbedCode($video['iFrame']);
-
-			$this->addReference($name, $videoEntity);
-			$manager->persist($videoEntity);
-		}
-
-		//Create Tricks
 		$this->addTricks($tricks, $manager);
-
-		//Create Comments
 		$this->addComments($comments, $manager);
-
 
 		$manager->flush();
 		echo "\n Loading fixtures is terminated!\n";
@@ -187,6 +168,29 @@ final class AppFixtures extends Fixture
 				->setTrick($trick);
 
 			$manager->persist($commentEntity);
+		}
+	}
+
+	private function addIllustrations($illustrations, ObjectManager $manager)
+	{
+		foreach ($illustrations as $name => $illustration) {
+			$illustrationEntity = new Illustration();
+			$illustrationEntity->setFilename($illustration['filename'])
+				->setPath($illustration['path']);
+
+			$this->addReference($name, $illustrationEntity);
+			$manager->persist($illustrationEntity);
+		}
+	}
+
+	private function addVideos($videos, ObjectManager $manager)
+	{
+		foreach ($videos as $name => $video) {
+			$videoEntity = new Video();
+			$videoEntity->setEmbedCode($video['iFrame']);
+
+			$this->addReference($name, $videoEntity);
+			$manager->persist($videoEntity);
 		}
 	}
 }

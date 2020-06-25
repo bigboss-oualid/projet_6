@@ -52,7 +52,7 @@ class TrickController extends AbstractController
 		    $this->em->persist($trick);
 		    $this->em->flush();
 
-		    $this->addFlash('success', "la figure <strong>{$trick->getTitle()}</strong> a bien été crée !" );
+		    $this->addFlash('success', "la figure <strong>{$trick->getTitle()}</strong> a bien été crée!" );
 		    return $this->redirectToRoute('blog.tricks');
 	    }
 
@@ -77,35 +77,30 @@ class TrickController extends AbstractController
 	 */
 	public function editTrick(Trick $trick, String $slug, Request $request, UserUpdateTrickRepository $repository):Response
 	{
-		/** @var User $user */
-		$user = $this->getUser();
-
 		if ($trick->getSlug() != $slug) {
 			return $this->redirectToRoute('trick.edit', [
 				'slug' => $trick->getSlug(),
 				'id'   => $trick->getId()
 			], 301);
 		}
+		/** @var User $user */
+		$user = $this->getUser();
 
 		$form = $this->createForm(TrickType::class, $trick);
 		$form->handleRequest($request);
 		if ($form->isSubmitted() && $form->isValid())
 		{
-			$update = $repository->findOneBy([
-				'author' => $user->getId(),
-				'trick' => $trick->getId()
-			]);
+			$update = $repository->findOneBy(['author' => $user->getId(), 'trick' => $trick->getId()]);
 			//Save every author only one time by updating
 			if($update){
 				$trick->removeUpdatedBy($update);
 			}
-
 			$update = new UserUpdateTrick($user, $trick);
 
 			$this->em->persist($update);
 			$this->em->flush();
 
-			$this->addFlash('success', "la figure <strong>{$trick->getTitle()}</strong> a bien été  modifiée !");
+			$this->addFlash('success', "la figure <strong>{$trick->getTitle()}</strong> a bien été  modifiée!");
 			return $this->redirectToRoute('blog.tricks');
 		}
 
@@ -146,7 +141,7 @@ class TrickController extends AbstractController
 			$this->em->flush();
 			$this->addFlash(
 				'success',
-				"La figure <strong>{$trick->getTitle()}</strong> a bien été supprimée !"
+				"La figure <strong>{$trick->getTitle()}</strong> a bien été supprimée!"
 			);
 		}
 		return $this->redirectToRoute('blog.tricks');
