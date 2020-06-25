@@ -22,28 +22,24 @@ use Symfony\Component\HttpFoundation\File\File;
 
 class FileUploaderSubscriberTest extends TestCase
 {
-	private function getFileUploader(){
-		$fileUploader = $this->getMockBuilder(FileUploader::class)
-			->disableOriginalConstructor()
-			->getMock();
-		return $fileUploader;
-	}
 	public function testEventSubscription() {
-		$fileUploaderSubscriber = new FileUploaderSubscriber($this->getFileUploader(), "target");
+		$fileUploaderSubscriber = new FileUploaderSubscriber(new FileUploader('targetDirectory'));
 		$this->assertArrayHasKey(PrePersist::class, $fileUploaderSubscriber->getSubscribedEvents());
 		$this->assertArrayHasKey(PreRemove::class, $fileUploaderSubscriber->getSubscribedEvents());
 		$this->assertArrayHasKey(PreUpdate::class, $fileUploaderSubscriber->getSubscribedEvents());
 		$this->assertArrayHasKey(PostRemove::class, $fileUploaderSubscriber->getSubscribedEvents());
 	}
-/*
-	public function testPrePersist(){
+
+	public function testLoadImageByPrePersist(){
 		$illustration = new Illustration();
 		$imageFile = $this->getMockBuilder(File::class)
 			->disableOriginalConstructor()
 			->getMock();
 		$illustration->setImageFile($imageFile);
-
-		$subscriber = new FileUploaderSubscriber($this->getFileUploader(), "target");
+		$fileUploader = $this->getMockBuilder(FileUploader::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$subscriber = new FileUploaderSubscriber($fileUploader);
 
 		$em = $this->getMockBuilder(ObjectManager::class)
 			->disableOriginalConstructor()
@@ -51,9 +47,9 @@ class FileUploaderSubscriberTest extends TestCase
 
 		$lifecycleEventArgs = new LifecycleEventArgs($illustration, $em);
 
-		$this->getFileUploader()->expects($this->once())->method('upload');
+		$fileUploader->expects($this->once())->method('upload');
 		$subscriber->prePersist($lifecycleEventArgs);
 
-	}*/
+	}
 
 }

@@ -1,0 +1,8 @@
+App\Entity\User:
+  user_user:
+    lastname: Test
+    firstname: Test
+    username: test
+    email: test@snowtricks.de
+    hash: \$2y\$10\$y9osoc/NN5eljpHvzO9L/e9Mlebu292KAGIlHBB3.M07KfJxa/tMG #test
+    enabled: true

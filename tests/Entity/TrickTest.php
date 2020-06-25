@@ -26,18 +26,6 @@ final class TrickTest extends KernelTestCase
 {
 	use FixturesTrait;
 
-	private function assertHasErrors(Trick $trick, int $number = 0)
-	{
-		self::bootKernel();
-		$errors = self::$container->get('validator')->validate($trick);
-		$messages = [];
-		/**@var ConstraintViolation */
-		foreach($errors as $error) {
-			$messages[] = $error->getPropertyPath(). ' => ' . $error->getMessage();
-		}
-		$this->assertCount($number, $errors, implode(', ', $messages));
-	}
-
 	public function testValidEntityTitle()
 	{
 		$this->assertHasErrors((new Trick)->setTitle('Titre de test'),0);
@@ -164,6 +152,18 @@ final class TrickTest extends KernelTestCase
 		}
 	}
 
+	private function assertHasErrors(Trick $trick, int $number = 0)
+	{
+		self::bootKernel();
+		$errors = self::$container->get('validator')->validate($trick);
+		$messages = [];
+		/**@var ConstraintViolation */
+		foreach($errors as $error) {
+			$messages[] = $error->getPropertyPath(). ' => ' . $error->getMessage();
+		}
+		$this->assertCount($number, $errors, implode(', ', $messages));
+	}
+
 	private function getEntity(string $title, string $description, User $userMock, array $illustrationsCollection, array $videosCollection, \ArrayAccess $groupsCollection): Trick
 	{
 		$trick = (new Trick())->setTitle($title)
@@ -181,7 +181,7 @@ final class TrickTest extends KernelTestCase
 		return $trick;
 	}
 
-	private function provideTrickData()
+	public function provideTrickData()
 	{
 		$title = 'Title';
 		$description = 'Description';

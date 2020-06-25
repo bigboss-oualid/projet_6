@@ -10,41 +10,23 @@ namespace App\Tests\Controller;
 
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 
 class FrontendControllerTest extends WebTestCase
-
 {
-	protected static function getKernelClass()
-	{
-		return \App\Kernel::class;
-	}
 
-	public function testHome()
+	public function testHomePage()
 	{
 		$client = static::createClient();
-		$crawler = $client->request('GET', '/');
-		$this->assertEquals(200, $client->getResponse()->getStatusCode());
+		$client->request('GET', '/');
+		$this->assertResponseStatusCodeSame(Response::HTTP_OK);
 	}
 
-	public function testCorrectShowPage()
+	public function testH3TricksPage()
 	{
-		$client = static::createClient();
-		$value = 1;
-		$slug = "mute";
-		$url = "/tricks/$slug/$value";
-		$crawler = $client->request('GET', $url);
-		$this->assertEquals(200, $client->getResponse()->getStatusCode());
+		$client = static ::createClient();
+		$client->request('GET', '/tricks/page/1');
+		$this->assertSelectorTextContains('h3', 'TOUS NOS FIGURES');
 	}
-
-
-	public function testIncorrectTricksPage()
-	{
-		$client = static::createClient();
-		$page = 0;
-		$url = "/tricks/page/$page";
-		$crawler = $client->request('GET', $url);
-		$this->assertEquals(500, $client->getResponse()->getStatusCode());
-	}
-
 }
