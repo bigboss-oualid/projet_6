@@ -53,3 +53,11 @@ illustration_nose_grab_1 :
 illustration_gutterball_1 :
   filename   : gutterball-1.jpg
   path       : images/defaults/tricks/gutterball-1.jpg
+
+illustration_indy_1 :
+  filename   : indy-1.jpg
+  path       : images/defaults/tricks/indy-1.jpg
+
+illustration_indy_2 :
+  filename   : indy-2.jpg
+  path       : images/defaults/tricks/indy-2.jpg

@@ -8,11 +8,11 @@ admin:
     Avatar: admin
 
 female_1:
-  Firstname: Kerstin
-  Lastname: Qwertz
-  Username: qwertz
-  Password: qwertz
-  Email: qwertz@yahoo.com
+  Firstname: Demo
+  Lastname: User
+  Username: demo
+  Password: demo
+  Email: demo@snowtricks.com
   Reference:
     Avatar: female_1
 
@@ -55,9 +55,9 @@ male_2:
 
 male_3:
   Firstname: Kratos
-  Lastname: GOF
-  Username: gof
-  Password: gof
-  Email: gof@kratos.com
+  Lastname: GOW
+  Username: gow
+  Password: gow
+  Email: gow@kratos.com
   Reference:
     Avatar: male_3

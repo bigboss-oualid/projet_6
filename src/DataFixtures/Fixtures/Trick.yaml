@@ -105,3 +105,26 @@ flip900:
     Videos:
     Groups:
       - flip
+
+indy:
+  Title: Indy
+  Description: <p>Saisie de la carre frontside de la planche, entre les deux pieds, avec la main arrière</p>
+  Reference:
+    Author: admin
+    Illustrations:
+      - illustration_indy_1
+      - illustration_indy_2
+    Videos:
+    Groups:
+      - grab
+      - slide
+
+truckDriver:
+  Title: Truck Driver
+  Description: <p>Saisie du carre avant et carre arrière avec chaque main (comme tenir un volant de voiture)</p>
+  Reference:
+    Author: admin
+    Illustrations:
+    Videos:
+    Groups:
+      - grab
