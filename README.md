@@ -1,6 +1,6 @@
 # SnowTricks Symfony 5.0.7
 
-[![Maintainability](https://api.codeclimate.com/v1/badges/01c142989cee5fd53e9a/maintainability)](https://codeclimate.com/github/bigboss-oualid/projet_6/maintainability)
+[![Maintainability](https://api.codeclimate.com/v1/badges/a744ca7deb74463ec50a/maintainability)](https://codeclimate.com/github/bigboss-oualid/projet_6/maintainability)
 
 ## About the project
 
