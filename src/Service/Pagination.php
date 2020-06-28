@@ -89,8 +89,13 @@ class Pagination
 	public function getData(){
 		$this->error();
 		//determine offset if object isn't deleted
-		if($this->offset == null){
+		if($this->offset == 0){
 			$this->offset = $this->currentPage * $this->limit - $this->limit;
+			dump($this->offset);
+		} else{
+			//subtract the remaining number of tricks if the user deleted them
+			$this->offset = ($this->currentPage * $this->limit) - (2* $this->limit) + $this->offset;
+			dump($this->offset);
 		}
 		$repository = $this->em->getRepository($this->entityClass);
 
