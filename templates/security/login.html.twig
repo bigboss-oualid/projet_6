@@ -3,46 +3,77 @@
 {% block title %}Connexion au site!{% endblock %}
 
 {% block body %}
-    <div class="container">
-        <div class="row justify-content-md-center">
-            <div class="col-md-6 mt-5">
-                <div class="bg-light py-3 px-3">
-                    <h1 class="text-center mb-5 mt-4">Connectez vous !</h1>
-                    {% if error and error.user is not defined %}
-                        <div class="alert alert-danger">Une erreur est servenue, le nom d'utilisateur ou alors le mot de passse est invalide</div>
-                    {% elseif error.user is defined %}
-                        <div class="alert alert-warning">
-                            <div>{{ error.message }}</div>
-                            <a href="{{ path('security.send_confirm', {username: last_username}) }}">Envoyer un email de confirmation</a>
+    <div class="container justify-content-center vertical-center m-bottom">
+        <div class="row">
+            <div class="col-sm-12" id="create-account-title">
+                <h3 class="titre-content mb-5 text-center"><span class="bg-main">C</span>ONNEXION</h3>
+            </div>
+            {% include'partials/_flashes.html.twig' %}
+            <div class="col-sm-12">
+                <div class="user_card w-100">
+                    <div class="d-flex justify-content-center">
+                        <div class="brand_logo_container">
+                            <img src="{{ asset('images/defaults/logo.png') }}" class="brand_logo" alt="Logo">
                         </div>
-                    {% endif %}
-                    <form action="{{ path('security.login') }}" method="post">
-                        <div class="form-group">
-                            <label for="username">Username</label>
-                            <input type="text" name="_username" id="username" class="form-control" placeholder="Username..." required value="{{ last_username }}">
-                        </div>
-                        <div class="form-group">
-                            <label for="password">Mot de passe</label>
-                            <input type="password" name="_password" id="password" placeholder="Mot de passe..." class="form-control" required>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-sm-6 checkbox mb-3">
-                                <input type="checkbox" id="remember_me" name="_remember_me" checked>
-                                <label for="remember_me"> Se souvenir de moi</label>
+                    </div>
+                    <div class="d-flex justify-content-center form_container px-5">
+                        <div class="row mx-md-5">
+                            <div class="col-sm-12">
+                                {% if error and error.user is not defined %}
+                                    <div class="alert alert-danger">Une erreur est servenue, le nom d'utilisateur ou alors le mot de passse est invalide</div>
+                                {% endif %}
+
+                                {% if error.user is defined %}
+                                    <div class="alert alert-warning">
+                                        <div>{{ error.message }}</div>
+                                        <a href="{{ path('security.send_confirm', {username: last_username}) }}">Envoyer un email de confirmation</a>
+                                    </div>
+                                {% endif %}
                             </div>
-                            <div class="form-group col-sm-6 mb-3">
-                                <a class="float-right"  href="{{ path('security.forgotten_password') }}">mot de passe oublie ?</a>
+                            <div class="col-sm-12">
+                                <form action="{{ path('security.login') }}" method="post">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                        </div>
+                                        <input type="text" name="_username" id="username" class="form-control input_user" placeholder="Username ou Email..." required value="{{ last_username }}">
+                                    </div>
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fas fa-key"></i></span>
+                                        </div>
+                                        <input type="password" name="_password" id="password" placeholder="Mot de passe..." class="show_pass form-control input_pass" required>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text ptxt-parent"><i class="ptxt fas fa-eye-slash"></i></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" id="remember_me" name="_remember_me" class="custom-control-input" checked>
+                                            <label class="custom-control-label text-white" for="remember_me">Remember me</label>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                                    <div class="d-flex justify-content-center mt-4">
+                                        <button type="submit" class="btn btn-warning btn-nav btn-block">Connexion!</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="mt-4">
+                                    <div class="d-flex justify-content-center text-white">
+                                        <span class="d-none d-sm-block">Vous avez un compte? </span>
+                                        <a href="{{ path('security.register') }}" class="ml-2 normal-link">S'inscrire</a>
+                                    </div>
+                                    <div class="d-flex justify-content-center links">
+                                        <a class="float-right normal-link"  href="{{ path('security.forgotten_password') }}">Mot de passe oublié?</a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-                        <div class="form-group my-4">
-                            <button type="submit" class="btn btn-success btn-block">Connexion !</button>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
-
     </div>
-
 {% endblock %}

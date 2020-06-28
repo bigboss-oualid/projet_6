@@ -18,38 +18,38 @@ class UserType extends ApplicationType
 	        ->add(
 	        	'avatar',
 		        AvatarType::class,
-		        $this->getConfiguration(false, ['placeholder' => "Choisissez votre photo..."], [
+		        $this->getConfiguration(false, ['placeholder' => "Avatar..."], [
 			        'data_class' => Avatar::class])
 	        )
             ->add(
             	'lastName',
 	            textType::class,
-                    $this->getConfiguration('Nom', ['placeholder' => "Votre nom.."])
+                    $this->getConfiguration('Nom', ['placeholder' => "Nom.."])
                     )
             ->add(
             	'firstName',
 	            textType::class,
-	            $this->getConfiguration('Prénom', ['placeholder' => "Votre prénom.."])
+	            $this->getConfiguration('Prénom', ['placeholder' => "Prénom.."])
 	            )
             ->add(
             	'username',
 	            textType::class,
-	            $this->getConfiguration('Username', ['placeholder' => "Votre nom d'utilisateur.."])
+	            $this->getConfiguration('Username', ['placeholder' => "Nom d'utilisateur.."])
 	            )
             ->add(
             	'email',
 	            EmailType::class,
-	            $this->getConfiguration('Email', ['placeholder' => "Votre adresse email.."])
+	            $this->getConfiguration('Email', ['placeholder' => "Adresse email.."])
 	            )
             ->add(
             	'hash',
 	            PasswordType::class,
-	            $this->getConfiguration('Mot de passe', ['placeholder' => "Choisissez un mot de passe !"])
+	            $this->getConfiguration('Mot de passe', ['placeholder' => "Mot de passe !"])
 	            )
 	        ->add(
 		        'passwordConfirm',
 		        PasswordType::class,
-		        $this->getConfiguration('Confirmation du mot de passe', ['placeholder' => "Veuillez confirmer votre mot de passe !"])
+		        $this->getConfiguration('Confirmation du mot de passe', ['placeholder' => "Confirmation mot de passe !"])
 	        )
         ;
     }

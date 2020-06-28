@@ -14,17 +14,11 @@ class UserChecker implements UserCheckerInterface
 			return;
 		}
 
-		// user is deleted, show a generic Account Not Found message.
+		// User account is deactivated.
 		if (!$user->isEnabled()) {
-			$exception = new AccountDisabledException("Votre compte n'est pas activé !");
-			throw $exception;
+			throw new AccountDisabledException("Votre compte n'est pas activé!");
 		}
 	}
 
-	public function checkPostAuth(UserInterface $user)
-	{
-		if (!$user instanceof AppUser) {
-			return;
-		}
-	}
+	public function checkPostAuth(UserInterface $user){}
 }

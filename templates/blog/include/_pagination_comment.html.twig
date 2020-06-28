@@ -1,17 +1,22 @@
 {% for comment in comments %}
-<div class="bg-light rounded mb-3 p-3">
-    <div class="row">
-        <div class="col-1">
-            <img src="{{ asset('images/' ~ comment.author.avatar.filename) }}" alt="Avatar de {{ comment.author.fullName }}" class="mb-1 avatar-medium">
+<div class="wow fadeInUp" data-wow-duration="4s">
+    <div class="row mt-3">
+        <div class="col-sm-1">
+            <a href="{{ path('user.show', {'username': comment.author.username}) }}">
+                <img src="{{ asset(comment.author.avatar.path) }}" alt="{{ comment.author.fullName }}" class="avatar-medium rounded">
+            </a>
         </div>
-        <div class="col-10 col-offset-1">
-            <div class="row ">
-                <p class="col-12 float-left">
-                    <strong>{{ comment.author.fullName }}</strong> a dit :
+        <div class="comment-container col-sm-11">
+            <div class="row">
+                <p class="col-12 float-left h4 commenter">
+                    <strong>{{ comment.author.fullName }}</strong> :
                 </p>
-                <blockquote class="col-12">
+                <div class="col-12 h5 ml-2">
                     {{ comment.content }}
-                </blockquote>
+                </div>
+                <div class="col-12">
+                    <small class="font-weight-bold mt-3 float-right text-info">Le {{ comment.createdAt| format_datetime(pattern="dd/MM/YYYY 'à' hh:mm")}}</small>
+                </div>
             </div>
         </div>
     </div>

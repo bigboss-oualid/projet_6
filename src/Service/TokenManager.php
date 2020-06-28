@@ -48,8 +48,8 @@ class TokenManager
 	 */
 	public function createToken(User $user, bool $confirmation = false): Token
 	{
-		if($token = $user->getToken()){
-			$this->deleteToken($token);
+		if($userToken = $user->getToken()){
+			$this->deleteToken($userToken);
 			$this->em->flush();
 		}
 
@@ -57,8 +57,9 @@ class TokenManager
 		$this->token->setCreatedAt(new \DateTime())
 			->setTokenCode($this->tokenGenerator->generateToken())
 			->setUser($user);
-		if($confirmation)
+		if($confirmation){
 			$this->token->generateConfirmationCode(1111,9999);
+		}
 		$user->setToken($this->token);
 
 		return $this->token;
@@ -73,8 +74,8 @@ class TokenManager
 	{
 		$user = null;
 
-		if($token = $this->repository->findOneByTokenCode($tokenCode)){
-			$this->token = $token;
+		if($userToken = $this->repository->findOneByTokenCode($tokenCode)){
+			$this->token = $userToken;
 			$user = $this->token->getUser();
 		}
 
@@ -84,7 +85,9 @@ class TokenManager
 
 	public function isTokenExpired()
 	{
-		if(!$this->token)   return true;
+		if(!$this->token){
+			return true;
+		}
 		$createdAt = $this->token->getCreatedAt();
 		$createdAt->add(new \DateInterval('PT2H'));
 
@@ -96,8 +99,9 @@ class TokenManager
 
 	public function deleteToken(Token $token = null)
 	{
-		if($token == null)
+		if($token == null){
 			$token = $this->token;
+		}
 		$token->setUser(null);
 		$this->em->remove($token);
 	}

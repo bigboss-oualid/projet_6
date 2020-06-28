@@ -45,11 +45,6 @@ class Trick
 	private $createdAt;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="tricks", cascade={"persist"})
-	 */
-	private $category;
-
-	/**
 	 * @ORM\OneToMany(targetEntity="App\Entity\Illustration", mappedBy="trick", cascade={"persist"}, orphanRemoval=true)
 	 * @Assert\Valid()
 	 */
@@ -65,11 +60,6 @@ class Trick
 	 * @ORM\Column(type="string", length=255)
 	 */
 	private $slug;
-
-	/**
-	 * @ORM\Column(type="boolean")
-	 */
-	private $published;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="tricks")
@@ -93,27 +83,33 @@ class Trick
      */
     private $ratings;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Group", fetch="EAGER", inversedBy="tricks",cascade={"persist"})
+     */
+    private $groups;
+
 	public function __construct()
-    {
-        $this->createdAt = new \DateTime();
-        $this->illustrations = new ArrayCollection();
-        $this->videos = new ArrayCollection();
-        $this->updatedBy = new ArrayCollection();
-        $this->comments = new ArrayCollection();
-        $this->ratings = new ArrayCollection();
-    }
+	{
+	   $this->createdAt = new \DateTime();
+	   $this->illustrations = new ArrayCollection();
+	   $this->videos = new ArrayCollection();
+	   $this->updatedBy = new ArrayCollection();
+	   $this->comments = new ArrayCollection();
+	   $this->ratings = new ArrayCollection();
+	   $this->groups = new ArrayCollection();
+	}
 
 	public function getId(): ?int
-    {
-        return $this->id;
-    }
+	{
+	    return $this->id;
+	}
 
 	public function getTitle(): ?string
-    {
-        return $this->title;
-    }
+	{
+	    return $this->title;
+	}
 
-	public function setTitle(string $title): self
+	public function setTitle(?string $title): self
 	{
 	    $this->title = $title;
 
@@ -127,33 +123,14 @@ class Trick
 
 	public function setDescription(?string $description): self
 	{
-		  $this->description = $description;
+		$this->description = $description;
 
-		  return $this;
+		return $this;
 	}
 
 	public function getCreatedAt(): ?\DateTimeInterface
 	{
-	   return $this->createdAt;
-	}
-
-	public function setCreatedAt(\DateTimeInterface $createdAt): self
-	{
-		$this->createdAt = $createdAt;
-
-		return $this;
-	}
-
-	public function getCategory(): ?Category
-    {
-        return $this->category;
-    }
-
-	public function setCategory(?Category $category): self
-	{
-		$this->category = $category;
-
-		return $this;
+		return $this->createdAt;
 	}
 
 	/**
@@ -166,25 +143,25 @@ class Trick
 
 	public function addIllustration(Illustration $illustration): self
 	{
-		if (!$this->illustrations->contains($illustration)) {
-		    $this->illustrations[] = $illustration;
-		    $illustration->setTrick($this);
-		}
+	    if (!$this->illustrations->contains($illustration)) {
+	        $this->illustrations[] = $illustration;
+	        $illustration->setTrick($this);
+	    }
 
-		return $this;
+	    return $this;
 	}
 
 	public function removeIllustration(Illustration $illustration): self
 	{
-		if ($this->illustrations->contains($illustration)) {
-			  $this->illustrations->removeElement($illustration);
-			  // set the owning side to null (unless already changed)
-			  if ($illustration->getTrick() === $this) {
-			      $illustration->setTrick(null);
-			  }
-		}
+	    if ($this->illustrations->contains($illustration)) {
+	          $this->illustrations->removeElement($illustration);
+	          // set the owning side to null (unless already changed)
+	          if ($illustration->getTrick() === $this) {
+	              $illustration->setTrick(null);
+	          }
+	    }
 
-		return $this;
+	    return $this;
 	}
 
 	/**
@@ -202,30 +179,30 @@ class Trick
 	 */
 	public function addVideo(Video $video): self
 	{
-		if (!$this->videos->contains($video)) {
-			$this->videos[] = $video;
-			$video->setTrick($this);
-		}
+	    if (!$this->videos->contains($video)) {
+	        $this->videos[] = $video;
+	        $video->setTrick($this);
+	    }
 
-		return $this;
+	    return $this;
 	}
 
 	public function removeVideo(Video $video): self
 	{
-		if ($this->videos->contains($video)) {
-			$this->videos->removeElement($video);
-			// set the owning side to null (unless already changed)
-			/*if ($video->getTrick() === $this) {
-				$video->setTrick(null);
-			}*/
-		}
+	    if ($this->videos->contains($video)) {
+	        $this->videos->removeElement($video);
+	        // set the owning side to null (unless already changed)
+	        if ($video->getTrick() === $this) {
+	            $video->setTrick(null);
+	        }
+	    }
 
-		return $this;
+	    return $this;
 	}
 
 	public function getSlug(): ?string
 	{
-		return $this->slug;
+	    return $this->slug;
 	}
 
 	/**
@@ -238,33 +215,32 @@ class Trick
 	 */
 	public function createSlug(EventArgs $event): void
 	{
-	  //create slug if trick is new or his title is modified
-		if($this->id == null || (isset($event->getEntityChangeSet()['title'])))
-			$this->slug = $this->slugify($this->title);
-	}
+	    //create slug if trick is new or his title is modified
+	    if($this->id == null || (isset($event->getEntityChangeSet()['title']))){
+		    $delimiter = '-';
+		    $oldLocale = setlocale(LC_ALL, '0');
+		    setlocale(LC_ALL, 'en_US.UTF-8');
+		    $clean = iconv('UTF-8', 'ASCII//TRANSLIT', $this->title);
+		    $clean = preg_replace("/[^a-zA-Z0-9\/_|+ -]/", '', $clean);
+		    $clean = preg_replace("/[\/_|+ -]+/", $delimiter, $clean);
+		    $clean = strtolower($clean);
+		    $clean = trim($clean, $delimiter);
+		    setlocale(LC_ALL, $oldLocale);
 
-	public function isPublished(): ?bool
-	{
-		return $this->published;
-	}
-
-	public function setPublished(bool $published): self
-	{
-		$this->published = $published;
-
-		return $this;
+		    $this->slug = $clean;
+	    }
 	}
 
 	public function getAuthor(): ?User
 	{
-		return $this->author;
+	    return $this->author;
 	}
 
 	public function setAuthor(?User $author): self
 	{
-		$this->author = $author;
+	    $this->author = $author;
 
-		return $this;
+        return $this;
 	}
 
     /**
@@ -274,19 +250,6 @@ class Trick
     {
         return $this->updatedBy;
     }
-
-	/**
-	 * @return string
-	 */
-	public function lastUpdatedBy(): ?String
-	{
-		if(!$this->updatedBy)
-		    return null;
-		//$current = current(($this->updatedBy)->toArray());
-		$last = end(($this->updatedBy)->toArray());
-
-		return $last;
-	}
 
     public function addUpdatedBy(UserUpdateTrick $updatedBy): self
     {
@@ -319,29 +282,6 @@ class Trick
         return $this->comments;
     }
 
-    public function addComment(Comment $comment): self
-    {
-        if (!$this->comments->contains($comment)) {
-            $this->comments[] = $comment;
-            $comment->setTrick($this);
-        }
-
-        return $this;
-    }
-
-    public function removeComment(Comment $comment): self
-    {
-        if ($this->comments->contains($comment)) {
-            $this->comments->removeElement($comment);
-            // set the owning side to null (unless already changed)
-            if ($comment->getTrick() === $this) {
-                $comment->setTrick(null);
-            }
-        }
-
-        return $this;
-    }
-
     /**
      * @return Collection|Rating[]
      */
@@ -350,27 +290,17 @@ class Trick
         return $this->ratings;
     }
 
-    public function addRating(Rating $rating): self
-    {
-        if (!$this->ratings->contains($rating)) {
-            $this->ratings[] = $rating;
-	        $rating->setTrick($this);
+	/**
+	 * count comments
+	 *
+	 * @return Int
+	 */
+	public function countComment(): Int{
+        if($this->comments){
+	        return count($this->comments);
         }
 
-        return $this;
-    }
-
-    public function removeRating(Rating $rating): self
-    {
-        if ($this->ratings->contains($rating)) {
-            $this->ratings->removeElement($rating);
-            // set the owning side to null (unless already changed)
-            if ($rating->getTrick() === $this) {
-	            $rating->setTrick(null);
-            }
-        }
-
-        return $this;
+        return 0;
     }
 
 	/**
@@ -379,35 +309,42 @@ class Trick
 	 * @return Int
 	 */
 	public function getAvgRatings(): Int{
-		if(count($this->ratings))
-		{
-			$sum = array_reduce($this->ratings->toArray(), function($total, Rating $rating) {
-				return $total + $rating->getRating();
-			}, 0);
-			return $sum / count($this->ratings);
-		}
+	    if(count($this->ratings))
+	    {
+	        $sum = array_reduce($this->ratings->toArray(), function($total, Rating $rating) {
+	            return $total + $rating->getRating();
+	        }, 0);
+	        return $sum / count($this->ratings);
+	    }
 
-		return 0;
-
+	    return 0;
 	}
 
-	/**
-	 * Initialize le slug
-	 *
-	 * @param string $string
-	 * @param string $delimiter
-	 *
-	 * @return string
-	 */
-	private function slugify(String $string, String $delimiter = '-'): string {
-		$oldLocale = setlocale(LC_ALL, '0');
-		setlocale(LC_ALL, 'en_US.UTF-8');
-		$clean = iconv('UTF-8', 'ASCII//TRANSLIT', $string);
-		$clean = preg_replace("/[^a-zA-Z0-9\/_|+ -]/", '', $clean);
-		$clean = preg_replace("/[\/_|+ -]+/", $delimiter, $clean);
-		$clean = strtolower($clean);
-		$clean = trim($clean, $delimiter);
-		setlocale(LC_ALL, $oldLocale);
-		return $clean;
-	}
+    /**
+     * @return Collection|Group[]
+     */
+    public function getGroups(): Collection
+    {
+        return $this->groups;
+    }
+
+    public function addGroup(?Group $group): self
+    {
+        if (!$this->groups->contains($group)) {
+            $this->groups[] = $group;
+            $group->addTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGroup(Group $group): self
+    {
+        if ($this->groups->contains($group)) {
+            $this->groups->removeElement($group);
+            $group->removeTrick($this);
+        }
+
+        return $this;
+    }
 }

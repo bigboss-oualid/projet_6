@@ -1,26 +1,50 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Confirmation du compte !{% endblock %}
+{% block title %}Confirmation du compte!{% endblock %}
 
 {% block body %}
-    <div class="container">
-        <div class="row justify-content-md-center">
-            <div class="col-md-6 mt-5">
-                <div class="bg-light py-3 px-3">
-                    <h1 class="text-center mb-5 mt-4">Confirmez votre compte !</h1>
-                    <form action="{{ path('security.confirm_account', {username: app.request.get('username'), tokenCode: app.request.get('tokenCode')}) }}" method="post">
-                        <div class="form-group">
-                            <label for="_confirmationCode">Code</label>
-                            <input type="text" name="_confirmationCode" id="code-confirmation" class="form-control" placeholder="code de confirmation..." required>
+    <div class="container justify-content-center vertical-center m-bottom">
+        <div class="row">
+            <div class="col-sm-12" id="create-account-title">
+                <h3 class="titre-content mb-5 text-center"><span class="bg-main">C</span>ONFIRMATION DU COMPTE</h3>
+                {% include'partials/_flashes.html.twig' %}
+            </div>
+            <div class="col-12">
+                <div class="user_card w-100">
+                    <div class="d-flex justify-content-center">
+                        <div class="brand_logo_container">
+                            <img src="{{ asset('images/defaults/logo.png') }}" class="brand_logo" alt="Logo">
                         </div>
-                        <div class="form-group my-4">
-                            <button type="submit" class="btn btn-success btn-block">Confirmation !</button>
+                    </div>
+                    <div class="d-flex justify-content-center form_container px-5">
+                        <div class="row mx-md-5">
+                            <div class="col-sm-12">
+                                <form action="{{ path('security.confirm_account', {username: app.request.get('username'), tokenCode: app.request.get('tokenCode')}) }}" method="post">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fas fa-unlock-alt"></i></span>
+                                        </div>
+                                        <input type="text" name="_confirmationCode" id="code-confirmation" class="form-control input_user" placeholder="code de confirmation..." required>
+                                    </div>
+                                    <div class="d-flex justify-content-center mt-4">
+                                        <button type="submit" class="btn btn-warning btn-nav btn-block">Confirmer!</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="mt-4">
+                                    <div class="d-flex justify-content-center links text-white">
+                                        Vous n'avez pas de compte? <a href="{{ path('security.register') }}" class="ml-2 normal-link">S'inscrire</a>
+                                    </div>
+                                    <div class="d-flex justify-content-center links">
+                                        <a class="float-right normal-link"  href="{{ path('security.login') }}">Se connecter?</a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
-
     </div>
-
 {% endblock %}

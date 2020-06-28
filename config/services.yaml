@@ -5,7 +5,7 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: 'fr'
-    uploads_absolute_dir: '%kernel.project_dir%/public/images'
+    absolute_uploads_dir: '%kernel.project_dir%/public'
     limit_pagination: 4
 
 services:
@@ -28,12 +28,9 @@ services:
 
     App\Service\FileUploader:
         arguments:
-          $targetDirectory: '%uploads_absolute_dir%'
+          $targetDirectory: '%absolute_uploads_dir%'
 
     App\Listener\FileUploaderSubscriber:
-        arguments:
-          $uploader: '@App\Service\FileUploader'
-          $targetDirectory: '%uploads_absolute_dir%'
         tags:
           - { name: doctrine.event_subscriber }
 
@@ -41,6 +38,13 @@ services:
         arguments:
           $buttonTemplatePath: 'partials/_load_more.html.twig'
           $limit: '%limit_pagination%'
+
+    App\Listener\RedirectUserListener:
+        arguments:
+          - "@security.token_storage"
+          - "@router"
+        tags:
+          - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

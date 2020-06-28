@@ -32,12 +32,14 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Vous devez renseigner votre nom de famille !")
+     * @Assert\Length(min=2, max=25, minMessage="Nom trop court, Il doit faire au moins 2 caractères !", maxMessage="Nom trop long, Il doit faire au max 25 caractères !")
      */
     private $lastName;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Vous devez renseigner votre prénom !")
+     * @Assert\Length(min=2, max=25, minMessage="Prénom trop court, Il doit faire au moins 2 caractères !", maxMessage="Prénom trop long, Il doit faire au max 25 caractères !")
      */
     private $firstName;
 
@@ -67,7 +69,7 @@ class User implements UserInterface
 	 * @Assert\Length(min=8, minMessage="Votre mot de passe doit faire au moins 8 caractères !", )
 	 * @Assert\Regex(
 	 *     pattern="/.*^(?=.*[A-Z]).*$/",
-	 *     message="Le mot de passe devrait contenir au moindes lettres en majuscules et en minuscules !"
+	 *     message="Le mot de passe devrait contenir au moin une lettre en majuscule et en minuscule !"
 	 * )
 	 * @Assert\Regex(
 	 *     pattern="/.*^(?=.*\d).*$/",
@@ -75,7 +77,7 @@ class User implements UserInterface
 	 * )
 	 * @Assert\Regex(
 	 *     pattern="/.*^(?=.*\W).*$/",
-	 *     message="Le mot de passe devrait contenir des caractères spéciaux !"
+	 *     message="Le mot de passe devrait contenir au moin  un caractère spécial!"
 	 * )
 	 */
     //pattern="/.*^(?=.{8,20})(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).*$/"
@@ -107,11 +109,6 @@ class User implements UserInterface
     private $userRoles;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\UserUpdateTrick", mappedBy="author", cascade={"persist"}, orphanRemoval=true)
-     */
-    private $updatedTricks;
-
-    /**
      * @ORM\OneToOne(targetEntity="App\Entity\Token", mappedBy="user", cascade={"persist", "remove"})
      */
     private $token;
@@ -126,19 +123,12 @@ class User implements UserInterface
      */
     private $comments;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Rating", mappedBy="author", orphanRemoval=true)
-     */
-    private $ratings;
-
     public function __construct()
     {
         $this->tricks        = new ArrayCollection();
 	    $this->createdAt     = new \DateTime();
         $this->userRoles     = new ArrayCollection();
-        $this->updatedTricks = new ArrayCollection();
         $this->comments      = new ArrayCollection();
-        $this->ratings       = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -171,9 +161,9 @@ class User implements UserInterface
     }
 
 	public function getFullName(): String
-                              	{
-                              		return ucwords("{$this->getFirstName()} {$this->getLastName()}");
-                              	}
+    {
+        return ucwords("{$this->getFirstName()} {$this->getLastName()}");
+    }
 
     public function getUsername(): ?string
     {
@@ -212,32 +202,25 @@ class User implements UserInterface
     }
 
 	public function getToken(): ?Token
-                                  {
-                                      return $this->token;
-                                  }
+	{
+	    return $this->token;
+	}
 
 	public function setToken(?Token $token): self
-                                  {
-                                      $this->token = $token;
-                              
-                                      // set the owning side of the relation if necessary
-                                      if ($token != null && $token->getUser() !== $this) {
-                                          $token->setUser($this);
-                                      }
-                              
-                                      return $this;
-                                  }
+	{
+		$this->token = $token;
+
+		// set the owning side of the relation if necessary
+		if ($token != null && $token->getUser() !== $this) {
+		    $token->setUser($this);
+		}
+
+		return $this;
+	}
 
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
     }
 
     public function getAvatar(): ?Avatar
@@ -264,46 +247,21 @@ class User implements UserInterface
         return $this->tricks;
     }
 
-    public function addTrick(Trick $trick): self
-    {
-        if (!$this->tricks->contains($trick)) {
-            $this->tricks[] = $trick;
-            $trick->setAuthor($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTrick(Trick $trick): self
-    {
-        if ($this->tricks->contains($trick)) {
-            $this->tricks->removeElement($trick);
-            // set the owning side to null (unless already changed)
-            if ($trick->getAuthor() === $this) {
-                $trick->setAuthor(null);
-            }
-        }
-
-        return $this;
-    }
-
-
 	public function getRoles(): array
-                              	{
-                              		 $roles = $this->userRoles->map(function (Role $role){
-                              		     return $role->getTitle();
-                              		 })->toArray();
-                              
-                              		 $roles[] = 'ROLE_USER';
-                              		 //dd($roles);
-                              
-                              		  return $roles;
-                              	}
+    {
+         $roles = $this->userRoles->map(function (Role $role){
+             return $role->getTitle();
+         })->toArray();
+
+         $roles[] = 'ROLE_USER';
+
+          return array_unique($roles);
+    }
 
 	public function getPassword():? String
-                              	{
-                              		return $this->hash;
-                              	}
+    {
+        return $this->hash;
+    }
 
 	public function getSalt() {}
 
@@ -327,47 +285,6 @@ class User implements UserInterface
         return $this;
     }
 
-    public function removeUserRole(Role $userRole): self
-    {
-        if ($this->userRoles->contains($userRole)) {
-            $this->userRoles->removeElement($userRole);
-            $userRole->removeUser($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|UserUpdateTrick[]
-     */
-    public function getUpdatedTricks(): Collection
-    {
-        return $this->updatedTricks;
-    }
-
-    public function addUpdatedTrick(UserUpdateTrick $updatedTricks): self
-    {
-        if (!$this->updatedTricks->contains($updatedTricks)) {
-            $this->updatedTricks[] = $updatedTricks;
-            $updatedTricks->setAuthor($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUpdatedTrick(UserUpdateTrick $updatedTricks): self
-    {
-        if ($this->updatedTricks->contains($updatedTricks)) {
-            $this->updatedTricks->removeElement($updatedTricks);
-            // set the owning side to null (unless already changed)
-            if ($updatedTricks->getAuthor() === $this) {
-                $updatedTricks->setAuthor(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function isEnabled(): ?bool
     {
         return $this->enabled;
@@ -386,59 +303,5 @@ class User implements UserInterface
     public function getComments(): Collection
     {
         return $this->comments;
-    }
-
-    public function addComment(Comment $comment): self
-    {
-        if (!$this->comments->contains($comment)) {
-            $this->comments[] = $comment;
-            $comment->setAuthor($this);
-        }
-
-        return $this;
-    }
-
-    public function removeComment(Comment $comment): self
-    {
-        if ($this->comments->contains($comment)) {
-            $this->comments->removeElement($comment);
-            // set the owning side to null (unless already changed)
-            if ($comment->getAuthor() === $this) {
-                $comment->setAuthor(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Rating[]
-     */
-    public function getRatings(): Collection
-    {
-        return $this->ratings;
-    }
-
-    public function addRating(Rating $rate): self
-    {
-        if (!$this->ratings->contains($rate)) {
-            $this->ratings[] = $rate;
-	        $rate->setAuthor($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRating(Rating $rate): self
-    {
-        if ($this->ratings->contains($rate)) {
-            $this->ratings->removeElement($rate);
-            // set the owning side to null (unless already changed)
-            if ($rate->getAuthor() === $this) {
-	            $rate->setAuthor(null);
-            }
-        }
-
-        return $this;
     }
 }

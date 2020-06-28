@@ -14,6 +14,8 @@ class Illustration extends Picture
      */
     private $trick;
 
+	protected $path = 'images/defaults/default-illustration.png';
+
 	public function getTrick(): Trick
     {
         return $this->trick;
@@ -21,8 +23,9 @@ class Illustration extends Picture
 
     public function setTrick(?Trick $trick): self
     {
-    	if($trick)
-            $this->trick = $trick;
+    	if($trick){
+		    $this->trick = $trick;
+	    }
 
         return $this;
     }

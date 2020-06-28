@@ -2,10 +2,9 @@
 
 namespace App\Form;
 
-use App\Entity\Category;
+use App\Entity\Group;
 use App\Entity\Trick;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -20,15 +19,18 @@ class TrickType extends ApplicationType
             ->add(
             	'title',
 	            TextType::class,
-	            $this->getConfiguration("Titre", ['placeholder' => "Tapez le titre de la figure"])
+	            $this->getConfiguration("Titre", ['placeholder' => "Entrez le titre de la figure"],['required' => false])
             )
 	        ->add(
-	        	'category',
+	        	'groups',
 		        EntityType::class,
-		        $this->getConfiguration("Catégorie", [],
+		        $this->getConfiguration("Groupe", [],
 			        [
-			        	'class' => Category::class,
-				        'choice_label' => 'name'
+			        	'class' => Group::class,
+				        'choice_label' => function(?Group $group) {
+					        return $group ? strtoupper($group->getName()) : '';
+				        },
+				        'multiple' => true,
 			        ])
 		        )
             ->add(
@@ -39,13 +41,6 @@ class TrickType extends ApplicationType
 	                ['required' => false]
 	            )
             )
-            ->add(
-            	'published',
-	            CheckboxType::class,
-	            $this->getConfiguration("Publier la figure", [], ['required' => false])
-
-             )
-
 	        ->add('illustrations', CollectionType::class, [
 		        'entry_type'   	=> IllustrationType::class,
 		        'prototype'		=> true,
@@ -73,6 +68,7 @@ class TrickType extends ApplicationType
     {
         $resolver->setDefaults([
             'data_class' => Trick::class,
+	        'error_bubbling' => true
         ]);
     }
 

@@ -12,7 +12,7 @@ class RatingType extends ApplicationType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-	        ->add('rating', IntegerType::class, $this->getConfiguration("Difficulté sur 5", ['min' => 0, 'max' => 5, 'placeholder' => "Veuillez noter la Difficulté"]))
+	        ->add('rating', IntegerType::class, $this->getConfiguration(false, ['min' => 0, 'max' => 5, 'placeholder' => "?/5"]))
         ;
     }
 

@@ -3,42 +3,109 @@
 {% block title %}Connexion au site!{% endblock %}
 
 {% block body %}
-    <div class="container">
-        <h1>Inscrivez vous sur notre site !</h1>
-
-        {{  form_start(form) }}
-        <div class="col-md-6 offset-md-3">
-            <div class="row">
-                <div class="col-md-4  text-center p-2">
-                    {% if form.vars.value.filename is defined  %}
-                        <img  id="avatar-holder-{{ form.vars.name }}" src="{{ asset('images/' ~ form.vars.value.filename) }}" width="120" height="120" alt="{{ form.vars.value.altName }}">
-                    {% else %}
-                        <img id="avatar-holder-{{ form.vars.name }}" src="{{ asset('images/placeholder.png') }}" style='max-width:120px;'/>
-                    {%  endif %}
+    <div class="container justify-content-center vertical-center m-bottom">
+        <div class="row">
+            <div class="col-sm-12" id="create-account-title">
+                <h3 class="titre-content mb-5 text-center"><span class="bg-main">C</span>RÉER UN COMPTE</h3>
+                {% include'partials/_flashes.html.twig' %}
+            </div>
+            <div class="col-sm-12">
+                <div class="user_card w-100">
+                    {{  form_start(form) }}
+                    <div class="d-flex justify-content-center">
+                        <div class="brand_logo_container" role="button">
+                            <img id="avatar-holder" src="{{ asset('images/defaults/placeholder.png') }}" class="brand_logo" alt="avatar">
+                            <div class="d-block">{{ form_errors(form.avatar) }}</div>
+                            <div class="d-none">{{ form_widget(form.avatar) }}</div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center form_container">
+                        <div class="row mx-md-5">
+                            <div class="col-sm-12">
+                                <div class="form-row align-items-end">
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="input-group mb-3">
+                                            {{ form_errors(form.firstName) }}
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                                            </div>
+                                            {{ form_widget(form.firstName) }}
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="input-group mb-3">
+                                            {{ form_errors(form.lastName) }}
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                                            </div>
+                                            {{ form_widget(form.lastName) }}
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="input-group mb-3">
+                                            {{ form_errors(form.username) }}
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="fas fa-mask"></i></span>
+                                            </div>
+                                            {{ form_widget(form.username) }}
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-8 col-md-6">
+                                        <div class="input-group mb-3">
+                                            {{ form_errors(form.email) }}
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="fas fa-at"></i></span>
+                                            </div>
+                                            {{ form_widget(form.email) }}
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="input-group mb-3">
+                                            {{ form_errors(form.hash) }}
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="fas fa-unlock"></i></span>
+                                            </div>
+                                            {{ form_widget(form.hash, {'attr':{'class': 'show_pass'}}) }}
+                                            <div class="input-group-append">
+                                                <span class="input-group-text ptxt-parent"><i class="ptxt fas fa-eye-slash"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="input-group mb-3">
+                                            {{ form_errors(form.passwordConfirm) }}
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                            </div>
+                                            {{ form_widget(form.passwordConfirm, {'attr':{'class': 'show_pass'}}) }}
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 mt-4">
+                                        <button type="submit" class="btn btn-warning btn-nav btn-block">Créer un compte!</button>
+                                    </div>
+                                </div>
+                            </div>
+                            {{ form_end(form) }}
+                            <div class="col-sm-12">
+                                <div class="mt-4">
+                                    <div class="d-flex justify-content-center text-white">
+                                        <span class="d-none d-sm-block">Vous avez un compte? </span>
+                                        <a href="{{ path('security.register') }}" class="normal-link ml-2"> Se connecter</a>
+                                    </div>
+                                    <div class="d-flex justify-content-center links">
+                                        <a class="float-right normal-link"  href="{{ path('security.forgotten_password') }}">Mot de passe oublié?</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">{{ form_row(form.avatar) }}</div>
-            </div>
-            <div class="form-row align-items-end">
-                <div class="col-md-6">{{ form_row(form.firstName) }}</div>
-                <div class="col-md-6">{{ form_row(form.lastName) }}</div>
-                <div class="col-md-6">{{ form_row(form.username) }}</div>
-                <div class="col-md-6">{{ form_row(form.email) }}</div>
-                <div class="col-md-6">{{ form_row(form.hash) }}</div>
-                <div class="col-md-6">{{ form_row(form.passwordConfirm) }}</div>
-            </div>
-            <div class="row pt-4">
-                <div class="col-md-12 ">
-                    <button type="submit" class="w-100 btn btn-success">
-                        <i class="fa fa-floppy-o"></i>
-                         Confirmez l'inscription
-                    </button>
-                </div>
-                {{ form_end(form) }}
             </div>
         </div>
-
     </div>
+{% endblock %}
 
+{% block javascripts%}
+    {#change Avatar#}
+    {{ encore_entry_script_tags('loadAvatar') }}
 {% endblock %}

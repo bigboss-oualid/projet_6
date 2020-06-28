@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\PasswordUpdate;
+use App\Entity\Token;
 use App\Entity\User;
 use App\Form\PasswordUpdateType;
 use App\Form\UserType;
@@ -23,10 +24,20 @@ class SecurityController extends AbstractController
 	 * @var EntityManagerInterface
 	 */
 	private $em;
+	/**
+	 * @var Mailer
+	 */
+	private $mailer;
+	/**
+	 * @var TokenManager
+	 */
+	private $tokenManager;
 
-	public function __construct(EntityManagerInterface $em)
+	public function __construct(EntityManagerInterface $em, Mailer $mailer, TokenManager $tokenManager)
 	{
 		$this->em = $em;
+		$this->mailer = $mailer;
+		$this->tokenManager = $tokenManager;
 	}
 
 	/**
@@ -56,17 +67,13 @@ class SecurityController extends AbstractController
 	/**
 	 * @Route("/send-confirmation/{username}", name="security.send_confirm", requirements={"username": "[a-z0-9\-]*"})
 	 * @param User   $user
-	 * @param Mailer $mailer
 	 *
 	 * @return Response
-	 * @throws \Twig\Error\LoaderError
-	 * @throws \Twig\Error\RuntimeError
-	 * @throws \Twig\Error\SyntaxError
 	 */
-	public function sendConfirmation(User $user, Mailer $mailer): Response
+	public function sendConfirmation(User $user): Response
 	{
 		$token = $user->getToken();
-		$mailer->send(
+		$this->mailer->send(
 			'emails/partials/confirmation_account.html.twig',
 			'Confirmation de votre compte',
 			[
@@ -88,53 +95,36 @@ class SecurityController extends AbstractController
 	 *
 	 * @param Request                      $request
 	 * @param UserPasswordEncoderInterface $encoder
-	 * @param TokenManager                 $tokenManager
-	 * @param Mailer                       $mailer
 	 *
 	 * @return Response
 	 */
-	public function register(Request $request, UserPasswordEncoderInterface $encoder, TokenManager $tokenManager, Mailer $mailer): Response
+	public function register(Request $request, UserPasswordEncoderInterface $encoder): Response
 	{
 		$user = new User();
-
 		$form = $this->createForm(UserType::class, $user);
 
 		$form->handleRequest($request);
-
 		if ($form->isSubmitted() && $form->isValid()) {
 
 			$user->getAvatar()->setUser($user);
 			if($user->getAvatar()->getImageFile() == null){
 				$user->setAvatar(null);
 			}
-			$hash = $encoder->encodePassword($user, $user->getHash());
-			$user->setHash($hash);
+			$user->setHash($encoder->encodePassword($user, $user->getHash()));
 
-			$token = $tokenManager->createToken($user, WITH_CONFIRMATION);
+			//Create token to activate new account
+			$token = $this->tokenManager->createToken($user, WITH_CONFIRMATION);
 
-			$url = $this->generateUrl('security.confirm_account',
-				[
-					'tokenCode' => $token->getTokenCode(),
-					'username' => $user->getUsername()
-				],
-				UrlGeneratorInterface::ABSOLUTE_URL
-			);
+			$url = $this->generateUrl('security.confirm_account', ['tokenCode' => $token->getTokenCode(), 'username' => $user->getUsername()],UrlGeneratorInterface::ABSOLUTE_URL);
+
 			$token->setUrlActivation($url);
 
 			$this->em->persist($user);
 			$this->em->flush();
 
-			$mailer->send(
-				'emails/partials/confirmation_account.html.twig',
-				'Confirmation de votre compte',
-				[
-					'user' => $user,
-					'url'  => $url,
-					'confirmationCode' => $token->getConfirmationCode()
-				]);
+			$this->mailer->send('emails/partials/confirmation_account.html.twig','Confirmation de votre compte', ['user' => $user, 'url'  => $url, 'confirmationCode' => $token->getConfirmationCode()]);
 
-			$this->addFlash('success', "!!!  Félicitations  !!!<br/> Votre compte a bien été créé ! <br/>Un email de confirmation à été envoyé à <strong>{$user->getEmail()}</strong> pour activer votre compte et pouvoir vous connecté!");
-
+			$this->addFlash('success', "!!!  Félicitations  !!!<br/> Votre compte a bien été créé ! <br/>Un email de confirmation à été envoyé à <strong>{$user->getEmail()}</strong>!");
 			return $this->redirectToLogin();
 		}
 
@@ -159,35 +149,31 @@ class SecurityController extends AbstractController
 			if(!$user->isEnabled()) {
 				$userToken = $user->getToken();
 				$confirmationCode = $request->request->get('_confirmationCode');
+
+				//Check token link is valid
 				if($userToken->getTokenCode() === $tokenCode) {
 
 					if($confirmationCode != $userToken->getConfirmationCode()){
-						$this->addFlash('danger', "le code que vous avez entré <strong>[ $confirmationCode]</strong> est invalide<br/>!!! Vérifier votre code svp !!!");
 
-						return $this->redirectToRoute('security.confirm_account', [
-							'current_menu'    => 'login',
-							'username'        => $user->getUsername(),
-							'tokenCode'       => $tokenCode
-						]);
+						$this->addFlash('danger', "le code que vous avez entré <strong>[ $confirmationCode]</strong> est invalide<br/>!!! Vérifier votre code svp !!!");
+						return $this->redirectToRoute('security.confirm_account', ['username'=>$user->getUsername(), 'tokenCode'=> $tokenCode]);
 					}
 
-					$user->setToken(null);
-					$userToken->setUser(null);
-					$this->em->remove($userToken);
-					$user->setEnabled(true);
+					$this->activateUser($user, $userToken);
+
 					$this->em->persist($user);
 					$this->em->flush();
 
-					return $this->redirectToLogin();
+					$this->addFlash('info', "Votre compte est activé, désormais vous pouvez vous connectez!");
+
+				}else {
+					$this->addFlash('danger', "Une erreur est survenue, le token <strong>[ {$tokenCode} ]</strong> du lien d'activation est incorrect!");
 				}
-				$this->addFlash('danger', "Une erreur est servenue, le lien <srong>[ token ]</strong> est invalide");
-
-				return $this->redirectToLogin();
-			} else {
-				$this->addFlash('warning', "!!!  Cher utilisateur <strong>{$user->getFullName()}</strong> !!!<br/> Votre compte est déjà activé, désormais vous pouvez vous connecter !");
-
-				return $this->redirectToLogin();
+			}else {
+				$this->addFlash('warning', "!!! Cher utilisateur <strong>{$user->getFullName()}</strong> !!!<br/>Votre compte est déjà activé, désormais vous pouvez vous connecter!");
 			}
+
+			return $this->redirectToLogin();
 		}
 
 		return $this->render('security/confirm_account.html.twig',[
@@ -198,42 +184,32 @@ class SecurityController extends AbstractController
 
 	/**
 	 * @Route("/forgotten-password", name="security.forgotten_password")
+	 *
 	 * @param Request      $request
-	 * @param Mailer       $mailer
-	 * @param TokenManager $tokenManager
 	 *
 	 * @return Response
 	 */
-	public function forgottenPassword(Request $request, Mailer $mailer, TokenManager $tokenManager): Response
+	public function forgottenPassword(Request $request): Response
 	{
 		if ($request->isMethod('POST')) {
 
 			$email = $request->request->get('_email');
 			/* @var $user User */
-			$user = $this->em->getRepository(User::class)->findOneByEmail($email);
+			$user = $this->em->getRepository(User::class)->findOneBy(['email' => $email]);
 
 			if ($user === null) {
 				$this->addFlash('danger', "Aucun compte n'est associé à cette adresse e-mail: <strong> {$email}</strong>");
 				return $this->redirectToLogin();
 			}
 
-			$token = $tokenManager->createToken($user);
+			$token = $this->tokenManager->createToken($user);
 			$this->em->flush();
 
-			$url = $this->generateUrl('security.reset_password', [
-				'tokenCode' => $token->getTokenCode()],
-				UrlGeneratorInterface::ABSOLUTE_URL
-			);
+			$url = $this->generateUrl('security.reset_password', ['tokenCode' => $token->getTokenCode()],UrlGeneratorInterface::ABSOLUTE_URL);
 
-			$mailer->send(
-				'emails/partials/reset_password.html.twig',
-				'Réinitialisation du mot de passe',
-				[
-					'user' => $user,
-					'url'  => $url
-				]);
+			$this->mailer->send('emails/partials/reset_password.html.twig','Réinitialisation du mot de passe', ['user' => $user, 'url'  => $url]);
 
-			$this->addFlash('success', "Nous avons envoyé un lien à <strong>{$email}</strong>, pour rénitialiser votre mot de passe.<br/> Le lien expirera dans les deux heures suivantes !");
+			$this->addFlash('success', "Nous avons envoyé un lien à <strong>{$email}</strong>, pour rénitialiser votre mot de passe.<br/> Le lien expirera dans les deux heures suivantes!");
 
 			return $this->redirectToLogin();
 		}
@@ -245,14 +221,14 @@ class SecurityController extends AbstractController
 
 	/**
 	 * @Route("/reset-password/{tokenCode}", name="security.reset_password")
+	 *
 	 * @param Request                      $request
 	 * @param String                       $tokenCode
 	 * @param UserPasswordEncoderInterface $passwordEncoder
-	 * @param TokenManager                 $tokenManager
 	 *
 	 * @return Response
 	 */
-	public function resetPassword(Request $request, String $tokenCode, UserPasswordEncoderInterface $passwordEncoder, TokenManager $tokenManager): Response
+	public function resetPassword(Request $request, String $tokenCode, UserPasswordEncoderInterface $passwordEncoder): Response
 	{
 		$passwordUpdate = new PasswordUpdate();
 
@@ -261,26 +237,22 @@ class SecurityController extends AbstractController
 
 		if ($form->isSubmitted() && $form->isValid()) {
 			/* @var $user User */
-			$user =	$tokenManager->getUserFromToken($tokenCode);
+			$user = $this->tokenManager->getUserFromToken($tokenCode);
 
-			if ($user === null) {
-				$this->addFlash('danger', "Le lien est incorrect ou expiré, veuillez demander un nouveau lien, afin de  réinitialiser votre mot de passe !");
-				return $this->redirectToLogin();
+			if ($user === null | $this->tokenManager->isTokenExpired()) {
+
+				$this->addFlash('danger', "Le lien est incorrect ou expiré, veuillez demander un nouveau lien, afin de réinitialiser votre mot de passe !");
+
+			} else {
+
+				$user->setHash($passwordEncoder->encodePassword($user, $request->request->get('password_update')['newPassword']));
+
+				$this->em->persist($user);
+				$this->tokenManager->deleteToken();
+				$this->em->flush();
+
+				$this->addFlash('success', 'Votre mot de passe est mis à jour, Veuillez vous connecter avec votre nouveau mot de passe');
 			}
-
-			if($tokenManager->isTokenExpired()){
-
-				$this->addFlash('danger', 'Le lien est expiré, veuillez demander un nouveau lien, afin de réinitialiser votre mot de passe !');
-				return $this->redirectToLogin();
-			}
-
-			$user->setHash($passwordEncoder->encodePassword($user, $request->request->get('password_update')['newPassword']));
-
-			$this->em->persist($user);
-			$tokenManager->deleteToken();
-			$this->em->flush();
-
-			$this->addFlash('success', 'Votre mot de passe est mis à jour, Veuillez vous connecter avec votre nouveau mot de passe');
 
 			return $this->redirectToLogin();
 		}
@@ -292,9 +264,15 @@ class SecurityController extends AbstractController
 		);
 	}
 
-	private function redirectToLogin(){
+	private function activateUser(User $user, Token $userToken){
+		$user->setToken(null);
+		$userToken->setUser(null);
+		$this->em->remove($userToken);
+		$user->setEnabled(true);
+	}
 
-		return $this->redirectToRoute('security.login',['current_menu'=>'login']);
+	private function redirectToLogin(){
+		return $this->redirectToRoute('security.login');
 	}
 }
 

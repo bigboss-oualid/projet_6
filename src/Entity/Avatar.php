@@ -14,6 +14,8 @@ class Avatar extends Picture
 	 */
 	private $user;
 
+	protected $path = 'images/defaults/default-avatar.png';
+
 	public function getUser(): ?User
 	{
 		return $this->user;

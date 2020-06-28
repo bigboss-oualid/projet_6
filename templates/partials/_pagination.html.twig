@@ -1,16 +1,16 @@
-<div class="d-flex justify-content-center">
+<div class="d-flex justify-content-center m-bottom">
     <nav aria-label="...">
-        <ul class="pagination">
-            <li class="page-item {% if page == 1 %}disabled{% endif %}">
-                <a class="page-link" href="{{ path(route, {'page': page-1}|merge(parameters)) }}" tabindex="-1">Previous</a>
+        <ul id="trick-pagination" class="pagination">
+            <li class="page-item js-prev {% if page == 1 %}disabled{% endif %}">
+                <a class="page-link text" href="{{ path(route, {'page': page-1}|merge(parameters)) }}" tabindex="-1">Précédente</a>
             </li>
             {% for i in 1..pages %}
-                <li class="page-item {% if page == i %}active{% endif %}">
-                    <a class="page-link" href="{{ path(route, {'page': i}|merge(parameters)) }}">{{ i }}</a>
+                <li class="page-item page-number {% if page == i %}active {% endif %}">
+                    <a class="page-link js-pagination" href="{{ path(route, {'page': i}|merge(parameters)) }}">{{ i }}</a>
                 </li>
             {%  endfor %}
-            <li class="page-item {% if page == pages %}disabled{% endif %}">
-                <a class="page-link" href="{{ path(route, {'page': page+1}|merge(parameters)) }}">Next</a>
+            <li class="page-item js-next {% if page == pages %}disabled{% endif %}">
+                <a class="page-link js-pagination" href="{{ path(route, {'page': page+1}|merge(parameters)) }}">Suivante</a>
             </li>
         </ul>
     </nav>

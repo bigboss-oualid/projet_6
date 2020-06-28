@@ -14,5 +14,16 @@
 .phpunit.result.cache
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
-AppFixtures.php
-/public/images/
+
+###> symfony/webpack-encore-bundle ###
+/node_modules/
+/public/images/fixtures/
+/UML/
+npm-debug.log
+yarn-error.log
+###< symfony/webpack-encore-bundle ###
+
+###> squizlabs/php_codesniffer ###
+/.phpcs-cache
+/phpcs.xml
+###< squizlabs/php_codesniffer ###

@@ -6,6 +6,10 @@ use App\Entity\Picture;
 use App\Service\FileUploader;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Mapping\PostRemove;
+use Doctrine\ORM\Mapping\PrePersist;
+use Doctrine\ORM\Mapping\PreRemove;
+use Doctrine\ORM\Mapping\PreUpdate;
 
 class FileUploaderSubscriber implements EventSubscriber
 {
@@ -13,86 +17,79 @@ class FileUploaderSubscriber implements EventSubscriber
 	 * @var FileUploader
 	 */
 	private $uploader;
-	private $targetDirectory;
 
 	/**
 	 * FileUploaderSubscriber constructor.
 	 *
 	 * @param FileUploader $uploader
-	 * @param              $targetDirectory
 	 */
-	public function __construct(FileUploader $uploader, $targetDirectory)
+	public function __construct(FileUploader $uploader)
 	{
 		$this->uploader = $uploader;
-		$this->targetDirectory = $targetDirectory;
 	}
 
 	public function getSubscribedEvents()
 	{
 		return [
-			'prePersist',
-			'preUpdate',
-			'preRemove',
-			'postRemove'
+			PrePersist::class => 'prePersist',
+			PreUpdate::class  => 'preUpdate',
+			PreRemove::class  => 'preRemove',
+			PostRemove::class => 'postRemove'
 		];
 	}
 
 	/**
 	 * @param LifecycleEventArgs $args
 	 */
-	public function prePersist(LifecycleEventArgs $args) {
+	public function prePersist(LifecycleEventArgs $args)
+	{
 
 		$entity = $args->getEntity();
-
-		if (!$entity instanceof Picture || $entity->getImageFile() == null) {
+		if(!$entity instanceof Picture || $entity->getImageFile() == null) {
 			return;
 		}
 
-		$illustrationFileName = $this->uploader->upload($entity->getImageFile());
-		$entity->setFilename($illustrationFileName);
+		$this->uploader->upload($entity);
 	}
 
 	/**
 	 * @param LifecycleEventArgs $args
 	 */
-	public function preUpdate(LifecycleEventArgs $args) {
+	public function preUpdate(LifecycleEventArgs $args)
+	{
 
 		$entity = $args->getEntity();
 
-		if (!$entity instanceof Picture || $entity->getImageFile() == null) {
+		if(!$entity instanceof Picture || $entity->getImageFile() == null) {
 			return;
 		}
-		unlink($this->targetDirectory .'/' .$entity->getFilename());
-		$illustrationFileName = $this->uploader->upload($entity->getImageFile());
-
-		$entity->setFilename($illustrationFileName);
+		$this->uploader->deletePicture($entity);
+		$this->uploader->upload($entity);
 	}
 
 	/**
 	 * @param LifecycleEventArgs $args
 	 */
-	public function preRemove(LifecycleEventArgs $args) {
+	public function preRemove(LifecycleEventArgs $args)
+	{
 
 		$entity = $args->getEntity();
-		if (!$entity instanceof Picture) {
+		if(!$entity instanceof Picture) {
 			return;
 		}
-		$entity->setTempFilename($this->targetDirectory .'/' . $entity->getFilename());
+		$entity->setTempFilename($entity->getPath());
 	}
 
 	/**
 	 * @param LifecycleEventArgs $args
 	 */
-	public function postRemove(LifecycleEventArgs $args) {
+	public function postRemove(LifecycleEventArgs $args)
+	{
 		$entity = $args->getEntity();
-		if (!$entity instanceof Picture) {
+		if(!$entity instanceof Picture) {
 			return;
 		}
-		// PostRemove => We no longer have the entity's ID => Use the name we saved
-		if (file_exists($entity->getTempFilename()))
-		{
-			// Remove file
-			unlink($entity->getTempFilename());
-		}
+
+		$this->uploader->deletePicture($entity);
 	}
 }

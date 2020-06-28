@@ -1,0 +1,8 @@
+App\Entity\User:
+  user{1..10}:
+    lastname: Last-<current()>
+    firstname: First-<current()>
+    username: username-<current()>
+    email: test-<current()>\@snowtricks.de
+    hash: test<current()>
+    enabled: true

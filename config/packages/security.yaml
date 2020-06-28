@@ -1,7 +1,7 @@
 security:
     encoders:
         App\Entity\User:
-            algorithm: bcrypt
+            algorithm: auto
             #algorithm: sodium
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
@@ -20,7 +20,7 @@ security:
           user_checker: App\Security\UserChecker
 
           form_login:
-              #login_path: account.login
+              #login_path: security.login
               check_path: security.login
 
           logout:

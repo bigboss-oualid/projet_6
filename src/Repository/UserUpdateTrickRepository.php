@@ -18,33 +18,4 @@ class UserUpdateTrickRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, UserUpdateTrick::class);
     }
-
-    // /**
-    //  * @return UserUpdateTrick[] Returns an array of UserUpdateTrick objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('u.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?UserUpdateTrick
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

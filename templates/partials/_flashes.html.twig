@@ -1,0 +1,10 @@
+{% for label, messages in app.flashes%}
+    <div class="col-sm-12 my-5">
+        <div class="flash-container alert alert-{{ label }}">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {% for message in messages %}
+                <p class="text-center">{{ message | raw}}</p>
+            {% endfor %}
+        </div>
+    </div>
+{% endfor %}

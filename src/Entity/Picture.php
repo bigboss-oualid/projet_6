@@ -36,7 +36,7 @@ abstract class Picture
     /**
      * @ORM\Column(type="string", length=255)
      */
-    protected $oldName;
+    protected $path;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -69,22 +69,25 @@ abstract class Picture
 	 */
 	public function setImageFile(?File $imageFile): self
 	{
-		if($imageFile){
-			$this->oldName = $imageFile->getClientOriginalName();
+		//resolve seriliaze problem
+		if(!$this->imageFile){
+			$this->tempFilename = $this->path;
+			$this->path = "";
 		}
+
 		$this->imageFile = $imageFile;
 
 		return $this;
 	}
 
-    public function getOldName(): ?string
+    public function getPath(): ?string
     {
-        return $this->oldName;
+        return $this->path;
     }
 
-    public function setOldName(string $oldName): self
+    public function setPath(string $path): self
     {
-        $this->oldName = $oldName;
+        $this->path = $path;
         return $this;
     }
 
@@ -96,7 +99,8 @@ abstract class Picture
     public function setFilename(string $filename): self
     {
         $this->filename = $filename;
-	    if($this->imageFile = null){}
+	    //resolve serializer problem
+	    $this->imageFile = null;
 
         return $this;
     }
