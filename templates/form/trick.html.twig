@@ -1,0 +1,109 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container m-top m-bottom">
+        {% if errorsForm is not empty %}
+            <div class="flash-container alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <div class="mb-1 text-center text-capitalize text-dark font-weight-bolder">Veuillez corriger les erreurs suivantes !!!</div>
+                {% for error in errorsForm%}
+                    <div class="text-danger">{{ loop.index }}- {{ error.message | raw}}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {{ form_start(formTrick) }}
+        {{ form_widget(formTrick._token) }}
+        <div class="row d-flex justify-content-center mb-4" id="default-illustration">
+            <div id="trick-title-edit" class="col-md-4 mb-2">
+               {{ form_errors(formTrick.title) }}
+               {{ form_widget(formTrick.title) }}
+            </div>
+            <img id="default-img-trick" src="{{ asset('images/defaults/default-illustration.png') }}" height="480px" width="100%" alt="default illustration" class="rounded">
+            <div id="btns-img-0" class="row mt-2">
+               <a id="default-edit" class="btn btn-success">
+                   <i class="fa fa-pencil"></i>
+               </a>
+               <a id="default-remove" class="ml-1 btn btn-danger float-right">
+                   <i class="fa fa-trash text-white"></i>
+               </a>
+           </div>
+        </div>
+        <div class="my-4 row d-flex justify-content-center d-none d-sm-block d-md-none">
+            <div class="col-md-4">
+                <a id="media-show" href="" class="mt-4 btn btn-nav nav-link btn-warning">Afficher media</a>
+            </div>
+        </div>
+        <span id="trick-media" class="hidden">
+            {{ form_errors(formTrick) }}
+            <div class="row">
+            <div class="col-md-6">
+                <div id="illustrations" class="row mt-4" data-index="{{ formTrick.illustrations|length > 0 ? formTrick.illustrations|last.vars.name+1 : 0 }}" data-prototype="{{ include("partials/_image.html.twig", { form: formTrick.illustrations.vars.prototype })|e("html_attr") }}">
+                    {% for illustration in formTrick.illustrations%}
+                        {{ include("partials/_image.html.twig", { form: illustration }) }}
+                    {% endfor %}
+                </div>
+                <div class="row-3 mt-1 mb-1 d-md-none">
+                    <button type="button" class="btn btn-sm btn-primary btn-block btn-add-image" data-rel="#illustrations"><i class="fa fa-plus"></i><strong> Photo </strong><small> (jpeg, png)</small></button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div id="videos" class="row mt-4" data-index="{{ formTrick.videos|length > 0 ? formTrick.videos|last.vars.name+1 : 0 }}" data-prototype="{{ include("partials/_video.html.twig", { form: formTrick.videos.vars.prototype })|e("html_attr") }}">
+                    {% for video in formTrick.videos%}
+                        {{ include("partials/_video.html.twig", { form: video }) }}
+                    {% endfor %}
+                </div>
+                <div class="row-3 mt-2 mb-4 d-md-none">
+                    <button type="button" class="btn btn-sm btn-warning btn-block btn-add-video" data-rel="#videos"><i class="fa fa-plus"></i><strong> Video </strong><small> (code integré)</small></button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mt-2 mb-4 d-none d-md-block">
+                <button type="button" class="btn btn-sm btn-primary btn-block btn-add-image" data-rel="#illustrations"><i class="fa fa-plus"></i><strong> Photo </strong><small> (jpeg, png)</small></button>
+            </div>
+            <div class="col-md-6 mt-2 mb-4 d-none d-md-block">
+                <button type="button" class="btn btn-sm btn-warning btn-block btn-add-video" data-rel="#videos"><i class="fa fa-plus text-dark"></i><strong> Video </strong><small> (code integré)</small></button>
+            </div>
+        </div>
+        </span>
+
+        {% if editMode %}
+            {%  include 'partials/_infos.html.twig'%}
+        {% endif %}
+        {{ form_errors(formTrick.description) }}
+        {{ form_widget(formTrick.description|raw) }}
+        <div class="row my-2">
+            <div class="col-4">
+                {{ form_errors(formTrick.groups) }}
+                {{ form_widget(formTrick.groups) }}
+            </div>
+        </div>
+        <div class="row float-right mb-5">
+            <div class="col col-md-auto">
+                <button type="submit" class="btn btn-success font-weight-bolder text-dark shadow-white">
+                    {% if editMode %}
+                        Enregistrer
+                    {% else %}
+                        Ajouter
+                    {% endif %}
+                </button>
+                {{ form_end(formTrick, { "render_rest": false }) }}
+            </div>
+            {% if app.user == formTrick.vars.value.author and editMode  %}
+                <div class="col col-md-auto order-first">
+                    <form method="post" action="{{ path('trick.delete', {id: formTrick.vars.value.id}) }}">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ app.request.get('id')) }}">
+                        <button data-trick-title ="{{ trick.title }}" class="js-del-out btn btn-danger font-weight-bolder text-white shadow-black">Supprimer</button>
+                    </form>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {#add media#}
+    {{ encore_entry_script_tags('form') }}
+{% endblock %}

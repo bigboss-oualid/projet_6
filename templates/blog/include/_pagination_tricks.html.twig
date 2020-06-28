@@ -1,0 +1,41 @@
+{% for trick in tricks %}
+    <div id="{{ trick.slug }}" class="js-offset col-md-3 mt-4 wow bounceInUp" data-wow-duration="1.4s ">
+        <div class="card h-100">
+            {% set illustration = trick.illustrations|first %}
+            <a class="item-card box" href="{{ path('blog.show', {slug: trick.slug, id: trick.id}) }}">
+                {% if illustration%}
+                    <img class="card-img-top" src="{{ asset(illustration.path) }}">
+                {% else %}
+                    <img class="card-img-top" src="{{ asset('images/defaults/default-illustration.png') }}">
+                {% endif %}
+            </a>
+            <div class="card-block">
+                <h4 class="card-title text-center text-capitalize text-decoration-none">
+                    <a href="{{ path('blog.show', {slug: trick.slug, id: trick.id}) }}">
+                        {{ trick.title }}
+                    </a>
+                </h4>
+
+                <div class="card-text text-center">
+                    {% if app.user %}
+                        <div class="text-center">
+                            <a href="{{ path('trick.edit', {slug: trick.slug, id: trick.id}) }}" class="btn btn-warning my-btn-blog"><i class="fa fa-pencil"></i></a>
+                            {% if app.user == trick.author  %}
+                                <a data-title ="{{ trick.title }}" data-slug ="{{ trick.slug }}" data-token="{{ csrf_token('delete' ~ trick.id) }}" href="{{ path('trick.delete', {id: trick.id}) }}" class="btn btn-danger my-btn-blog d-inline-block js-del-in"><i class="fa fa-trash"></i></a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card-footer text-center">
+                <small>
+                    {% if trick.ratings|length > 0 %}
+                        {% include 'partials/_rating.html.twig' with{'rating': trick.avgRatings} %}
+                    {% else %}
+                        <small>Pas encore évalué</small>
+                    {% endif %}
+                </small>
+            </div>
+        </div>
+    </div>
+{% endfor %}

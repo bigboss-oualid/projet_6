@@ -1,0 +1,28 @@
+<div class="col-lg-4 col-md-6 mb-2" id="illustration-{{ form.vars.name}}">
+    <div class="border p-2 w-100">
+        <div class="text-center p-2">
+            {% set file = form.vars %}
+            {% if file.value.filename is defined %}
+                <img id="illustration-holder-{{ file.name }}" class="rounded" src="{{ asset(file.value.path) }}" width="120" height="120" alt="illustration-{{ file.name}}"/>
+            {% else %}
+                <img id="illustration-holder-{{ file.name }}" width="120" height="120" class="rounded" src="{{ asset('images/defaults/placeholder.png') }}"/>
+            {% endif %}
+            <div class="row mt-2 d-flex justify-content-center">
+                <label class="custom-file-upload">
+                    {{ form_widget(form.imageFile)}}
+                    <a class="btn btn-success btn-edit">
+                        {% if file.value.filename is defined  %}
+                            <i class="fa fa-pencil"></i>
+                        {% else %}
+                            <i class="fa fa-plus-circle text-white"></i>
+                        {% endif %}
+                    </a>
+                </label>
+                <div class="ml-1">
+                    <button type="button" class="btn btn-danger btn-remove float-right" data-rel="#illustration-{{ file.name }}"><i class="fa fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

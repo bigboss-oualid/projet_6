@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}JSST!{% endblock %}</title>
+        <!--Get Css from webpack-encore-->
+        {{ encore_entry_link_tags('app') }}
+        {% block stylesheets %}
+        {% endblock %}
+    </head>
+    <body>
+        {% include 'partials/_header.html.twig' %}
+
+        <div class="main-container">
+            {% block body %}{% endblock %}
+        </div>
+
+        {% include 'partials/_footer.html.twig' %}
+
+        <!--Get Js from webpack-encore-->
+        {{  encore_entry_script_tags('app') }}
+        <script src="{{ asset('js-lib/wow.js') }}"></script>
+
+        {% block javascripts %}
+        {% endblock %}
+
+    </body>
+</html>

@@ -1,0 +1,15 @@
+{% extends 'emails/notification.html.twig' %}
+
+{% block body %}
+<div class="float:left;">
+    <p>Cher utilisateur <span style="color:darkorange">{{ fullName }}</span>,</p>
+    <p>Veuillez utiliser le code fourni pour confirmer votre compte auprès de nos services afin d'éviter sa suspension et pour pouvoir enfin ajouter des figures et laisser des commentaires.</p>
+</div>
+<p align="center" >
+    <span style="text-align:center;margin-top:3px;margin-bottom:3px;padding:10px;font-weight: bolder; background-color: #ffc107">Code: {{ confirmationCode }}</span>
+    <p align="center">
+        <a style="line-height:16px;color:white;font-weight:400;text-decoration:none;font-size:16px;display:inline-block;padding:10px 24px;background-color:#ffc107;border-radius:5px;min-width:90px; font-weight: bold" href="{{ url }}">Confirmer votre compte</a>
+    </p>
+    <div style="text-align:center">Merci Groupe SnowTricks</div>
+</p>
+{% endblock %}

@@ -1,0 +1,79 @@
+{
+  "entrypoints": {
+    "app": {
+      "js": [
+        "/build/runtime.420770e4.js",
+        "/build/1.1c491ec0.js",
+        "/build/2.4a9e2c3c.js",
+        "/build/app.061e2d4a.js"
+      ],
+      "css": [
+        "/build/2.dc98838f.css",
+        "/build/app.b882d965.css"
+      ]
+    },
+    "home": {
+      "js": [
+        "/build/runtime.420770e4.js",
+        "/build/0.b1f7156c.js",
+        "/build/home.1059efd2.js"
+      ]
+    },
+    "loadMore": {
+      "js": [
+        "/build/runtime.420770e4.js",
+        "/build/loadMore.4ca8ec8c.js"
+      ]
+    },
+    "pagination": {
+      "js": [
+        "/build/runtime.420770e4.js",
+        "/build/0.b1f7156c.js",
+        "/build/pagination.0711f096.js"
+      ]
+    },
+    "comments": {
+      "js": [
+        "/build/runtime.420770e4.js",
+        "/build/comments.8886be39.js"
+      ]
+    },
+    "form": {
+      "js": [
+        "/build/runtime.420770e4.js",
+        "/build/1.1c491ec0.js",
+        "/build/0.b1f7156c.js",
+        "/build/form.e2b1203c.js"
+      ]
+    },
+    "loadAvatar": {
+      "js": [
+        "/build/runtime.420770e4.js",
+        "/build/loadAvatar.926ef392.js"
+      ]
+    },
+    "carousel": {
+      "js": [
+        "/build/runtime.420770e4.js",
+        "/build/1.1c491ec0.js",
+        "/build/3.1a9add30.js",
+        "/build/carousel.a39aa393.js"
+      ]
+    },
+    "error.js": {
+      "js": [
+        "/build/runtime.420770e4.js",
+        "/build/error.js.12d9455a.js"
+      ]
+    },
+    "error.css": {
+      "js": [
+        "/build/runtime.420770e4.js",
+        "/build/error.css.ce58f7a1.js"
+      ],
+      "css": [
+        "/build/error.css.cddb238d.css"
+      ]
+    }
+  }
+}

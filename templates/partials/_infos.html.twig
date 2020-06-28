@@ -1,0 +1,67 @@
+<section class="container">
+    <div class="row d-flex justify-content-center">
+        <div class="col-lg-3 col-md-6">
+            <a class="text-decoration-none" href="{{ path('user.show', {'username': trick.author.username}) }}">
+                <div class="row info-trick mr-auto">
+                    <div class="col-12 text-center font-weight-bold">Créé par {{ trick.author.username }}</div>
+                    <div class="col-md-4 info-trick-img">
+                        <img class="avatar avatar-medium d-block mx-auto" src="{{ asset(trick.author.avatar.path) }}" alt="{{ trick.author.username }}">
+                    </div>
+                    <div class="col-md-8 align-self-center text-md-left text-center">
+                        <div class="mobile-inline">Le {{ trick.createdAt| format_datetime('medium', 'none', locale='fr')}}</div>
+                        <div class="mobile-inline"> À {{ trick.createdAt | format_datetime('none', 'short', locale='fr')}}</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% if trick.updatedBy is not empty%}
+            <div class="col-lg-3 col-md-6">
+                {% set updated=trick.updatedBy|last %}
+                <a class="text-decoration-none" href="{{ path('user.show', {'username': updated.author.username}) }}">
+                    <div class="row info-trick mr-auto">
+                        <div class="col-12 text-center font-weight-bold">Mise à jour par {{ updated.author.username }}</div>
+                        <div class="col-md-4 info-trick-img">
+                            <img class="avatar avatar-medium d-block mx-auto" src="{{ asset(updated.author.avatar.path) }}" alt="{{ updated.author.username }}">
+                        </div>
+                        <div class="col-md-8 align-self-center text-md-left text-center">
+                            <div class="mobile-inline">Le {{ updated.updatedAt| format_datetime('medium', 'none', locale='fr')}}</div>
+                            <div class="mobile-inline">À {{ updated.updatedAt | format_datetime('none', 'short', locale='fr')}}</div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        {% endif %}
+        <div class="col-lg-3 col-md-6">
+            <div class="row info-trick mr-auto">
+                <div class="col-12 text-center font-weight-bold">Commentaires</div>
+                <div class="col-12 text-center">
+                    {% set nbrComments = trick.countComment %}
+                    {% if nbrComments == 0 %}
+                        <span class="font-weight-bolder bg-main text-center h1">0</span>
+                        <span class="text-warning fa-comment-slash fa fa-3x  pb-3"></span>
+                    {% else  %}
+                        <span class="font-weight-bolder bg-main text-center h1">{{ nbrComments }} </span>
+                        <span class="text-warning fa-comments fa fa-3x  pb-3"></span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% if trick.avgRatings != 0 %}
+            <div class="col-lg-3 col-md-6">
+                <div class="row info-trick mr-auto">
+                    <div class="col-12 text-center font-weight-bold">Difficulté
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <div class="my-2 ">
+                            <span class="fa-heartbeat fa fa-3x"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-8 align-self-center text-center">
+                        {%  include 'partials/_rating.html.twig' with{ 'rating': trick.avgRatings} %}
+                        <small>(Calculée sur {{ trick.ratings|length }} avis)</small>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</section>
