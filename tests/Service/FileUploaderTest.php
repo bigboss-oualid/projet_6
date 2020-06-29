@@ -11,7 +11,7 @@ class FileUploaderTest extends TestCase
 {
 	public function testUpload() {
 		$fileUploader = new FileUploader('');
-		$path = 'test/test.png';
+		$path = __DIR__.'/test/test.png';
 		$image = new UploadedFile(
 			$path,
 			'test.png',
