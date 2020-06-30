@@ -11,8 +11,10 @@
                     <h3 class="my-heading wow bounceInDown" data-wow-duration="1.5s">BIENVENUE À <span class="bg-main">S</span>NOW<span class="bg-main">T</span>RICKS</h3>
                     <p class="myp-slider text-center slider-text mt-5 wow slideInRight" data-wow-duration="2.5s">Où les snowboarders s'unissent et s'améliorent ensemble</p>
                     <p class="mb-0 text-center slider-text d-none d-lg-block wow slideInLeft" data-wow-duration="3s">PARTAGEZ VOS SOUVENIRS | CONNECTEZ-VOUS AVEC D'AUTRES | SE FAIRE DE NOUVEAUX AMIS</p>
-                    <h4 class="wow bounceIn mb-3" data-wow-duration="4s" data-wow-delay="3s" id="js-home"><span class="bg-main">J</span>immy<span class="bg-main">S</span>weat</h4>
-                    <a data-wow-duration="2s" class="btn btn-join btn-outline-warning  wow bounceInUp" href="{{ path('security.register') }}">REJOIGNEZ LA COMMUNAUTÉ</a>
+                    <h2 class="wow bounceIn mb-5 mt-5" data-wow-duration="4s" data-wow-delay="3s" id="js-home"><span class="bg-main">J</span>immy<span class="bg-main">S</span>weat</h2>
+                    {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                        <a data-wow-duration="2s" class="btn btn-join btn-outline-warning  wow bounceInUp" href="{{ path('security.register') }}">REJOIGNEZ LA COMMUNAUTÉ</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -27,10 +29,10 @@
         <div class="row">
             <div class="col-md-8 mx-auto wow fadeInUp" data-wow-duration="1.6s">
                 <h3 id="home-section" class="home-p text-center mb-3 font-weight-bold">Figures <span class="bg-main">S</span>now<span class="bg-main">T</span>ricks</h3>
-                <p class="h2 text-dark text-center mb-5">Avant de commencer à apprendre des figures, même ceux qui sont faciles, vous devriez avoir maîtrisé certaines des bases. Vous devez surtout être sûr de rouler dans les deux sens (interrupteur de conduite) sur la montagne avant de vous lancer dans des tricks.</p>
+                <p class="h2 description text-center mb-5">Avant de commencer à apprendre des figures, même ceux qui sont faciles, vous devriez avoir maîtrisé certaines des bases. Vous devez surtout être sûr de rouler dans les deux sens (interrupteur de conduite) sur la montagne avant de vous lancer dans des tricks.</p>
             </div>
         </div>
-        <div id="tricks" class="row load-content d-flex justify-content-center" data-pagination = '[{"pagesNumber":"{{  pagination.pages }}","currentPage":"2"}]'>
+        <div id="tricks" class="mt-5 row load-content d-flex justify-content-center" data-pagination = '[{"pagesNumber":"{{  pagination.pages }}","currentPage":"2"}]'>
             {% include 'blog/include/_pagination_tricks.html.twig' with {'tricks': pagination.data}%}
         </div>
         {% if  pagination.pages > 0 %}
