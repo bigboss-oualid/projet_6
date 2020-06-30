@@ -1,4 +1,4 @@
-function loaddmore(holder, pages, currentPage){
+function loadMore(holder, pages, currentPage){
     let loadBtn = $('a.js-load');
     if (currentPage > pages){
         loadBtn.remove()
@@ -13,15 +13,14 @@ function loaddmore(holder, pages, currentPage){
             {
                 url: url,
                 data: {
-                    page: currentPage,
                     offset: offset
                 },
                 dataType: "html",
                 beforeSend: function() {
                     incrementPages.text('...')
                 },
-                success: function(data) {
-                    holder.append(data);
+                success: function(loadedData) {
+                    holder.append(loadedData);
                     currentPage++;
                     if (currentPage > pages){
                         e.currentTarget.remove()
@@ -31,9 +30,9 @@ function loaddmore(holder, pages, currentPage){
                     let elts = $('html,body');
                     elts.animate({scrollTop: elts.height()}, 1000);
                 },
-                error: function(e)
+                error: function(error)
                 {
-                    console.log(e);
+                    console.log(error);
                     alert('Error: ' + "une erreur technique est survenue, essayez d'actualiser la page!");
                 }
             }
@@ -47,4 +46,4 @@ let holderContent = $(".load-content");
 let data = holderContent.data('pagination')[0];
 let page = data.currentPage;
 let pagesNumber = data.pagesNumber;
-$(document).ready(loaddmore(holderContent, pagesNumber, page));
+$(document).ready(loadMore(holderContent, pagesNumber, page));

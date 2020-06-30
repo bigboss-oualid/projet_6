@@ -288,12 +288,19 @@ option[value=""] {
 /*end section info trick*/
 
 /*home*/
+.description{
+    font-family: 'Kaushan Script', cursive;
+    font-weight: bold;
+    font-size: 32px;
+    color: white;
+    text-shadow: 2px 1px 1px rgba(0,0,0,1);
+}
 #gobottom{
     display: none;
 }
 .mybg-dark {
     background: rgba(0,0,0,0.7)!important;
-    text-shadow: 2px -2px 10px rgba(255,255,255,0.7);
+    text-shadow: 2px -2px 10px rgba(255,255,255,1);
     transition: 3s;
 }
 .navbar-shrink{
@@ -391,6 +398,7 @@ h3.my-heading {
 #js-home {
     text-shadow: 1px 1px 1px rgba(0,0,0,1);
     font-family: 'Kaushan Script', cursive;
+    font-size: 55px;
 }
 
 p.myp-slider {

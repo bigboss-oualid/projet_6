@@ -4,12 +4,12 @@
       "js": [
         "/build/runtime.420770e4.js",
         "/build/1.1c491ec0.js",
-        "/build/2.4a9e2c3c.js",
+        "/build/2.50c2e817.js",
         "/build/app.061e2d4a.js"
       ],
       "css": [
         "/build/2.dc98838f.css",
-        "/build/app.b882d965.css"
+        "/build/app.988356c8.css"
       ]
     },
     "home": {
@@ -22,7 +22,7 @@
     "loadMore": {
       "js": [
         "/build/runtime.420770e4.js",
-        "/build/loadMore.4ca8ec8c.js"
+        "/build/loadMore.f09e6697.js"
       ]
     },
     "pagination": {

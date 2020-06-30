@@ -17,7 +17,7 @@ class Pagination
 {
 	private $entityClass;
 	private $limit;
-	private $offset;
+	private $offset=0;
 	private $currentPage = 1;
 	private $route;
 	/**
@@ -88,14 +88,18 @@ class Pagination
 	 */
 	public function getData(){
 		$this->error();
-		//determine offset if object isn't deleted
-		if($this->offset == 0){
+		$repository = $this->em->getRepository($this->entityClass);
+		if($this->currentPage == 1 && $this->offset>0){
+			//with ajax offset will be calculated with javascript
+			return $repository->findBy($this->criteria, ['createdAt' => 'DESC'], $this->limit, $this->offset);
+		}
+		elseif($this->offset == 0 || $this->offset%4 == 0){
+			//determine offset if object isn't deleted
 			$this->offset = $this->currentPage * $this->limit - $this->limit;
 		} else{
 			//subtract the remaining number of tricks if the user deleted them
 			$this->offset = ($this->currentPage * $this->limit) - (2* $this->limit) + $this->offset;
 		}
-		$repository = $this->em->getRepository($this->entityClass);
 
 		return $repository->findBy($this->criteria, ['createdAt' => 'DESC'], $this->limit, $this->offset);
 	}
