@@ -52,7 +52,9 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
     	if($email = filter_var($username, FILTER_VALIDATE_EMAIL)){
 		    /** @var User $user */
 		    $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' =>$email]);
-		    $username = $user->getUsername();
+		    if($user){
+			    $username = $user->getUsername();
+		    }
 	    }
 
         $credentials = [
