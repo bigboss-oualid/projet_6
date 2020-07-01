@@ -96,6 +96,7 @@ $ ./bin/phpunit --filter ClassNameTest
 ```
 Replace ``ClassNameTest`` in the command line with :
 `BackendControllerTest`, `FrontendControllerTest`, `SecurityControllerTest`, `TrickTest`, `FileUploaderSubscriberTest` or `UserRepositoryTest`
+
 ####Démo
 **Visitez le site:**  [SnowTricks](https://snowtricks.it-bigboss.de/ "Jimmy Sweat")
 
