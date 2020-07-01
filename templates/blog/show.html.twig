@@ -73,7 +73,18 @@
         <div class="row">
             <div class="jumbotron mt-2 py-1 w-100">
                 <h3 class="my-heading mb-2"><span class="bg-main">D</span>ESCRIPTION</h3>
-                <p class="h4">{{ trick.description|raw }}</p>
+                <p class="h4">
+                    {% if trick.description is empty%}
+                        <div class="text-center"><span class="bg-main">
+                            La figure n'a pas encore de description <br/>
+                            <a href="{{ path('trick.edit', {slug: trick.slug, id: trick.id}) }}" class="text-decoration-none">
+                                Ajouter une desciption
+                            </a>
+                        </span></div>
+                    {% else %}
+                        {{ trick.description|raw }}
+                    {% endif %}
+                </p>
                 <h3 class="my-heading float-right">Groupes:
                 {% set groups = trick.groups %}
                 {% for group in groups %}
