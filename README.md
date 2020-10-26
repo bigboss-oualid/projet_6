@@ -4,71 +4,79 @@
 
 ## About the project
 
-![Project](https://img.shields.io/badge/Project-6-blue.svg)
-![Symfony](https://img.shields.io/badge/Symfony-v5.0.7-Lime.svg)
+![Project](https://img.shields.io/badge/Project-6-FF4500.svg)
+![Symfony](https://img.shields.io/badge/Symfony-v5.0.7-45CB3E)
+[![Repo Size](https://img.shields.io/github/repo-size/bigboss-oualid/projet_6?label=Repo+Size)](https://github.com/bigboss-oualid/projet_6/tree/master)
+![request](https://img.shields.io/github/issues-pr-closed/bigboss-oualid/projet_6?color=33FFCC)
+![Issues](https://img.shields.io/github/issues-closed/bigboss-oualid/projet_6?logo=logo)
 
 Development of a community website for sharing snowboard tricks using the Symfony framework. The website is developed only with one external bundle, which is **```doctrine/doctrine-fixtures-bundle```** in order to load the data, for the initialization of the project.
+##Documentation
 
-## Prerequisites
+* [Getting started](index.md#getting-started)
 
-* ![WampServer](https://img.shields.io/badge/WampServer-v3.2.0-DeepPink.svg) OR ![PHP](https://img.shields.io/badge/PHP-v7.4.7-SlateBlue.svg) + ![MySQL](https://img.shields.io/badge/MySQL-v8.0.19-Goldenrod.svg)
-* ![Git](https://img.shields.io/badge/Git-v2.26.2-OrangeRed.svg)
-* ![Symfony](https://img.shields.io/badge/Symfony-v5.0.7-Lime.svg)
-* ![Composer](https://img.shields.io/badge/Composer-v1.10.6-SaddleBrown.svg)
-* ![Nodejs](https://img.shields.io/badge/Nodejs-v14.4.0-DarkGreen.svg)
-* ![Maildev](https://img.shields.io/badge/Maildev-v1.1.0-DeepSkyBlue.svg)
 ## Getting Started
-#### Prepare your work environment
-Download & install :
-- [WampServer](https://www.wampserver.com/) OR separatly [PHP](https://www.php.net/manual/fr/install.php) & [MySql](https://dev.mysql.com/downloads/mysql/#downloads)
-- [Git](https://git-scm.com/download)
-- [Symfony CLI](https://symfony.com/download)
-- [Composer](https://getcomposer.org/download/)
-- [Nodejs](https://nodejs.org/fr/)
 
-#### Install the Project
-1. [Download](https://codeload.github.com/bigboss-oualid/projet_6/zip/master) the project, or clone the repository. In your terminal from home directory, use the command.
-> [![Repo Size](https://img.shields.io/github/repo-size/bigboss-oualid/projet_6?label=Repo+Size)](https://github.com/bigboss-oualid/projet_6/tree/master)
+### Prepare your work environment
+
+Download & install all prerequisites tools
+
+##### Prerequisites
+* [![WampServer](https://img.shields.io/badge/WampServer-v3.2.0-F70094)](https://www.wampserver.com/) OR [![PHP](https://img.shields.io/badge/PHP-%3E%3D7.4.7-7377AD)](https://www.php.net/manual/fr/install.php) + [![MySQL](https://img.shields.io/badge/MySQL-v8.0.19-DF6900)](https://dev.mysql.com/downloads/mysql/#downloads)
+* [![Git](https://img.shields.io/badge/Git-v2.27-E94E31)](https://git-scm.com/download)
+* [![Symfony CLI](https://img.shields.io/badge/Symfony_CLI-v4.20-000000)](https://symfony.com/download)
+* [![Composer](https://img.shields.io/badge/Composer-v1.10.13-5F482F)](https://getcomposer.org/download)
+* [![Nodes](https://img.shields.io/badge/Nodejs-v14.5.0-026E00)](https://nodejs.org)
+
+##### Set up the Project
+###### Installation
+1.Download the project [![Download](https://img.shields.io/badge/-Here-D3D345)](https://codeload.github.com/bigboss-oualid/projet_6/zip/master "click to start download"), or clone the repository by executing the command line from your terminal.the project, or clone the repository. In your terminal from home directory, use the command.
 ```shell
 $ git clone https://github.com/bigboss-oualid/projet_6.git
 ```
-2. In your terminal change the working directory to the project folder and run the below command lines.
-3. Install dependencies :
+
+2. In your terminal change the working directory to the project folder and run the below command line to install all dependencies :
 ```shell 
 $ composer install
 ```
-4. Edit the variable ***DATABASE_URL*** in line 32 on file ```.env``` in root with your database details (skip this step if you installed wamp with root). [more info](https://symfony.com/doc/current/doctrine.html#configuring-the-database)
-5. Run ***WampServer*** (run Mysql if you don't use Wamp and you have modified ***DATABASE_URL*** in step 4 ).
-6. Create the application database with command: 
+
+
+###### Set up Database:
+3. Edit the variable ***DATABASE_URL*** at line ``32`` on file **```./.env```** with your database details
+ 
+ > [More info about how you Configure the Database in Symfony](https://symfony.com/doc/current/doctrine.html#configuring-the-database)
+ 
+4.Run ***WampServer*** (Or run Mysql separately, if you don't use Wamp).
+
+5. Create the application database: 
 ```shell 
 $ php bin/console doctrine:database:create
 ```
-7. Create entity tables
+6. Create the Database script Tables/Schema:
 ```shell
 $ php bin/console make:migration
 ```
-8. Add tables to Database 
+
+7. Add tables in the Database:
 ```shell 
 $ php bin/console --no-interaction doctrine:migrations:migrate
 ```
-9. Load the initial data into the application database
+
+8. Load the initial data into the application database
 ```shell 
 $ php bin/console doctrine:fixtures:load --group=AppFixtures -n
 ```
-10. Run PHP's built-in Web Server 
-```shell 
-$ symfony server:start
-```
-11. Navigate to [localhost:8000](http://localhost:8000) 
 
-#### Test your project's generated emails on local
-* MailDev is a simple way to test your project's generated emails during development with an easy to use web interface that runs on your machine built on top of Node.js, which makes it very simple to set up.If you have not already done so, you must first install [Nodejs](https://nodejs.org/fr/) on your machine and thus have the npm command available.
+###### Prepare SMTP Server + Web Interface on local machine
+> MailDev is a simple way to test your project's generated emails during development with an easy to use web interface
+ that runs on your machine built on top of Node.js, which makes it very simple to set up.If you have not already done so, you must first install [Nodejs](https://nodejs.org/fr/) on your machine and thus have the npm command available.
 
-1. Install **maildev**
+1. Install **[maildev](https://maildev.github.io/maildev/)**
 ```shell 
 $ npm install -g maildev
 ```
-2. Open new ***Terminal*** window & run **maildev** 
+2. Open new ***Terminal*** window & run **maildev**
+
 ```shell 
 $ maildev
 ```
@@ -76,29 +84,39 @@ $ maildev
 
 > if you want use other SMTP server, edit the variable ***MAILER_URL*** in line 39 on file ```.env``` in root directory, with your SMTP details. 
 
-#### Users accounts
-username | email | password
----- | ----- | --------
-demo| demo@snowtricks.com | demo  
+
+### Try the Application:
+1. Run Symfony server:
+```shell 
+# start the server and display the log messages in the console
+$ symfony server:start
  
-#### Run Tests
-before testing the fileUploader service, check that the image `./test/Service/test/test.png` exists if not Copy an image to the same folder and rename it `test.png`
+# start the server in the background
+$ symfony server:start [-d] 
+```
+2. Navigate to [localhost:8000](http://localhost:8000) 
+> Log in with the account below to modify, create tricks & post comments.
 
-Open your terminal:
-
-* Run all tests 
+username | email               | password
+-------- | ------------------- | --------
+demo     | demo@snowtricks.com | demo  
+ 
+### Run Tests
+Before testing the fileUploader service, check that the image `./test/Service/test/test.png` exists if not Copy an 
+image to the same folder and rename it `test.png`.
 ```shell
+# Run all tests of the app
 $ ./bin/phpunit
+
+# Run tests for one class (replace CLASS_NAME with the name of class you want test)
+$ ./bin/phpunit --filter CLASS_NAME
 ```
-* Run only one class test
-```shell
-$ ./bin/phpunit --filter ClassNameTest
-```
-Replace ``ClassNameTest`` in the command line with :
+
+Replace ``CLASS_NAME`` in the command line with :
 `BackendControllerTest`, `FrontendControllerTest`, `SecurityControllerTest`, `TrickTest`, `FileUploaderSubscriberTest` or `UserRepositoryTest`
 
-#### Démo
-**Visitez le site:**  [SnowTricks](https://snowtricks.it-bigboss.de/ "Jimmy Sweat")
+### Demo
+**Visit the application demonstration:**  [![SnowTricks](https://img.shields.io/badge/-SnowTricks-FF4500.svg)](https://snowtricks.it-bigboss.de/ "Jimmy Sweat")
 
  
 ###### Author
