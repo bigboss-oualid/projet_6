@@ -12,8 +12,16 @@
 
 Development of a community website for sharing snowboard tricks using the Symfony framework. The website is developed only with one external bundle, which is **```doctrine/doctrine-fixtures-bundle```** in order to load the data, for the initialization of the project.
 ##Documentation
-
-* [Getting started](index.md#getting-started)
+* [Getting started](#getting-started)
+  * [Prepare your work environment](#prepare-your-work-environment)
+    * [Prerequisites](#prerequisites)
+    * [Set up the Project](#set-up-the-project)
+  * [Try the Application](#try-the-application)
+  * [Run Tests](#run-tests)
+    * [PHPUnit](#phpunit)
+  * [API Demonstration](#demo)
+  * [Information](#info)
+#
 
 ## Getting Started
 
@@ -118,7 +126,7 @@ Replace ``CLASS_NAME`` in the command line with :
 ### Demo
 **Visit the application demonstration:**  [![SnowTricks](https://img.shields.io/badge/-SnowTricks-FF4500.svg)](https://snowtricks.it-bigboss.de/ "Jimmy Sweat")
 
- 
+### Info 
 ###### Author
 [**Walid BigBoss**](https://it-bigboss.de)
 
