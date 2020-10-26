@@ -12,9 +12,10 @@
 
 Development of a community website for sharing snowboard tricks using the Symfony framework. The website is developed only with one external bundle, which is **```doctrine/doctrine-fixtures-bundle```** in order to load the data, for the initialization of the project.
 
-##Documentation
+## Documentation
 
-* [Getting started](readme.md#getting-started)
+* [Getting started](#try-the-application)
+* [Getting started](#try-the-application)
 
 ## Getting Started
 
