@@ -39,7 +39,7 @@ Download & install all prerequisites tools
 
 ##### Set up the Project
 ###### Installation
-1.Download the project [![Download](https://img.shields.io/badge/-Here-D3D345)](https://codeload.github.com/bigboss-oualid/projet_6/zip/master "click to start download"), or clone the repository by executing the command line from your terminal.the project, or clone the repository. In your terminal from home directory, use the command.
+1. Download the project [![Download](https://img.shields.io/badge/-Here-D3D345)](https://codeload.github.com/bigboss-oualid/projet_6/zip/master "click to start download"), or clone the repository by executing the command line from your terminal.the project, or clone the repository. In your terminal from home directory, use the command.
 ```shell
 $ git clone https://github.com/bigboss-oualid/projet_6.git
 ```
@@ -55,7 +55,7 @@ $ composer install
  
  > [More info about how you Configure the Database in Symfony](https://symfony.com/doc/current/doctrine.html#configuring-the-database)
  
-4.Run ***WampServer*** (Or run Mysql separately, if you don't use Wamp).
+4. Run ***WampServer*** (Or run Mysql separately, if you don't use Wamp).
 
 5. Create the application database: 
 ```shell 
