@@ -11,9 +11,10 @@
 ![Issues](https://img.shields.io/github/issues-closed/bigboss-oualid/projet_6?logo=logo)
 
 Development of a community website for sharing snowboard tricks using the Symfony framework. The website is developed only with one external bundle, which is **```doctrine/doctrine-fixtures-bundle```** in order to load the data, for the initialization of the project.
+
 ##Documentation
 
-* [Getting started](index.md#getting-started)
+* [Getting started](readme.md#getting-started)
 
 ## Getting Started
 
