@@ -7,6 +7,7 @@
 ![Project](https://img.shields.io/badge/Project-6-FF4500.svg)
 ![Symfony](https://img.shields.io/badge/Symfony-v5.0.7-45CB3E)
 [![Repo Size](https://img.shields.io/github/repo-size/bigboss-oualid/projet_6?label=Repo+Size)](https://github.com/bigboss-oualid/projet_6/tree/master)
+![Repo Size](https://img.shields.io/w3c-validation/html?preset=HTML%2C%20SVG%201.1%2C%20MathML%203.0%2C%20ITS%202.0&targetUrl=https%3A%2F%2Fsnowtricks.it-bigboss.de)
 ![request](https://img.shields.io/github/issues-pr-closed/bigboss-oualid/projet_6?color=33FFCC)
 ![Issues](https://img.shields.io/github/issues-closed/bigboss-oualid/projet_6?logo=logo)
 
@@ -135,5 +136,3 @@ Replace ``CLASS_NAME`` in the command line with :
 Code released under the MIT License.
 
 [![GitHub License](https://img.shields.io/github/license/bigboss-oualid/projet_6.svg?label=License)](https://github.com/bigboss-oualid/projet_6/blob/master/LICENSE.md)
-
- 
