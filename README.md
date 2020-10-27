@@ -20,7 +20,7 @@ Development of a community website for sharing snowboard tricks using the Symfon
   * [Try the Application](#try-the-application)
   * [Run Tests](#run-tests)
     * [PHPUnit](#phpunit)
-  * [API Demonstration](#demo)
+  * [Application Demonstration](#demo)
   * [Information](#info)
 #
 
