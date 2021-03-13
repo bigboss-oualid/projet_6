@@ -134,5 +134,4 @@ Replace ``CLASS_NAME`` in the command line with :
 ###### Copyright
 
 Code released under the MIT License.
-
-[![GitHub License](https://img.shields.io/github/license/bigboss-oualid/projet_6.svg?label=License)](https://github.com/bigboss-oualid/projet_6/blob/master/LICENSE.md)
+[![GitHub License](https://img.shields.io/github/license/bigboss-oualid/projet_6.svg?label=License)](https://github.com/bigboss-oualid/projet_6/blob/master/LICENSE)
